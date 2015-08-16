@@ -1,0 +1,14 @@
+E:\Develop\ItIsNotAGame1\ItIsNotAGame1\Data\bin\Debug\ItIsNotAGame1Data.dll
+E:\Develop\ItIsNotAGame1\ItIsNotAGame1\Data\bin\Debug\ItIsNotAGame1Data.pdb
+E:\Develop\ItIsNotAGame1\ItIsNotAGame1\Data\obj\Debug\Data.csprojResolveAssemblyReference.cache
+E:\Develop\ItIsNotAGame1\ItIsNotAGame1\Data\obj\Debug\ItIsNotAGame1Data.dll
+E:\Develop\ItIsNotAGame1\ItIsNotAGame1\Data\obj\Debug\ItIsNotAGame1Data.pdb
+E:\Develop\ItIsNotAGame1\ItIsNotAGame1\Data\bin\Debug\protobuf-net.dll
+E:\Develop\ItIsNotAGame1\ItIsNotAGame1\Data\bin\Debug\RegulusLibrary.dll
+E:\Develop\ItIsNotAGame1\ItIsNotAGame1\Data\bin\Debug\RegulusRemoting.dll
+E:\Develop\ItIsNotAGame1\ItIsNotAGame1\Data\bin\Debug\protobuf-net.pdb
+E:\Develop\ItIsNotAGame1\ItIsNotAGame1\Data\bin\Debug\protobuf-net.xml
+E:\Develop\ItIsNotAGame1\ItIsNotAGame1\Data\bin\Debug\RegulusLibrary.pdb
+E:\Develop\ItIsNotAGame1\ItIsNotAGame1\Data\bin\Debug\RegulusLibrary.xml
+E:\Develop\ItIsNotAGame1\ItIsNotAGame1\Data\bin\Debug\RegulusRemoting.pdb
+E:\Develop\ItIsNotAGame1\ItIsNotAGame1\Data\bin\Debug\RegulusRemoting.xml
