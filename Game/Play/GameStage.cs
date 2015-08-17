@@ -25,15 +25,16 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         }
         void IStage.Leave()
         {
-            throw new NotImplementedException();
+            
+            var player = _CreatePlayer();
             _Map.ChangeEvent -= _ChangeLocation;
-//            _Map.Left(player);
+            _Map.Left(player);
             _Save();
         }        
 
         void IStage.Enter()
         {
-            throw new NotImplementedException();
+
             var player = _CreatePlayer();
             _Map.Join(player, _Record.Start );
             _Map.ChangeEvent += _ChangeLocation;

@@ -23,7 +23,7 @@ Let's say we have a basic calculator interface:
     public interface ICalculator
     {
         int Add(int a, int b);
-        string Mode { get; set; }
+        string Mode { get; set; }£x
         event Action PoweringUp;
     }
 

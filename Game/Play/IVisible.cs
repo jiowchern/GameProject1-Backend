@@ -1,7 +1,14 @@
+using System;
+
+using Regulus.CustomType;
+
 namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
-    internal interface IVisible
+    public interface IVisible
     {
+        Guid Id { get; }
+        Rect Bounds { get; }
 
+        event Action BoundsEvent;
     }
 }

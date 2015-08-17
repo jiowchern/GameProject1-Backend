@@ -144,7 +144,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private void _ToGame(GamePlayerRecord record)
         {
-            throw new NotImplementedException();
+            
             var stage = new GameStage(_Binder, record , _GameRecorder , null);
             stage.DoneEvent += _ToVerify;
             _Machine.Push(stage);

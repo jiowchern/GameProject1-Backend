@@ -5,9 +5,9 @@ using System.Text;
 
 namespace Regulus.Project.ItIsNotAGame1.Game
 {
-    class VerifyStage : Regulus.Utility.IStage
-    {
-        public event Verify.DoneCallback DoneEvent;
+	class VerifyStage : Regulus.Utility.IStage
+	{
+		public event Verify.DoneCallback DoneEvent;
 
 		private readonly Regulus.Remoting.ISoulBinder _Binder;
 
@@ -19,21 +19,21 @@ namespace Regulus.Project.ItIsNotAGame1.Game
 			_Binder = binder;
 		}
 
-        void Regulus.Utility.IStage.Enter()
+		void Regulus.Utility.IStage.Enter()
 		{
 			_Verify.OnDoneEvent += DoneEvent;
 
 			_Binder.Bind<Regulus.Project.ItIsNotAGame1.Data.IVerify>(_Verify);
 		}
 
-        void Regulus.Utility.IStage.Leave()
+		void Regulus.Utility.IStage.Leave()
 		{
 			_Binder.Unbind<Regulus.Project.ItIsNotAGame1.Data.IVerify>(_Verify);
 			_Verify.OnDoneEvent -= DoneEvent;
 		}
 
-        void Regulus.Utility.IStage.Update()
+		void Regulus.Utility.IStage.Update()
 		{
 		}
-    }
+	}
 }
