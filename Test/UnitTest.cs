@@ -34,6 +34,7 @@ namespace Regulus.Project.ItIsNotAGame1.Test
             updater.Shutdown();
         }
 
+        
         [TestMethod]
         public void TestMapFind()
         {
@@ -45,13 +46,47 @@ namespace Regulus.Project.ItIsNotAGame1.Test
             IObservable observable = NSubstitute.Substitute.For<IObservable>();
             observable.Vision.Returns(rect);
 
-            IVisible[] visables = new Wall[]
-            {
-                new Wall(new Rect(1,1,1,1)), 
-                new Wall(new Rect(1,3,1,1)), 
-                new Wall(new Rect(1,5,1,1)), 
-                new Wall(new Rect(1,7,1,1)), 
-                new Wall(new Rect(1,9,1,1))
+            Polygon meshs1 = new Polygon();
+            Polygon meshs2 = new Polygon();
+            Polygon meshs3 = new Polygon();
+            Polygon meshs4 = new Polygon();
+            Polygon meshs5 = new Polygon();
+            
+            meshs1.Points.Add(new Vector2(1, 1));
+            meshs1.Points.Add(new Vector2(2, 1));
+            meshs1.Points.Add(new Vector2(2, 2));
+            meshs1.Points.Add(new Vector2(1, 2));
+
+            meshs2.Points.Add(new Vector2(1, 1));
+            meshs2.Points.Add(new Vector2(2, 1));
+            meshs2.Points.Add(new Vector2(2, 2));
+            meshs2.Points.Add(new Vector2(1, 2));
+            meshs2.Offset(0,2);
+
+            meshs3.Points.Add(new Vector2(1, 1));
+            meshs3.Points.Add(new Vector2(2, 1));
+            meshs3.Points.Add(new Vector2(2, 2));
+            meshs3.Points.Add(new Vector2(1, 2));
+            meshs3.Offset(0, 4);
+
+            meshs4.Points.Add(new Vector2(1, 1));
+            meshs4.Points.Add(new Vector2(2, 1));
+            meshs4.Points.Add(new Vector2(2, 2));
+            meshs4.Points.Add(new Vector2(1, 2));
+            meshs4.Offset(0, 6);
+
+            meshs5.Points.Add(new Vector2(1, 1));
+            meshs5.Points.Add(new Vector2(2, 1));
+            meshs5.Points.Add(new Vector2(2, 2));
+            meshs5.Points.Add(new Vector2(1, 2));
+            meshs5.Offset(0, 8);
+
+            IVisible[] visables = {
+                new Entity(meshs1), 
+                new Entity(meshs2), 
+                new Entity(meshs3), 
+                new Entity(meshs4), 
+                new Entity(meshs5)
             };
 
             foreach (var visable in visables)
@@ -71,42 +106,6 @@ namespace Regulus.Project.ItIsNotAGame1.Test
 
             Assert.AreEqual(3, results.Length);                        
         }
-         [TestMethod]
-        public void TestMove()
-        {
-            Map map = new Map();
-
-            Rect rect = new Rect(-0.5f, -0.5f , 1, 1);
-
-
-            Mover mover = new Mover(rect , 1.0f);
-            
-
-            IVisible[] visables = new Wall[]
-            {
-                new Wall(new Rect(1,1,1,1)), 
-                new Wall(new Rect(1,3,1,1)), 
-                new Wall(new Rect(1,5,1,1)), 
-                new Wall(new Rect(1,7,1,1)), 
-                new Wall(new Rect(1,9,1,1))
-            };
-
-            foreach (var visable in visables)
-            {
-                map.Join(visable);
-            }
-
-            
-            var results = map.Find(mover.GetOrbit(1.0f));
-
-
-            foreach (var visable in visables)
-            {
-                map.Left(visable);
-            }
-
-
-            Assert.AreEqual(3, results.Length);        
-        }
+        
     }
 }

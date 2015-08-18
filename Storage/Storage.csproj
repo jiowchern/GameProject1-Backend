@@ -52,7 +52,7 @@
       <HintPath>..\Db\RegulusDatabase.dll</HintPath>
     </Reference>
     <Reference Include="RegulusLibrary, Version=0.1.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RegulusLibrary.0.1.0\lib\net35\RegulusLibrary.dll</HintPath>
+      <HintPath>..\packages\RegulusLibrary.0.1.2\lib\net35\RegulusLibrary.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="RegulusRemoting, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">

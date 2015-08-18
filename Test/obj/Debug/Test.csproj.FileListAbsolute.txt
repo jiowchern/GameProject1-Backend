@@ -79,3 +79,5 @@ D:\Develop\ItIsNotAGame1\Backend\Test\bin\Debug\MongoDB.Driver.xml
 D:\Develop\ItIsNotAGame1\Backend\Test\bin\Debug\MongoDB.Bson.xml
 D:\Develop\ItIsNotAGame1\Backend\Test\obj\Debug\ItIsNotAGame1Test.dll
 D:\Develop\ItIsNotAGame1\Backend\Test\obj\Debug\ItIsNotAGame1Test.pdb
+D:\Develop\ItIsNotAGame1\Backend\Test\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
+D:\Develop\ItIsNotAGame1\Backend\Test\bin\Debug\zh-Hant\Microsoft.VisualStudio.QualityTools.UnitTestFramework.resources.dll

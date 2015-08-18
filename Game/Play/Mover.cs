@@ -2,16 +2,15 @@
 {
     public class Mover
     {
-        private CustomType.Rect _Bounds;
+        private Regulus.CustomType.Polygon _Body;
         private float _Speed;
 
-        public Mover(CustomType.Rect bounds, float speed)
-        {
-            // TODO: Complete member initialization
-            this._Bounds = bounds;
-            this._Speed = speed;
+        public Mover(Regulus.CustomType.Polygon body, float speed)
+        {                        
+            this._Body =  body;
+            _Speed = speed;
         }
-        public IObservable GetOrbit(float second)
+        public IObservable GetOrbit(float angle , float second)
         {
             throw new System.NotImplementedException();
         }

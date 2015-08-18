@@ -6,16 +6,16 @@
     <members>
         <member name="M:Regulus.Collection.QuadTree`1.#ctor(Regulus.CustomType.Size,System.Int32,System.Boolean)">
             <summary>
-            Initializes a new instance of the <see cref="T:Regulus.Collection.QuadTree`1"/> class. 
+                Initializes a new instance of the <see cref="T:Regulus.Collection.QuadTree`1"/> class.
             </summary>
             <param name="minLeafSize">
-            The smallest size a leaf will split into
+                The smallest size a leaf will split into
             </param>
             <param name="maxObjectsPerLeaf">
-            Maximum number of objects per leaf before it forces a split into sub quadrants
+                Maximum number of objects per leaf before it forces a split into sub quadrants
             </param>
             <param name="sort">
-            Whether or not queries will return objects in the order in which they were added
+                Whether or not queries will return objects in the order in which they were added
             </param>
         </member>
         <member name="T:Regulus.Framework.IBootable">
@@ -68,13 +68,13 @@
         </member>
         <member name="M:Regulus.Remoting.Value`1.#ctor">
             <summary>
-            Initializes a new instance of the <see cref="T:Regulus.Remoting.Value`1"/> class. 
+                Initializes a new instance of the <see cref="T:Regulus.Remoting.Value`1"/> class.
                 建構子
             </summary>
         </member>
         <member name="M:Regulus.Remoting.Value`1.#ctor(`0)">
             <summary>
-            Initializes a new instance of the <see cref="T:Regulus.Remoting.Value`1"/> class. 
+                Initializes a new instance of the <see cref="T:Regulus.Remoting.Value`1"/> class.
                 預設已經填入資料
             </summary>
             <param name="val">

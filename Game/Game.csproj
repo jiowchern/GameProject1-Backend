@@ -38,7 +38,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="RegulusLibrary, Version=0.1.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RegulusLibrary.0.1.0\lib\net35\RegulusLibrary.dll</HintPath>
+      <HintPath>..\packages\RegulusLibrary.0.1.2\lib\net35\RegulusLibrary.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="RegulusRemoting, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -62,7 +62,7 @@
     <Compile Include="Play\LoadRecordStage.cs" />
     <Compile Include="Play\Map.cs" />
     <Compile Include="Play\Mover.cs" />
-    <Compile Include="Play\Wall.cs" />
+    <Compile Include="Play\Entity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Play\User.cs" />
     <Compile Include="Storage\Center.cs" />

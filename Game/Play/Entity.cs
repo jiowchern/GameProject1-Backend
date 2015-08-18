@@ -1,17 +1,18 @@
 ﻿using System;
 
 using Regulus.CustomType;
+using Regulus.Extension;
 
 namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
-    public class Wall : IVisible
+    public class Entity : IVisible
     {
-        private Guid _Id;
-        private readonly Rect _Bounds;
-
-        public Wall(Rect bounds)
+        private readonly Polygon _Mesh;
+        private readonly Guid _Id;
+        
+        public Entity(Polygon mesh)
         {
-            this._Bounds = bounds;
+            _Mesh = mesh;
             _Id = Guid.NewGuid();
         }
 
@@ -22,7 +23,12 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         CustomType.Rect IVisible.Bounds
         {
-            get { return _Bounds; }
+            get { return _Mesh.Points.ToRect(); }
+        }
+
+        Polygon IVisible.Mesh
+        {
+            get { return _Mesh; }
         }
 
         private System.Action _BoundsEvent;
