@@ -34,7 +34,12 @@ namespace Regulus.Project.ItIsNotAGame1.Test
             updater.Shutdown();
         }
 
-        
+        [TestMethod]
+        public void TestMove()
+        {
+            //Mover mover = new Mover();
+        }
+
         [TestMethod]
         public void TestMapFind()
         {

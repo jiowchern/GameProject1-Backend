@@ -32,36 +32,41 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MongoDB.Bson">
-      <HintPath>..\Db\MongoDB.Bson.dll</HintPath>
+    <Reference Include="MongoDB.Bson, Version=2.0.0.828, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\MongoDB.Bson.dll</HintPath>
     </Reference>
-    <Reference Include="MongoDB.Driver">
-      <HintPath>..\Db\MongoDB.Driver.dll</HintPath>
+    <Reference Include="MongoDB.Driver, Version=2.0.0.828, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\MongoDB.Driver.dll</HintPath>
     </Reference>
-    <Reference Include="MongoDB.Driver.Core">
-      <HintPath>..\Db\MongoDB.Driver.Core.dll</HintPath>
+    <Reference Include="MongoDB.Driver.Core, Version=2.0.0.828, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\MongoDB.Driver.Core.dll</HintPath>
     </Reference>
-    <Reference Include="MySql.Data">
-      <HintPath>..\Db\MySql.Data.dll</HintPath>
+    <Reference Include="MySql.Data, Version=6.8.3.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\MySql.Data.dll</HintPath>
     </Reference>
     <Reference Include="protobuf-net, Version=2.0.0.668, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
-      <HintPath>..\packages\protobuf-net.2.0.0.668\lib\net40\protobuf-net.dll</HintPath>
-      <Private>True</Private>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\protobuf-net.dll</HintPath>
     </Reference>
-    <Reference Include="RegulusDatabase">
-      <HintPath>..\Db\RegulusDatabase.dll</HintPath>
+    <Reference Include="RegulusDatabase, Version=1.0.5620.42775, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\RegulusDatabase.dll</HintPath>
     </Reference>
     <Reference Include="RegulusLibrary, Version=0.1.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RegulusLibrary.0.1.2\lib\net35\RegulusLibrary.dll</HintPath>
-      <Private>True</Private>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\RegulusLibrary.dll</HintPath>
     </Reference>
     <Reference Include="RegulusRemoting, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RegulusRemoting.0.1.0\lib\net35\RegulusRemoting.dll</HintPath>
-      <Private>True</Private>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\RegulusRemoting.dll</HintPath>
     </Reference>
     <Reference Include="RegulusRemotingSoulNative, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RegulusRemotingServer.0.1.0\lib\net35\RegulusRemotingSoulNative.dll</HintPath>
-      <Private>True</Private>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\RegulusRemotingSoulNative.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -85,17 +90,9 @@
       <Name>Game</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="Server.exe" />
-    <Content Include="Server.pdb" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-    <None Include="Server.exe.config" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy ..\..\server.exe</PostBuildEvent>
+    <PostBuildEvent>copy ..\..\..\Library\server.exe</PostBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

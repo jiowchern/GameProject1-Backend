@@ -33,20 +33,20 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="protobuf-net, Version=2.0.0.668, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
-      <HintPath>..\packages\protobuf-net.2.0.0.668\lib\net40\protobuf-net.dll</HintPath>
-      <Private>True</Private>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\protobuf-net.dll</HintPath>
     </Reference>
     <Reference Include="RegulusLibrary, Version=0.1.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RegulusLibrary.0.1.2\lib\net35\RegulusLibrary.dll</HintPath>
-      <Private>True</Private>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\RegulusLibrary.dll</HintPath>
     </Reference>
     <Reference Include="RegulusRemoting, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RegulusRemoting.0.1.0\lib\net35\RegulusRemoting.dll</HintPath>
-      <Private>True</Private>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\RegulusRemoting.dll</HintPath>
     </Reference>
     <Reference Include="RegulusRemotingSoulNative, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RegulusRemotingServer.0.1.0\lib\net35\RegulusRemotingSoulNative.dll</HintPath>
-      <Private>True</Private>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\RegulusRemotingSoulNative.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -62,10 +62,6 @@
     <Compile Include="Server.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Server.exe" />
-    <Content Include="Server.pdb" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Data\Data.csproj">
       <Project>{dd0daee5-5f0f-4a40-9a0a-3533077cb553}</Project>
       <Name>Data</Name>
@@ -79,13 +75,9 @@
       <Name>StorageUser</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-    <None Include="Server.exe.config" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy ..\..\server.exe</PostBuildEvent>
+    <PostBuildEvent>copy ..\..\..\Library\server.exe</PostBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

@@ -26,11 +26,6 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             get { return _Mesh.Points.ToRect(); }
         }
 
-        Polygon IVisible.Mesh
-        {
-            get { return _Mesh; }
-        }
-
         private System.Action _BoundsEvent;
         event System.Action IVisible.BoundsEvent
         {

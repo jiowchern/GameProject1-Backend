@@ -34,16 +34,16 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="protobuf-net, Version=2.0.0.668, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
-      <HintPath>..\packages\protobuf-net.2.0.0.668\lib\net35\protobuf-net.dll</HintPath>
-      <Private>True</Private>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\protobuf-net.dll</HintPath>
     </Reference>
     <Reference Include="RegulusLibrary, Version=0.1.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RegulusLibrary.0.1.2\lib\net35\RegulusLibrary.dll</HintPath>
-      <Private>True</Private>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\RegulusLibrary.dll</HintPath>
     </Reference>
     <Reference Include="RegulusRemoting, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RegulusRemoting.0.1.0\lib\net35\RegulusRemoting.dll</HintPath>
-      <Private>True</Private>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\RegulusRemoting.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -67,9 +67,6 @@
     <Compile Include="IVerify.cs" />
     <Compile Include="Location.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

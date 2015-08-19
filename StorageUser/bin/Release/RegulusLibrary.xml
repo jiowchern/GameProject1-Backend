@@ -6,26 +6,21 @@
     <members>
         <member name="M:Regulus.Collection.QuadTree`1.#ctor(Regulus.CustomType.Size,System.Int32,System.Boolean)">
             <summary>
-            Initializes a new instance of the <see cref="T:Regulus.Collection.QuadTree`1"/> class. 
+                Initializes a new instance of the <see cref="T:Regulus.Collection.QuadTree`1" /> class.
             </summary>
             <param name="minLeafSize">
-            The smallest size a leaf will split into
+                The smallest size a leaf will split into
             </param>
             <param name="maxObjectsPerLeaf">
-            Maximum number of objects per leaf before it forces a split into sub quadrants
+                Maximum number of objects per leaf before it forces a split into sub quadrants
             </param>
             <param name="sort">
-            Whether or not queries will return objects in the order in which they were added
+                Whether or not queries will return objects in the order in which they were added
             </param>
         </member>
         <member name="T:Regulus.Framework.IBootable">
             <summary>
                 啟動器
-            </summary>
-        </member>
-        <member name="T:Regulus.Utility.IUpdatable">
-            <summary>
-                更新器
             </summary>
         </member>
         <member name="T:Regulus.Remoting.INotifier`1">
@@ -66,15 +61,25 @@
             </summary>
             <typeparam name="T"></typeparam>
         </member>
+        <member name="E:Regulus.Remoting.Value`1.OnValue">
+            <summary>
+                如果有設定資料則會發生此事件
+            </summary>
+        </member>
+        <member name="P:Regulus.Remoting.Value`1.Empty">
+            <summary>
+                空物件
+            </summary>
+        </member>
         <member name="M:Regulus.Remoting.Value`1.#ctor">
             <summary>
-            Initializes a new instance of the <see cref="T:Regulus.Remoting.Value`1"/> class. 
+                Initializes a new instance of the <see cref="T:Regulus.Remoting.Value`1" /> class.
                 建構子
             </summary>
         </member>
         <member name="M:Regulus.Remoting.Value`1.#ctor(`0)">
             <summary>
-            Initializes a new instance of the <see cref="T:Regulus.Remoting.Value`1"/> class. 
+                Initializes a new instance of the <see cref="T:Regulus.Remoting.Value`1" /> class.
                 預設已經填入資料
             </summary>
             <param name="val">
@@ -92,16 +97,6 @@
             </summary>
             <param name="val"></param>
             <returns>如果有資料則傳回真</returns>
-        </member>
-        <member name="E:Regulus.Remoting.Value`1.OnValue">
-            <summary>
-                如果有設定資料則會發生此事件
-            </summary>
-        </member>
-        <member name="P:Regulus.Remoting.Value`1.Empty">
-            <summary>
-                空物件
-            </summary>
         </member>
         <member name="T:Regulus.Utility.OBB">
              @author scott.cgi
@@ -133,6 +128,13 @@
         </member>
         <member name="M:Regulus.Utility.OBB.setLeftTop(System.Single,System.Single)">
             Set OBB top left x, y
+        </member>
+        <member name="P:Regulus.Utility.SpinWait.Count">
+            <summary>获取已对此实例调用 <see cref="M:Regulus.Utility.SpinWait.SpinOnce" /> 的次数。</summary>
+        </member>
+        <member name="P:Regulus.Utility.SpinWait.NextSpinWillYield">
+            <summary>获取对 <see cref="M:Regulus.Utility.SpinWait.SpinOnce" /> 的下一次调用是否将产生处理器，同时触发强制上下文切换。</summary>
+            <returns>对 <see cref="M:Regulus.Utility.SpinWait.SpinOnce" /> 的下一次调用是否将产生处理器，同时触发强制上下文切换。</returns>
         </member>
         <member name="M:Regulus.Utility.SpinWait.SpinOnce">
             <summary>执行单一自旋。</summary>
@@ -167,16 +169,14 @@
                 表示无限期超时。
             </exception>
         </member>
-        <member name="P:Regulus.Utility.SpinWait.Count">
-            <summary>获取已对此实例调用 <see cref="M:Regulus.Utility.SpinWait.SpinOnce"/> 的次数。</summary>
-        </member>
-        <member name="P:Regulus.Utility.SpinWait.NextSpinWillYield">
-            <summary>获取对 <see cref="M:Regulus.Utility.SpinWait.SpinOnce"/> 的下一次调用是否将产生处理器，同时触发强制上下文切换。</summary>
-            <returns>对 <see cref="M:Regulus.Utility.SpinWait.SpinOnce"/> 的下一次调用是否将产生处理器，同时触发强制上下文切换。</returns>
-        </member>
         <member name="P:Regulus.Utility.Time.Ticks">
             <summary>
                 目前時間Ticks
+            </summary>
+        </member>
+        <member name="T:Regulus.Utility.IUpdatable">
+            <summary>
+                更新器
             </summary>
         </member>
     </members>
