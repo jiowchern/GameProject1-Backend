@@ -25,22 +25,20 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private readonly Regulus.Project.ItIsNotAGame1.Data.IGameRecorder _GameRecorder;
 
-
+        private readonly Zone _Zone;
 
         private Regulus.Project.ItIsNotAGame1.Data.Account _Account;
 
         private Regulus.Project.ItIsNotAGame1.Data.GamePlayerRecord _GamePlayerRecord;
 
-        public User(
-            ISoulBinder binder,
-            Regulus.Project.ItIsNotAGame1.Data.IAccountFinder account_finder,
-            Regulus.Project.ItIsNotAGame1.Data.IGameRecorder game_record_handler)
+        public User(ISoulBinder binder, IAccountFinder account_finder, IGameRecorder game_record_handler, Zone zone)
         {
             _Machine = new StageMachine();
 
             _Binder = binder;
             _AccountFinder = account_finder;
             _GameRecorder = game_record_handler;
+            _Zone = zone;
         }
 
         event Action Regulus.Project.ItIsNotAGame1.Data.IAccountStatus.KickEvent
@@ -138,14 +136,19 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         private void _ToLoadRecord()
         {
             var stage = new LoadRecordStage(_Account.Id , _Binder, _GameRecorder);
-            stage.DoneEvent += _ToGame ;
+            stage.DoneEvent += _ToRequestMap; 
             _Machine.Push(stage);
         }
 
-        private void _ToGame(GamePlayerRecord record)
+        private void _ToRequestMap(GamePlayerRecord record)
         {
-            
-            var stage = new GameStage(_Binder, record , _GameRecorder , null);
+            Map map = _Zone.FindMap("test");
+            _ToGame(record, map);
+        }
+
+        private void _ToGame(GamePlayerRecord record , Map map)
+        {            
+            var stage = new GameStage(_Binder, record , _GameRecorder , map);
             stage.DoneEvent += _ToVerify;
             _Machine.Push(stage);
         }

@@ -7,7 +7,7 @@ using Regulus.CustomType;
 
 namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
-    public class Map
+    public class Map 
     {
 
         
@@ -17,9 +17,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         public Map()
         {
-
             _Set = new List<Visible>();
-            _QuadTree = new QuadTree<Visible>(new Size(1, 1), 100);
+            _QuadTree = new QuadTree<Visible>(new Size(2, 2), 100);
         }
 
         public class Visible : Regulus.Collection.IQuadObject
@@ -82,8 +81,6 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                 _Set.Remove(result);
                 result.Release();
             }
-
-            
         }
 
         public IVisible[] Find(IObservable observable)

@@ -26,7 +26,11 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             get { return _Mesh.Points.ToRect(); }
         }
 
+        Polygon IVisible.Mesh { get; }
+
         private System.Action _BoundsEvent;
+        public Guid Id { get { return _Id; } }
+
         event System.Action IVisible.BoundsEvent
         {
             add { _BoundsEvent += value; }

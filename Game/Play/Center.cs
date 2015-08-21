@@ -1,4 +1,6 @@
-﻿using Regulus.Framework;
+﻿using System.Security.Policy;
+
+using Regulus.Framework;
 using Regulus.Game;
 using Regulus.Project.ItIsNotAGame1.Data;
 using Regulus.Utility;
@@ -11,22 +13,24 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         private readonly Regulus.Project.ItIsNotAGame1.Data.IGameRecorder _GameRecorder;
         private readonly Regulus.Game.Hall _Hall;
         private readonly Regulus.Utility.Updater _Updater;
-        public Center(IAccountFinder accountFinder, IGameRecorder gameRecorder)
+
+        private Regulus.Project.ItIsNotAGame1.Game.Play.Zone _Zone;
+        public Center(IAccountFinder accountFinder, IGameRecorder gameRecorder  )
         {
             _AccountFinder = accountFinder;
             _GameRecorder = gameRecorder;
             _Hall = new Hall();            
             _Updater = new Updater();
+            _Zone = new Zone();
         }
         public void Join(Regulus.Remoting.ISoulBinder binder)
         {
-            _Hall.PushUser(new User(binder , _AccountFinder , _GameRecorder));
+            _Hall.PushUser(new User(binder , _AccountFinder , _GameRecorder , _Zone));
         }
-
 
         void IBootable.Launch()
         {
-            _Updater.Add(_Hall);
+            _Updater.Add(_Hall);            
         }
 
         void IBootable.Shutdown()

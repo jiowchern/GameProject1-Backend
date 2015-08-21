@@ -21,7 +21,7 @@ namespace Regulus.Project.ItIsNotAGame1.Data
 
         public Guid[] Actors { get; set; }
 
-	    public Location Start { get; set; }
+	    
 	}
 
 }

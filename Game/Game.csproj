@@ -55,14 +55,17 @@
   <ItemGroup>
     <Compile Include="DummyFrature.cs" />
     <Compile Include="Play\Center.cs" />
+    <Compile Include="Play\EntityData.cs" />
+    <Compile Include="Play\EntityStatus.cs" />
     <Compile Include="Play\GameStage.cs" />
-    <Compile Include="Play\IMap.cs" />
     <Compile Include="Play\IObservable.cs" />
     <Compile Include="Play\IVisible.cs" />
     <Compile Include="Play\LoadRecordStage.cs" />
     <Compile Include="Play\Map.cs" />
+    <Compile Include="Play\RealmMaterial.cs" />
     <Compile Include="Play\Mover.cs" />
     <Compile Include="Play\Entity.cs" />
+    <Compile Include="Play\Zone.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Play\User.cs" />
     <Compile Include="Storage\Center.cs" />

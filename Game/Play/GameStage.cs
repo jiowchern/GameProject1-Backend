@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
+
+using Regulus.CustomType;
 using Regulus.Project.ItIsNotAGame1.Data;
 using Regulus.Remoting;
 using Regulus.Utility;
@@ -12,56 +15,85 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         private readonly IGameRecorder _Recoder;
         private readonly ISoulBinder _Binder;
 
-        private IMap _Map;
+        private Map _Map;
 
-        private Regulus.Utility.TimeCounter _TimeCounter;
-        public GameStage(ISoulBinder binder, GamePlayerRecord record, IGameRecorder recoder, IMap map)
+        private Regulus.Utility.TimeCounter _SaveTimeCounter;
+        private Regulus.Utility.TimeCounter _DeltaTimeCounter;
+
+        private Entity _Player;
+
+        private EntityStatus _Status;
+
+        private Mover _Mover;
+
+        
+
+        public GameStage(ISoulBinder binder, GamePlayerRecord record, IGameRecorder recoder, Map map)
         {
             _Map = map;
             _Record = record;
             _Recoder = recoder;
             _Binder = binder;
-            _TimeCounter = new TimeCounter();
+            _SaveTimeCounter = new TimeCounter();
+            _DeltaTimeCounter = new TimeCounter();
         }
         void IStage.Leave()
         {
             
-            var player = _CreatePlayer();
-            _Map.ChangeEvent -= _ChangeLocation;
-            _Map.Left(player);
+            _Map.Left(_Player);
             _Save();
         }        
 
         void IStage.Enter()
         {
-
-            var player = _CreatePlayer();
-            _Map.Join(player, _Record.Start );
-            _Map.ChangeEvent += _ChangeLocation;
+            _Player = _CreatePlayer();
+            _Map.Join(_Player);
+            
         }
 
-        private IVisible _CreatePlayer()
+        private Entity _CreatePlayer()
         {
-            throw new NotImplementedException();
+            var mesh = new Polygon(new []
+            {
+                new Vector2(0,0),
+                new Vector2(0,1),
+                new Vector2(1,1),
+                new Vector2(1,0),
+            });
+            
+            return new Entity(mesh);
         }
 
         void IStage.Update()
         {
             _UpdateSave();
 
-            
+            var deltaTime = _GetDeltaTime();
+
+            var velocity = _Status.GetSpeed(deltaTime);
+
+            var orbit = _Mover.GetOrbit(velocity);
+            var entitys = _Map.Find(orbit).Where(x => x.Id != _Player.Id );
+            _Mover.Move(velocity, entitys); 
+
+
         }
-        private void _ChangeLocation(IVisible arg1, Location arg2)
+        
+
+        private float _GetDeltaTime()
         {
-            throw new NotImplementedException();
+            var second = _DeltaTimeCounter.Second;
+            _DeltaTimeCounter.Reset();
+            return second;
         }
+        
 
         private void _UpdateSave()
         {
-            if (_TimeCounter.Second >= 60)
+            if (this._SaveTimeCounter.Second >= 60)
             {
                 _Save();
-                _TimeCounter.Reset();
+                this._SaveTimeCounter.Reset();
             }
         }
 

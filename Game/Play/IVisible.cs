@@ -9,6 +9,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         Guid Id { get; }
         Rect Bounds { get; }        
 
+        Polygon Mesh { get; }
+
         event Action BoundsEvent;
     }
 }
