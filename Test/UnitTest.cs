@@ -1,13 +1,9 @@
-﻿using System;
-using System.Globalization;
-using System.Threading;
-
+﻿
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using NSubstitute;
 
 using Regulus.CustomType;
-using Regulus.Project.ItIsNotAGame1.Data;
 using Regulus.Project.ItIsNotAGame1.Game.Play;
 using Regulus.Utility;
 
@@ -16,7 +12,20 @@ namespace Regulus.Project.ItIsNotAGame1.Test
     [TestClass]
     public class UnitTest
     {
-        
+
+        [TestMethod]
+        public void TestZone()
+        {                         
+            var rms = new RealmMaterial();
+            rms.Name = "test";
+            rms.EntityDatas = new EntityData[]
+            {
+                new EntityData {  }
+            };
+            var zone = new Zone(new RealmMaterial[] { rms });
+            var map = zone.FindMap("test");
+            Assert.AreNotEqual(null, map);
+        }
 
         [TestMethod]
         public void TestCenter()

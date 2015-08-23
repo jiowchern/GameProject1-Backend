@@ -26,3 +26,13 @@ D:\Develop\ItIsNotAGame1\Backend\Data\bin\Debug\RegulusRemoting.xml
 D:\Develop\ItIsNotAGame1\Backend\Data\obj\Debug\ItIsNotAGame1Data.dll
 D:\Develop\ItIsNotAGame1\Backend\Data\obj\Debug\ItIsNotAGame1Data.pdb
 D:\Develop\ItIsNotAGame1\Backend\Data\obj\Debug\Data.csprojResolveAssemblyReference.cache
+E:\Develop\Project\ItIsNotAGame1\Backend\Data\obj\Debug\ItIsNotAGame1Data.dll
+E:\Develop\Project\ItIsNotAGame1\Backend\Data\obj\Debug\ItIsNotAGame1Data.pdb
+E:\Develop\Project\ItIsNotAGame1\Backend\Data\bin\Debug\ItIsNotAGame1Data.dll
+E:\Develop\Project\ItIsNotAGame1\Backend\Data\bin\Debug\ItIsNotAGame1Data.pdb
+E:\Develop\Project\ItIsNotAGame1\Backend\Data\bin\Debug\protobuf-net.dll
+E:\Develop\Project\ItIsNotAGame1\Backend\Data\bin\Debug\RegulusLibrary.dll
+E:\Develop\Project\ItIsNotAGame1\Backend\Data\bin\Debug\RegulusRemoting.dll
+E:\Develop\Project\ItIsNotAGame1\Backend\Data\bin\Debug\protobuf-net.xml
+E:\Develop\Project\ItIsNotAGame1\Backend\Data\bin\Debug\RegulusLibrary.xml
+E:\Develop\Project\ItIsNotAGame1\Backend\Data\bin\Debug\RegulusRemoting.xml

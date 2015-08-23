@@ -15,16 +15,17 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         class Realm
         {
             private readonly EntityData[] _EntityDatas;
+            private readonly Map _Map;
 
             public Realm(EntityData[] entity_datas)
             {
                 _EntityDatas = entity_datas;
-                
+                _Map = new Map();
             }
 
             public Map Query()
             {
-                throw new System.NotImplementedException();
+                return _Map;
             }
         }
         private Dictionary<string, Realm> _Realms;
@@ -33,7 +34,11 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         public Zone(RealmMaterial[] realm_materials)
         {
+            if (realm_materials == null)
+                throw new System.NullReferenceException();
+
             _Realms = new Dictionary<string, Realm>();
+
             foreach (var material in realm_materials)
             {
                 _Realms.Add(material.Name , new Realm(material.EntityDatas));

@@ -21,7 +21,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _GameRecorder = gameRecorder;
             _Hall = new Hall();            
             _Updater = new Updater();
-            _Zone = new Zone();
+            _Zone = new Zone(new RealmMaterial[] { new RealmMaterial { Name = "test", EntityDatas = new EntityData[0] } });
         }
         public void Join(Regulus.Remoting.ISoulBinder binder)
         {
@@ -30,7 +30,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         void IBootable.Launch()
         {
-            _Updater.Add(_Hall);            
+            _Updater.Add(_Hall);
+            _Updater.Add(_Zone);
         }
 
         void IBootable.Shutdown()
