@@ -23,7 +23,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         public class Visible : Regulus.Collection.IQuadObject
         {
-            public Visible(IVisible noumenon)
+            public Visible(IIndividual noumenon)
             {
                 Noumenon = noumenon;
                 
@@ -61,20 +61,20 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                 remove { _BoundsChanged -= value; }
             }
 
-            public IVisible Noumenon { get; private set; }
+            public IIndividual Noumenon { get; private set; }
         }
 
-        public void Join(IVisible visible)
+        public void Join(IIndividual individual)
         {
-            var v = new Visible(visible);
+            var v = new Visible(individual);
             v.Initial();
             _Set.Add(v);
             _QuadTree.Insert(v);
         }
 
-        public void Left(IVisible visible)
+        public void Left(IIndividual individual)
         {
-            var results = _Set.FindAll(v => v.Noumenon.Id == visible.Id);
+            var results = _Set.FindAll(v => v.Noumenon.Id == individual.Id);
             foreach (var result in results)
             {
                 _QuadTree.Remove(result);
@@ -83,7 +83,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             }
         }
 
-        public IVisible[] Find(IObservable observable)
+        public IIndividual[] Find(IObservable observable)
         {
             var results = _QuadTree.Query(observable.Vision);
 

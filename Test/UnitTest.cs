@@ -6,7 +6,7 @@ using NSubstitute;
 using Regulus.CustomType;
 using Regulus.Project.ItIsNotAGame1.Game.Play;
 using Regulus.Utility;
-
+using Regulus.Project.ItIsNotAGame1.Data;
 namespace Regulus.Project.ItIsNotAGame1.Test
 {
     [TestClass]
@@ -16,13 +16,13 @@ namespace Regulus.Project.ItIsNotAGame1.Test
         [TestMethod]
         public void TestZone()
         {                         
-            var rms = new RealmMaterial();
-            rms.Name = "test";
-            rms.EntityDatas = new EntityData[]
+            var material = new RealmMaterial();
+            material.Name = "test";
+            material.EntityDatas = new[]
             {
                 new EntityData {  }
             };
-            var zone = new Zone(new RealmMaterial[] { rms });
+            var zone = new Zone(new RealmMaterial[] { material });
             var map = zone.FindMap("test");
             Assert.AreNotEqual(null, map);
         }
@@ -92,12 +92,12 @@ namespace Regulus.Project.ItIsNotAGame1.Test
             
             meshs5.Offset(0, 8);
 
-            IVisible[] visables = {
-                new Entity(meshs1), 
-                new Entity(meshs2), 
-                new Entity(meshs3), 
-                new Entity(meshs4), 
-                new Entity(meshs5)
+            IIndividual[] visables = {
+                new Entity(meshs1 , ""), 
+                new Entity(meshs2, ""), 
+                new Entity(meshs3, ""), 
+                new Entity(meshs4, ""), 
+                new Entity(meshs5, "")
             };
 
             foreach (var visable in visables)

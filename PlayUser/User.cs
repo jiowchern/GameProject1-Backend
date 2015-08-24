@@ -49,9 +49,17 @@ namespace Regulus.Project.ItIsNotAGame1
 			get { return _Agent.QueryNotifier<Regulus.Project.ItIsNotAGame1.Data.IVerify>(); }
 		}
 
-		
+	    INotifier<IVisible> IUser.VisibleProvider
+	    {
+            get { return _Agent.QueryNotifier<Regulus.Project.ItIsNotAGame1.Data.IVisible>(); }
+        }
 
-		INotifier<Regulus.Project.ItIsNotAGame1.Data.IAccountStatus> IUser.AccountStatusProvider
+	    INotifier<IController> IUser.ControllerProvider
+	    {
+            get { return _Agent.QueryNotifier<Regulus.Project.ItIsNotAGame1.Data.IController>(); }
+        }
+
+	    INotifier<Regulus.Project.ItIsNotAGame1.Data.IAccountStatus> IUser.AccountStatusProvider
 		{
 			get { return _Agent.QueryNotifier<IAccountStatus>(); }
 		}

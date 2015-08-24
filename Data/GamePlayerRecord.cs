@@ -19,10 +19,14 @@ namespace Regulus.Project.ItIsNotAGame1.Data
 
         [ProtoMember(3)]
 
-        public Guid[] Actors { get; set; }
+        public string Name { get; set; }
 
-	    
-	}
+	    public GamePlayerRecord()
+	    {
+	        Name = "無名" + System.DateTime.Now.ToLocalTime();
+	    }
+
+    }
 
 }
 

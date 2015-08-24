@@ -55,14 +55,14 @@
   <ItemGroup>
     <Compile Include="DummyFrature.cs" />
     <Compile Include="Play\Center.cs" />
-    <Compile Include="Play\EntityData.cs" />
+    <Compile Include="Play\EntityProvider.cs" />
     <Compile Include="Play\EntityStatus.cs" />
     <Compile Include="Play\GameStage.cs" />
     <Compile Include="Play\IObservable.cs" />
-    <Compile Include="Play\IVisible.cs" />
+    <Compile Include="Play\IIndividual.cs" />
     <Compile Include="Play\LoadRecordStage.cs" />
     <Compile Include="Play\Map.cs" />
-    <Compile Include="Play\RealmMaterial.cs" />
+    <Compile Include="Play\Player.cs" />
     <Compile Include="Play\Mover.cs" />
     <Compile Include="Play\Entity.cs" />
     <Compile Include="Play\Zone.cs" />
@@ -81,7 +81,6 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-   
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

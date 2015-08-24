@@ -1,15 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 using Regulus.CustomType;
+using Regulus.Game;
 using Regulus.Project.ItIsNotAGame1.Data;
 using Regulus.Remoting;
 using Regulus.Utility;
 
 namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
-    internal class GameStage : IStage
+    internal class GameStage : IStage , IController , IQuitable
     {
         private readonly GamePlayerRecord _Record;
         private readonly IGameRecorder _Recoder;
@@ -26,6 +29,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private Mover _Mover;
 
+        private List<IIndividual> _Controllers;
+
         
 
         public GameStage(ISoulBinder binder, GamePlayerRecord record, IGameRecorder recoder, Map map)
@@ -36,6 +41,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _Binder = binder;
             _SaveTimeCounter = new TimeCounter();
             _DeltaTimeCounter = new TimeCounter();
+            _Controllers = new List<IIndividual>();
         }
         void IStage.Leave()
         {
@@ -53,15 +59,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private Entity _CreatePlayer()
         {
-            var mesh = new Polygon(new []
-            {
-                new Vector2(0,0),
-                new Vector2(0,1),
-                new Vector2(1,1),
-                new Vector2(1,0),
-            });
-            
-            return new Entity(mesh);
+            return EntityProvider.Create("actor1", _Record.Name );
         }
 
         void IStage.Update()
@@ -70,15 +68,40 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
             var deltaTime = _GetDeltaTime();
 
-            var velocity = _Status.GetSpeed(deltaTime);
+            var velocity = _Status.GetVelocity(deltaTime);
 
             var orbit = _Mover.GetOrbit(velocity);
-            var entitys = _Map.Find(orbit).Where(x => x.Id != _Player.Id );
-            _Mover.Move(velocity, entitys); 
-
+            var entitys = _Map.Find(orbit);
+            _Mover.Move(velocity, entitys.Where(x => x.Id != _Player.Id));
 
         }
-        
+
+        private void _Broadcast(IEnumerable<IIndividual> controllers)
+        {
+            var current = _Controllers;
+
+            _BroadcastJoin(controllers.Except(current));
+            _BroadcastLeft(current.Except(controllers));
+
+            _Controllers.Clear();
+            _Controllers.AddRange(controllers);
+        }
+
+        private void _BroadcastLeft(IEnumerable<IIndividual> controllers)
+        {
+            foreach (var controller in controllers)
+            {
+                _Binder.Unbind<IVisible>(controller);
+            }
+        }
+
+        private void _BroadcastJoin(IEnumerable<IIndividual> controllers)
+        {
+            foreach (var controller in controllers)
+            {
+                _Binder.Bind<IVisible>(controller);
+            }
+        }
 
         private float _GetDeltaTime()
         {
@@ -103,5 +126,15 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         }
 
         public event Action DoneEvent;
+
+        void IController.Move(float angle)
+        {
+            _Status.Move(angle);
+        }
+
+        public void Quit()
+        {
+            DoneEvent.Invoke();
+        }
     }
 }

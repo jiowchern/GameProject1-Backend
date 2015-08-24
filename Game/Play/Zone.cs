@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 using Regulus.CustomType;
 using Regulus.Framework;
 using Regulus.Utility;
-
+using Regulus.Project.ItIsNotAGame1.Data;
 namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
     public class Zone :Regulus.Utility.IUpdatable
@@ -66,7 +66,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         bool IUpdatable.Update()
         {
-            throw new System.NotImplementedException();
+            return true;
         }
     }
 }
