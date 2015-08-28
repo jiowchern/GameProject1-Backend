@@ -7,10 +7,10 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
     public class EntityProvider 
     {
-        public static Entity Create(string entity_name ,string resource_name)
+        public static Entity Create(GamePlayerRecord record)
         {
-            var data = Singleton<Resource>.Instance.FindEntity(resource_name);
-            return new Entity(data.Mesh , entity_name);
+            var data = Singleton<Resource>.Instance.FindEntity(record.Entity);
+            return new Entity(data.Mesh.Clone() , record);
         }
     }
 }

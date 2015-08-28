@@ -21,12 +21,15 @@ namespace Regulus.Project.ItIsNotAGame1.Data
 
         public string Name { get; set; }
 
-	    public GamePlayerRecord()
+        [ProtoMember(4)]
+
+        public ENTITY Entity { get; set; }
+
+        public GamePlayerRecord()
 	    {
 	        Name = "無名" + System.DateTime.Now.ToLocalTime();
 	    }
 
     }
-
 }
 

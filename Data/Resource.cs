@@ -6,9 +6,9 @@ namespace Regulus.Project.ItIsNotAGame1.Data
     {
         public EntityData[] Entitys;
 
-        public EntityData FindEntity(string name)
+        public EntityData FindEntity(ENTITY name)
         {
-            return (from e in Entitys where e.Name == name select e).SingleOrDefault();
+            return (from e in Entitys where e.Name == name select e).Single();
         }        
     }
 }

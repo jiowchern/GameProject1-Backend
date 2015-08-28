@@ -142,6 +142,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private void _ToRequestMap(GamePlayerRecord record)
         {
+            _GamePlayerRecord = record;
             Map map = _Zone.FindMap("test");
             _ToGame(record, map);
         }

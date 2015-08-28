@@ -56,13 +56,11 @@
     <Compile Include="DummyFrature.cs" />
     <Compile Include="Play\Center.cs" />
     <Compile Include="Play\EntityProvider.cs" />
-    <Compile Include="Play\EntityStatus.cs" />
     <Compile Include="Play\GameStage.cs" />
     <Compile Include="Play\IObservable.cs" />
     <Compile Include="Play\IIndividual.cs" />
     <Compile Include="Play\LoadRecordStage.cs" />
     <Compile Include="Play\Map.cs" />
-    <Compile Include="Play\Player.cs" />
     <Compile Include="Play\Mover.cs" />
     <Compile Include="Play\Entity.cs" />
     <Compile Include="Play\Zone.cs" />

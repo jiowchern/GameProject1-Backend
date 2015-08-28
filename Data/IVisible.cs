@@ -6,6 +6,7 @@ namespace Regulus.Project.ItIsNotAGame1.Data
 {
     public interface IVisible
     {
+        ENTITY EntityType { get; }
         Guid Id { get; }
 
         string Name { get; }

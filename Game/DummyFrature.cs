@@ -38,8 +38,16 @@ namespace Regulus.Project.ItIsNotAGame1.Game
 					Password = "user", 
 					Name = "user1", 
 					Competnces = Account.AllCompetnce()
-				}
-			};
+				},
+                new Account
+                {
+                    Id = Guid.NewGuid(),
+                    Password = "1",
+                    Name = "1",
+                    Competnces = Account.AllCompetnce()
+                }
+
+            };
         }
 
         Value<Account> IAccountFinder.FindAccountByName(string id)

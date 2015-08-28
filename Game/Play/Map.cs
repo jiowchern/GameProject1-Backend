@@ -70,6 +70,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             v.Initial();
             _Set.Add(v);
             _QuadTree.Insert(v);
+
+            individual.SetPosition(Regulus.Utility.Random.Instance.NextFloat(0,10) , Regulus.Utility.Random.Instance.NextFloat(0, 10));
         }
 
         public void Left(IIndividual individual)

@@ -1,6 +1,7 @@
 ﻿using Regulus.Project.ItIsNotAGame1.Game.Play;
 using System;
 
+using Regulus.Project.ItIsNotAGame1.Data;
 
 namespace Regulus.Project.ItIsNotAGame1.Play
 {
@@ -55,9 +56,17 @@ namespace Regulus.Project.ItIsNotAGame1.Play
         void Regulus.Framework.IBootable.Launch()
         {
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+            _LoadData();
             Regulus.Utility.Singleton<Regulus.Utility.Log>.Instance.RecordEvent += _LogRecorder.Record;
             _Updater.Add(_Storage);            
             _ToConnectStorage(_StorageUser);
+        }
+
+        private void _LoadData()
+        {
+            var buffer = System.IO.File.ReadAllBytes("entitys.txt");
+            var entitys = Regulus.Utility.Serialization.Read<EntityData[]>(buffer);
+            Resource.Instance.Entitys = entitys;
         }
 
         private void _BuildParams()

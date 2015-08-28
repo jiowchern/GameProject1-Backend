@@ -11,8 +11,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private Entity _Entity;
 
-        private IIndividual _Individual { get { return _Entity; } }
-        private Guid _Id;
+        private IIndividual _Individual { get { return _Entity; } }        
 
         public Mover(Entity entity)
         {
