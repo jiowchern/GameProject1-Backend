@@ -103,7 +103,7 @@ namespace Regulus.Project.ItIsNotAGame1.Test
 
             foreach (var visable in visables)
             {
-                map.Join(visable);    
+                map.JoinChallenger(visable);    
             }
             
             var results = map.Find(observable);

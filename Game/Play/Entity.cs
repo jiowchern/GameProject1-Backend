@@ -58,7 +58,12 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         CustomType.Rect IIndividual.Bounds
         {
-            get { return _Mesh.Points.ToRect(); }
+            get
+            {
+                var center = _Mesh.Center;
+                var rect = new Rect(center.X, center.Y, _View, _View);
+                return rect.LeftToCenter();
+            }
         }
 
         Polygon IIndividual.Mesh

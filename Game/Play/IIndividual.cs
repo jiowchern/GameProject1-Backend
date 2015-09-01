@@ -7,7 +7,6 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
     public interface IIndividual : IVisible
     {
-        
         Rect Bounds { get; }        
 
         Polygon Mesh { get; }

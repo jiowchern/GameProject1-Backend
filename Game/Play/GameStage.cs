@@ -65,7 +65,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _DifferenceNoticer.JoinEvent += _BroadcastJoin;
             _DifferenceNoticer.LeftEvent += _BroadcastLeft;
 
-            _Map.Join(_Player);
+            _Map.JoinChallenger(_Player);
             _Binder.Bind<IController>(this);
         }
 

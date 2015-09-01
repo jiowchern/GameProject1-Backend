@@ -12,5 +12,6 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             var data = Singleton<Resource>.Instance.FindEntity(record.Entity);
             return new Entity(data.Mesh.Clone() , record);
         }
+        
     }
 }

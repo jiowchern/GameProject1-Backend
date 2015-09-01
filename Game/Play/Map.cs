@@ -64,14 +64,22 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             public IIndividual Noumenon { get; private set; }
         }
 
-        public void Join(IIndividual individual)
+        public void JoinStaff(IIndividual individual)
+        {
+            _Join(individual);
+        }
+        public void JoinChallenger(IIndividual individual)
+        {
+            _Join(individual);
+            individual.SetPosition(Regulus.Utility.Random.Instance.NextFloat(0,2.5f) , Regulus.Utility.Random.Instance.NextFloat(0, 2.5f));
+        }
+
+        private void _Join(IIndividual individual)
         {
             var v = new Visible(individual);
             v.Initial();
-            _Set.Add(v);
-            _QuadTree.Insert(v);
-
-            individual.SetPosition(Regulus.Utility.Random.Instance.NextFloat(0,10) , Regulus.Utility.Random.Instance.NextFloat(0, 10));
+            this._Set.Add(v);
+            this._QuadTree.Insert(v);
         }
 
         public void Left(IIndividual individual)
