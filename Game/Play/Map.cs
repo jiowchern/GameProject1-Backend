@@ -11,9 +11,9 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
     {
 
         
-        private Regulus.Collection.QuadTree<Visible> _QuadTree;
+        private readonly Regulus.Collection.QuadTree<Visible> _QuadTree;
 
-        private List<Visible> _Set;
+        private readonly List<Visible> _Set;
 
         public Map()
         {

@@ -37,9 +37,13 @@ namespace Regulus.Project.ItIsNotAGame1
 
 			_CreateVerify(factory);
 
-		}
+            _CreateControll(factory);
 
-		private void _DestroySystem()
+        }
+
+	    
+
+	    private void _DestroySystem()
 		{
 
 		}
@@ -56,10 +60,16 @@ namespace Regulus.Project.ItIsNotAGame1
 		{
 		}
 
-	
-		
 
-		private void _CreateVerify(IGPIBinderFactory factory)
+
+        private void _CreateControll(IGPIBinderFactory factory)
+        {
+            var controller = factory.Create(_User.ControllerProvider);
+            controller.Bind("Move[Angle]", gpi=> new CommandParamBuilder().Build<float>(gpi.Move));
+            controller.Bind("Stop", gpi => new CommandParamBuilder().Build(gpi.Stop));
+        }
+
+        private void _CreateVerify(IGPIBinderFactory factory)
 		{
 			var verify = factory.Create(_User.VerifyProvider);
 			verify.Bind(
