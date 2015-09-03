@@ -48,3 +48,6 @@ E:\Develop\Project\ItIsNotAGame1\Backend\Game\bin\Debug\ItIsNotAGame1Data.pdb
 E:\Develop\Project\ItIsNotAGame1\Backend\Game\bin\Debug\protobuf-net.xml
 E:\Develop\Project\ItIsNotAGame1\Backend\Game\bin\Debug\RegulusLibrary.xml
 E:\Develop\Project\ItIsNotAGame1\Backend\Game\bin\Debug\RegulusRemoting.xml
+E:\Develop\Project\ItIsNotAGame1\Backend\Game\bin\Debug\protobuf-net.pdb
+E:\Develop\Project\ItIsNotAGame1\Backend\Game\bin\Debug\RegulusLibrary.pdb
+E:\Develop\Project\ItIsNotAGame1\Backend\Game\bin\Debug\RegulusRemoting.pdb

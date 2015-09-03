@@ -95,3 +95,7 @@ E:\Develop\Project\ItIsNotAGame1\Backend\Play\bin\Debug\RegulusRemotingSoulNativ
 E:\Develop\Project\ItIsNotAGame1\Backend\Play\bin\Debug\RegulusRemotingStandalone.pdb
 E:\Develop\Project\ItIsNotAGame1\Backend\Play\bin\Debug\RegulusRemotingGhostNative.pdb
 E:\Develop\Project\ItIsNotAGame1\Backend\Play\bin\Debug\RegulusRemotingGhostNative.xml
+E:\Develop\Project\ItIsNotAGame1\Backend\Play\bin\Debug\protobuf-net.pdb
+E:\Develop\Project\ItIsNotAGame1\Backend\Play\bin\Debug\RegulusLibrary.pdb
+E:\Develop\Project\ItIsNotAGame1\Backend\Play\bin\Debug\RegulusRemoting.pdb
+E:\Develop\Project\ItIsNotAGame1\Backend\Play\bin\Debug\RegulusRemotingSoulNative.pdb

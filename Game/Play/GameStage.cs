@@ -32,9 +32,6 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private readonly Regulus.Collection.DifferenceNoticer<IIndividual> _DifferenceNoticer;
 
-
-
-
         public GameStage(ISoulBinder binder, GamePlayerRecord record, IGameRecorder recoder, Map map)
         {
             _Map = map;            
@@ -47,8 +44,6 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
             _Player = _CreatePlayer();
             _Mover = new Mover(_Player);        
-
-
         }
         void IStage.Leave()
         {

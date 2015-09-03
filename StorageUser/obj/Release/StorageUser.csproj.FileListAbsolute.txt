@@ -36,7 +36,6 @@ E:\Develop\Project\ItIsNotAGame1\Backend\StorageUser\bin\Release\RegulusRemoting
 E:\Develop\Project\ItIsNotAGame1\Backend\StorageUser\bin\Release\RegulusRemoting.xml
 E:\Develop\Project\ItIsNotAGame1\Backend\StorageUser\bin\Release\RegulusRemotingGhostNative.pdb
 E:\Develop\Project\ItIsNotAGame1\Backend\StorageUser\bin\Release\RegulusRemotingGhostNative.xml
-E:\Develop\Project\ItIsNotAGame1\Backend\StorageUser\bin\Release\RegulusRemotingStandalone.pdb
 E:\Develop\Project\ItIsNotAGame1\Backend\StorageUser\obj\Release\StorageUser.csprojResolveAssemblyReference.cache
 E:\Develop\Project\ItIsNotAGame1\Backend\StorageUser\obj\Release\ItIsNotAGame1StorageUser.dll
 E:\Develop\Project\ItIsNotAGame1\Backend\StorageUser\obj\Release\ItIsNotAGame1StorageUser.pdb
@@ -61,3 +60,4 @@ D:\Develop\ItIsNotAGame1\Backend\StorageUser\bin\Release\RegulusRemotingStandalo
 D:\Develop\ItIsNotAGame1\Backend\StorageUser\obj\Release\StorageUser.csprojResolveAssemblyReference.cache
 D:\Develop\ItIsNotAGame1\Backend\StorageUser\obj\Release\ItIsNotAGame1StorageUser.dll
 D:\Develop\ItIsNotAGame1\Backend\StorageUser\obj\Release\ItIsNotAGame1StorageUser.pdb
+E:\Develop\Project\ItIsNotAGame1\Backend\StorageUser\bin\Release\RegulusRemotingStandalone.pdb

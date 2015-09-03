@@ -56,3 +56,7 @@ E:\Develop\Project\ItIsNotAGame1\Backend\StorageUser\bin\Debug\RegulusLibrary.xm
 E:\Develop\Project\ItIsNotAGame1\Backend\StorageUser\bin\Debug\RegulusRemoting.xml
 E:\Develop\Project\ItIsNotAGame1\Backend\StorageUser\bin\Debug\RegulusRemotingGhostNative.xml
 E:\Develop\Project\ItIsNotAGame1\Backend\StorageUser\obj\Debug\StorageUser.csprojResolveAssemblyReference.cache
+E:\Develop\Project\ItIsNotAGame1\Backend\StorageUser\bin\Debug\protobuf-net.pdb
+E:\Develop\Project\ItIsNotAGame1\Backend\StorageUser\bin\Debug\RegulusLibrary.pdb
+E:\Develop\Project\ItIsNotAGame1\Backend\StorageUser\bin\Debug\RegulusRemoting.pdb
+E:\Develop\Project\ItIsNotAGame1\Backend\StorageUser\bin\Debug\RegulusRemotingGhostNative.pdb
