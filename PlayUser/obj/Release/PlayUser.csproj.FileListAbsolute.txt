@@ -36,7 +36,6 @@ E:\Develop\Project\ItIsNotAGame1\Backend\PlayUser\bin\Release\RegulusRemoting.pd
 E:\Develop\Project\ItIsNotAGame1\Backend\PlayUser\bin\Release\RegulusRemoting.xml
 E:\Develop\Project\ItIsNotAGame1\Backend\PlayUser\bin\Release\RegulusRemotingGhostNative.pdb
 E:\Develop\Project\ItIsNotAGame1\Backend\PlayUser\bin\Release\RegulusRemotingGhostNative.xml
-E:\Develop\Project\ItIsNotAGame1\Backend\PlayUser\bin\Release\RegulusRemotingStandalone.pdb
 E:\Develop\Project\ItIsNotAGame1\Backend\PlayUser\obj\Release\PlayUser.csprojResolveAssemblyReference.cache
 E:\Develop\Project\ItIsNotAGame1\Backend\PlayUser\obj\Release\ItIsNotAGame1PlayUser.dll
 E:\Develop\Project\ItIsNotAGame1\Backend\PlayUser\obj\Release\ItIsNotAGame1PlayUser.pdb
@@ -61,3 +60,4 @@ D:\Develop\ItIsNotAGame1\Backend\PlayUser\bin\Release\RegulusRemotingStandalone.
 D:\Develop\ItIsNotAGame1\Backend\PlayUser\obj\Release\PlayUser.csprojResolveAssemblyReference.cache
 D:\Develop\ItIsNotAGame1\Backend\PlayUser\obj\Release\ItIsNotAGame1PlayUser.dll
 D:\Develop\ItIsNotAGame1\Backend\PlayUser\obj\Release\ItIsNotAGame1PlayUser.pdb
+E:\Develop\Project\ItIsNotAGame1\Backend\PlayUser\bin\Release\RegulusRemotingStandalone.pdb

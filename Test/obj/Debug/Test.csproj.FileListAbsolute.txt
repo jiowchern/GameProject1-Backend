@@ -83,3 +83,6 @@ E:\Develop\Project\ItIsNotAGame1\Backend\Test\bin\Debug\RegulusLibrary.xml
 E:\Develop\Project\ItIsNotAGame1\Backend\Test\bin\Debug\RegulusRemoting.xml
 E:\Develop\Project\ItIsNotAGame1\Backend\Test\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.xml
 E:\Develop\Project\ItIsNotAGame1\Backend\Test\bin\Debug\zh-Hant\Microsoft.VisualStudio.QualityTools.UnitTestFramework.resources.dll
+E:\Develop\Project\ItIsNotAGame1\Backend\Test\bin\Debug\protobuf-net.pdb
+E:\Develop\Project\ItIsNotAGame1\Backend\Test\bin\Debug\RegulusLibrary.pdb
+E:\Develop\Project\ItIsNotAGame1\Backend\Test\bin\Debug\RegulusRemoting.pdb
