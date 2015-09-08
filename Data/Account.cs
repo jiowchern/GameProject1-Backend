@@ -42,7 +42,7 @@ namespace Regulus.Project.ItIsNotAGame1.Data
 		
 			Id = Guid.NewGuid();
 			Name = Id.ToString();
-			Password = Id.ToString();
+			Password = Id.ToString(); 
 		}
 
 		public bool IsPassword(string password)

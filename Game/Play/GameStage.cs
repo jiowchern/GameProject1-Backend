@@ -75,8 +75,11 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
             var deltaTime = _GetDeltaTime();
 
-            var velocity = _Player.GetVelocity(deltaTime);
 
+
+
+
+            var velocity = _Player.GetVelocity(deltaTime);
             var orbit = _Mover.GetOrbit(velocity);
             var entitys = _Map.Find(orbit);
             if (_Mover.Move(velocity, entitys.Where(x => x.Id != _Player.Id)) == false)
