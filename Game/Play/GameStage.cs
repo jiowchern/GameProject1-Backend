@@ -75,19 +75,20 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
             var deltaTime = _GetDeltaTime();
 
-
-
-
-
-            var velocity = _Player.GetVelocity(deltaTime);
-            var orbit = _Mover.GetOrbit(velocity);
-            var entitys = _Map.Find(orbit);
-            if (_Mover.Move(velocity, entitys.Where(x => x.Id != _Player.Id)) == false)
-            {
-                _Player.Stop();
-            }
+            this._Move(deltaTime);
 
             _Broadcast(_Map.Find(_Player));
+        }
+
+        private void _Move(float deltaTime)
+        {
+            var velocity = this._Player.GetVelocity(deltaTime);
+            var orbit = this._Mover.GetOrbit(velocity);
+            var entitys = this._Map.Find(orbit);
+            if(this._Mover.Move(velocity, entitys.Where(x => x.Id != this._Player.Id)) == false)
+            {
+                this._Player.Stop();
+            }
         }
 
         private void _Broadcast(IEnumerable<IIndividual> controllers)

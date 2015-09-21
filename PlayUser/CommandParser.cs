@@ -64,6 +64,7 @@ namespace Regulus.Project.ItIsNotAGame1
 
         private void _CreateControll(IGPIBinderFactory factory)
         {
+            
             var controller = factory.Create(_User.ControllerProvider);
             controller.Bind("Move[Angle]", gpi=> new CommandParamBuilder().Build<float>(gpi.Move));
             controller.Bind("Stop", gpi => new CommandParamBuilder().Build(gpi.Stop));

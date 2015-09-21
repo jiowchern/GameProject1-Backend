@@ -1,5 +1,6 @@
 ﻿using Regulus.Project.ItIsNotAGame1.Game.Play;
 using System;
+using System.Reflection.Emit;
 
 using Regulus.Project.ItIsNotAGame1.Data;
 
@@ -47,7 +48,7 @@ namespace Regulus.Project.ItIsNotAGame1.Play
         }
 
         void Regulus.Framework.IBootable.Shutdown()
-        {
+        {            
             _Updater.Shutdown();
             Regulus.Utility.Singleton<Regulus.Utility.Log>.Instance.RecordEvent -= _LogRecorder.Record;
             AppDomain.CurrentDomain.UnhandledException -= CurrentDomain_UnhandledException;
