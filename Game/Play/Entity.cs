@@ -14,8 +14,6 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             MOVE
         };
 
-        private readonly Flag<TRIGGER> _Trigger;
-
         private readonly Polygon _Mesh;
         private readonly Guid _Id;
 
@@ -25,7 +23,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         public Entity(Polygon mesh, GamePlayerRecord record)
         {
-            _Trigger = new Flag<TRIGGER>();
+            
             _Id = Guid.NewGuid();
             _View = 30.0f;
             this._Record = record;
@@ -109,23 +107,17 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         public void Move(float angle)
         {
-            _Speed = 1.0f;
+            _Speed = 5.0f;
             _SetMove(angle);
         }
 
         private void _SetMove(float angle)
         {
             this.Direction = angle;
-            this._Trigger[TRIGGER.MOVE] = true;
-
-            if (this._Trigger[TRIGGER.MOVE])
+            if (this._MoveEvent != null)
             {
-                if (this._MoveEvent != null)
-                {
-                    this._MoveEvent.Invoke(this._Mesh.Center, this._ToVector(this.Direction) * this._Speed);
-                }
-                this._Trigger[TRIGGER.MOVE] = false;
-            }
+                this._MoveEvent.Invoke(this._Mesh.Center, this._ToVector(this.Direction) * this._Speed);
+            }            
         }
 
         public Vector2 GetVelocity(float delta_time)
@@ -144,8 +136,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         private Rect _BuildVidw()
         {
             var center = _Mesh.Center;
-            var hw = _View;
-            var hh = _View;
+            var hw = _View / 2;
+            var hh = _View / 2;
             var rect = new Rect(center.X - hw, center.Y - hh, _View , _View);
             return rect;
         }
