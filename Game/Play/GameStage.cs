@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -26,10 +27,9 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private readonly Entity _Player;
 
-        
-
         private readonly Mover _Mover;
 
+        private readonly Regulus.Utility.StageMachine _Status;
         private readonly Regulus.Collection.DifferenceNoticer<IIndividual> _DifferenceNoticer;
 
         public GameStage(ISoulBinder binder, GamePlayerRecord record, IGameRecorder recoder, Map map)
@@ -43,10 +43,13 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _DifferenceNoticer = new DifferenceNoticer<IIndividual>();
 
             _Player = _CreatePlayer();
-            _Mover = new Mover(_Player);        
+            _Mover = new Mover(_Player);
+
+            _Status = new StageMachine();
         }
         void IStage.Leave()
         {
+            _Status.Termination();
             _DifferenceNoticer.JoinEvent -= _BroadcastJoin;
             _DifferenceNoticer.LeftEvent -= _BroadcastLeft;
 
@@ -62,6 +65,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
             _Map.JoinChallenger(_Player);
             _Binder.Bind<IController>(this);
+
+            _ToIdle();
         }
 
         private Entity _CreatePlayer()
@@ -75,6 +80,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
             var deltaTime = _GetDeltaTime();
 
+            _Status.Update();
             this._Move(deltaTime);
 
             _Broadcast(_Map.Find(_Player));
