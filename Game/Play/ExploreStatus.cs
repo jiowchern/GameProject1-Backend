@@ -64,7 +64,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         public override void Enter()
         {
-            
+            _Player.Explore();
         }
 
         

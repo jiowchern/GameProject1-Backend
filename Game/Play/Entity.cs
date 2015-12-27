@@ -49,12 +49,12 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             get { return this._Record.Name; }
         }
 
-        private event Action<Vector2, float, float , float> _MoveEvent;
+        private event Action<VisibleStatus> _StatusEvent;
 
-        event Action<Vector2, float, float, float> IVisible.MoveEvent
+        event Action<VisibleStatus> IVisible.StatusEvent
         {
-            add { this._MoveEvent += value; }
-            remove { this._MoveEvent -= value; }
+            add { this._StatusEvent += value; }
+            remove { this._StatusEvent -= value; }
         }
 
         Vector2 IVisible.Position { get { return this._Mesh.Center; } }
@@ -140,10 +140,23 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         private void _SetMove(float angle)
         {
             this.Direction = (this.Direction + angle) % 360;
-            if (this._MoveEvent != null)
+            _InvokeStatusEvent(ACTOR_STATUS_TYPE.WALK);
+        }
+
+        private void _InvokeStatusEvent(ACTOR_STATUS_TYPE type)
+        {
+            if (this._StatusEvent != null)
             {
-                this._MoveEvent.Invoke(this._Mesh.Center, this._Speed, this.Direction, this._Trun);
-            }            
+                var status = new VisibleStatus()
+                {
+                    Status = type,
+                    StartPosition = _Mesh.Center,
+                    Speed = _Speed,
+                    Direction = this.Direction,
+                    Trun = _Trun
+                };
+                this._StatusEvent.Invoke(status);
+            }
         }
 
         public Vector2 GetVelocity(float delta_time)
@@ -173,10 +186,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         {
             this._Trun = trun;
 
-            if (this._MoveEvent != null)
-            {
-                this._MoveEvent.Invoke(this._Mesh.Center,  this._Speed, this.Direction , this._Trun ) ;
-            } 
+            _InvokeStatusEvent(ACTOR_STATUS_TYPE.WALK);            
         }
 
         public Polygon GetExploreBound()
@@ -190,6 +200,14 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             return _BuildVidw();
         }
 
-        
+        public void Idle()
+        {
+            _InvokeStatusEvent(ACTOR_STATUS_TYPE.IDLE);
+        }
+
+        public void Explore()
+        {
+            _InvokeStatusEvent(ACTOR_STATUS_TYPE.EXPLORE);
+        }
     }
 }

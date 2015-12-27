@@ -14,7 +14,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         public event Action<Guid> ExploreEvent;
 
-        public NormalStatus(ISoulBinder binder, Entity player) : base (ACTOR_STATUS_TYPE.NORMAL )
+        public NormalStatus(ISoulBinder binder, Entity player) : base (ACTOR_STATUS_TYPE.IDLE )
         {
             _Binder = binder;
             _Player = player;
@@ -36,6 +36,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         {
             _Binder.Bind<IMoveController>(this);
             _Binder.Bind<ISkillController>(this);
+
+            _Player.Idle();
         }
         
 

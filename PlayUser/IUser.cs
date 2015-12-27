@@ -22,7 +22,7 @@ namespace Regulus.Project.ItIsNotAGame1
         INotifier<Data.IInventoryNotifier> InventoryNotifierProvider { get; }
         INotifier<Data.ISkillController> SkillControllerProvider { get; }
 
-        INotifier<Data.IActorStatus> ActorStatusProvider { get; }
+        
 
 
     }

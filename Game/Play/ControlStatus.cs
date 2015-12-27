@@ -7,7 +7,7 @@ using Regulus.Utility;
 
 namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
-    internal class ControlStatus : Regulus.Utility.IUpdatable , Data.IActorStatus
+    internal class ControlStatus : Regulus.Utility.IUpdatable 
     {
         private readonly ISoulBinder _Binder;
 
@@ -31,8 +31,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         }
 
         void IBootable.Launch()
-        {
-            _Binder.Bind<Data.IActorStatus>(this);
+        {            
             _ToNormal();
         }
 
@@ -59,7 +58,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         void IBootable.Shutdown()
         {
             _Status.Termination();
-            _Binder.Unbind<Data.IActorStatus>(this);
+            
         }
 
         bool IUpdatable.Update()
@@ -68,22 +67,14 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             return true;
         }
 
-        private event Action<ACTOR_STATUS_TYPE, ACTOR_STATUS_TYPE> _OnChangeEvent;
+        
 
-        Guid IActorStatus.Id {
-            get { return _Player.Id; }
-        }
+        
 
-        event Action<ACTOR_STATUS_TYPE, ACTOR_STATUS_TYPE> IActorStatus.ChangeEvent
-        {
-            add { this._OnChangeEvent += value; }
-            remove { this._OnChangeEvent -= value; }
-        }
+        
 
         protected void _Change(ACTOR_STATUS_TYPE arg1)
-        {            
-            if(_OnChangeEvent != null)
-                _OnChangeEvent.Invoke(arg1, _Current);
+        {                        
             _Current = arg1;
         }
     }

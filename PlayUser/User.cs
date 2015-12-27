@@ -74,6 +74,6 @@ namespace Regulus.Project.ItIsNotAGame1
 
 	    INotifier<ISkillController> IUser.SkillControllerProvider { get { return this._Agent.QueryNotifier<ISkillController>(); } }
 
-	    INotifier<IActorStatus> IUser.ActorStatusProvider { get { return this._Agent.QueryNotifier<IActorStatus>(); } }
+	    
 	}
 }

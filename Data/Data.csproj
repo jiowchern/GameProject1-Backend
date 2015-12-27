@@ -62,7 +62,6 @@
     <Compile Include="IAccountFinder.cs" />
     <Compile Include="IAccountManager.cs" />
     <Compile Include="IAccountStatus.cs" />
-    <Compile Include="IActorStatus.cs" />
     <Compile Include="IMoveController.cs" />
     <Compile Include="IInventoryNotifier.cs" />
     <Compile Include="IPlayerProperys.cs" />
