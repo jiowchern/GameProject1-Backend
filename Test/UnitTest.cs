@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using NSubstitute;
@@ -12,11 +14,66 @@ namespace Regulus.Project.ItIsNotAGame1.Test
     [TestClass]
     public class UnitTest
     {
+        [TestMethod]
+        public void TestExtendingPolygon()
+        {
+            var polygon = new Polygon( new []
+            {
+                new Vector2(0,1),
+                new Vector2(1,0),
+                new Vector2(-1,0),
+                new Vector2(0,-1),
+            });
+
+            var extendPolygon = new ExtendPolygon(polygon , 1.0f);
+            var result = extendPolygon.Result;
+
+            Assert.AreEqual(new Vector2(0, 2), result.Points[0] );
+            Assert.AreEqual(new Vector2(2,0), result.Points[1] );
+            Assert.AreEqual(new Vector2(-2,0),result.Points[2] );
+            Assert.AreEqual(new Vector2(0,-2),result.Points[3] );
+        }
+        [TestMethod]
+        public void TestInventoryRemove()
+        {
+            var inventory = new Inventory();
+            Item item1 = new Item();
+            item1.Id = Guid.NewGuid();
+            item1.Weight = 10;
+            inventory.Add(item1);
+            
+            Item item2 = new Item();
+            item2.Id = Guid.NewGuid();
+            item2.Weight = 10;
+            inventory.Add(item2);
+
+            inventory.Remove(item1.Id);
+
+            var weight = inventory.GetWeight();
+
+            Assert.AreEqual(10, weight);
+        }
 
 
         [TestMethod]
+        public void TestInventoryWeight1()
+        {
+            var inventory = new Inventory();
+            Item item1 = new Item();
+            item1.Weight = 10;
+            inventory.Add(item1);
+            Item item2 = new Item();
+            item2.Weight = 10;
+            inventory.Add(item2);
+            var weight = inventory.GetWeight();
+
+            Assert.AreEqual(20 , weight);
+        }
+
+        [TestMethod]
         public void TestZone()
-        {                         
+        {
+            
             var material = new RealmMaterial();
             material.Name = "test";
             material.EntityDatas = new[]
@@ -31,13 +88,13 @@ namespace Regulus.Project.ItIsNotAGame1.Test
         [TestMethod]
         public void TestCenter()
         {
-            var binder = NSubstitute.Substitute.For<Regulus.Remoting.ISoulBinder>();
-            var finder = NSubstitute.Substitute.For<Regulus.Project.ItIsNotAGame1.Data.IAccountFinder>();
-            var record = NSubstitute.Substitute.For<Regulus.Project.ItIsNotAGame1.Data.IGameRecorder>();
+            var binder = Substitute.For<Remoting.ISoulBinder>();
+            var finder = Substitute.For<IAccountFinder>();
+            var record = Substitute.For<IGameRecorder>();
 
             var center = new Center(finder, record);
 
-            Regulus.Utility.Updater updater = new Updater();
+            Updater updater = new Updater();
             center.Join(binder);
             updater.Add(center);
             updater.Working();
@@ -50,9 +107,6 @@ namespace Regulus.Project.ItIsNotAGame1.Test
             Map map = new Map();
 
             Rect rect = new Rect(0.5f ,5,1,10);
-            
-            IObservable observable = NSubstitute.Substitute.For<IObservable>();
-            observable.Vision.Returns(rect);
 
             Polygon meshs1 = new Polygon(new[]{
                 new Vector2(1, 1),
@@ -106,14 +160,14 @@ namespace Regulus.Project.ItIsNotAGame1.Test
                 map.JoinChallenger(visable);    
             }
             
-            var results = map.Find(observable);
+            var results = map.Find(rect);
 
             foreach (var visable in visables)
             {
                 map.Left(visable);
             }
 
-            Assert.AreEqual(3, results.Length);    
+            Assert.AreEqual(5, results.Length);    
         }
         
     }

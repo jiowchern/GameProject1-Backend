@@ -31,14 +31,14 @@ namespace Regulus.Project.ItIsNotAGame1.Play
 
         public BuildCenterStage( IUser storage_user)
         {
-            _Feature = new ExternalFeature();
-            
-            _StorageUser = storage_user;
+            this._Feature = new ExternalFeature();
+
+            this._StorageUser = storage_user;
         }
 
         void IStage.Enter()
         {
-            _StorageUser.QueryProvider<IAccountFinder>().Supply += _AccountFinder;
+            this._StorageUser.QueryProvider<IAccountFinder>().Supply += this._AccountFinder;
         }
 
         void IStage.Leave()
@@ -53,19 +53,19 @@ namespace Regulus.Project.ItIsNotAGame1.Play
 
         private void _AccountFinder(IAccountFinder obj)
         {
-            _StorageUser.QueryProvider<IAccountFinder>().Supply -= _AccountFinder;
-            _Feature.AccountFinder = obj;
+            this._StorageUser.QueryProvider<IAccountFinder>().Supply -= this._AccountFinder;
+            this._Feature.AccountFinder = obj;
 
-            _StorageUser.QueryProvider<IGameRecorder>().Supply += _RecordQueriers;
+            this._StorageUser.QueryProvider<IGameRecorder>().Supply += this._RecordQueriers;
         }
 
         
         private void _RecordQueriers(IGameRecorder obj)
         {
-            _StorageUser.QueryProvider<IGameRecorder>().Supply -= _RecordQueriers;
-            _Feature.GameRecorder = obj;
+            this._StorageUser.QueryProvider<IGameRecorder>().Supply -= this._RecordQueriers;
+            this._Feature.GameRecorder = obj;
 
-            OnBuiledEvent(_Feature);
+            this.OnBuiledEvent(this._Feature);
         }
 
        

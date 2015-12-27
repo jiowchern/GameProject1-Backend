@@ -35,9 +35,6 @@ D:\Develop\ItIsNotAGame1\Backend\Game\bin\Debug\RegulusRemoting.xml
 D:\Develop\ItIsNotAGame1\Backend\Game\obj\Debug\Game.csprojResolveAssemblyReference.cache
 D:\Develop\ItIsNotAGame1\Backend\Game\obj\Debug\ItIsNotAGame1Game.dll
 D:\Develop\ItIsNotAGame1\Backend\Game\obj\Debug\ItIsNotAGame1Game.pdb
-E:\Develop\Project\ItIsNotAGame1\Backend\Game\obj\Debug\ItIsNotAGame1Game.dll
-E:\Develop\Project\ItIsNotAGame1\Backend\Game\obj\Debug\ItIsNotAGame1Game.pdb
-E:\Develop\Project\ItIsNotAGame1\Backend\Game\obj\Debug\Game.csprojResolveAssemblyReference.cache
 E:\Develop\Project\ItIsNotAGame1\Backend\Game\bin\Debug\ItIsNotAGame1Game.dll
 E:\Develop\Project\ItIsNotAGame1\Backend\Game\bin\Debug\ItIsNotAGame1Game.pdb
 E:\Develop\Project\ItIsNotAGame1\Backend\Game\bin\Debug\ItIsNotAGame1Data.dll
@@ -45,9 +42,12 @@ E:\Develop\Project\ItIsNotAGame1\Backend\Game\bin\Debug\protobuf-net.dll
 E:\Develop\Project\ItIsNotAGame1\Backend\Game\bin\Debug\RegulusLibrary.dll
 E:\Develop\Project\ItIsNotAGame1\Backend\Game\bin\Debug\RegulusRemoting.dll
 E:\Develop\Project\ItIsNotAGame1\Backend\Game\bin\Debug\ItIsNotAGame1Data.pdb
-E:\Develop\Project\ItIsNotAGame1\Backend\Game\bin\Debug\protobuf-net.xml
-E:\Develop\Project\ItIsNotAGame1\Backend\Game\bin\Debug\RegulusLibrary.xml
-E:\Develop\Project\ItIsNotAGame1\Backend\Game\bin\Debug\RegulusRemoting.xml
 E:\Develop\Project\ItIsNotAGame1\Backend\Game\bin\Debug\protobuf-net.pdb
+E:\Develop\Project\ItIsNotAGame1\Backend\Game\bin\Debug\protobuf-net.xml
 E:\Develop\Project\ItIsNotAGame1\Backend\Game\bin\Debug\RegulusLibrary.pdb
+E:\Develop\Project\ItIsNotAGame1\Backend\Game\bin\Debug\RegulusLibrary.xml
 E:\Develop\Project\ItIsNotAGame1\Backend\Game\bin\Debug\RegulusRemoting.pdb
+E:\Develop\Project\ItIsNotAGame1\Backend\Game\bin\Debug\RegulusRemoting.xml
+E:\Develop\Project\ItIsNotAGame1\Backend\Game\obj\Debug\Game.csprojResolveAssemblyReference.cache
+E:\Develop\Project\ItIsNotAGame1\Backend\Game\obj\Debug\ItIsNotAGame1Game.dll
+E:\Develop\Project\ItIsNotAGame1\Backend\Game\obj\Debug\ItIsNotAGame1Game.pdb

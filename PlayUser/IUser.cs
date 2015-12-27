@@ -7,14 +7,23 @@ namespace Regulus.Project.ItIsNotAGame1
 {
 	public interface IUser : IUpdatable
 	{
-		Regulus.Remoting.User Remoting { get; }
+		Remoting.User Remoting { get; }
 
-		INotifier<Regulus.Project.ItIsNotAGame1.Data.IVerify> VerifyProvider { get; }
+		INotifier<Data.IVerify> VerifyProvider { get; }
 
-        INotifier<Regulus.Project.ItIsNotAGame1.Data.IVisible> VisibleProvider { get; }
+        INotifier<Data.IVisible> VisibleProvider { get; }
 
-        INotifier<Regulus.Project.ItIsNotAGame1.Data.IController> ControllerProvider { get; }
+        INotifier<Data.IMoveController> MoveControllerProvider { get; }
 
-        INotifier<Regulus.Project.ItIsNotAGame1.Data.IAccountStatus> AccountStatusProvider { get; }
-	}
+        INotifier<Data.IPlayerProperys> PlayerProperysProvider { get; }
+
+        INotifier<Data.IAccountStatus> AccountStatusProvider { get; }
+
+        INotifier<Data.IInventoryNotifier> InventoryNotifierProvider { get; }
+        INotifier<Data.ISkillController> SkillControllerProvider { get; }
+
+        INotifier<Data.IActorStatus> ActorStatusProvider { get; }
+
+
+    }
 }

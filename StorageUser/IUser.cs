@@ -8,11 +8,11 @@ namespace Regulus.Project.ItIsNotAGame1.Storage.User
 {
 	public interface IUser : IUpdatable
 	{
-		Regulus.Remoting.User Remoting { get; }
+		Remoting.User Remoting { get; }
 
-		INotifier<Regulus.Project.ItIsNotAGame1.Data.IVerify> VerifyProvider { get; }
+		INotifier<Data.IVerify> VerifyProvider { get; }
 
-		INotifier<Regulus.Project.ItIsNotAGame1.Data.IStorageCompetences> StorageCompetencesProvider { get; }
+		INotifier<Data.IStorageCompetences> StorageCompetencesProvider { get; }
 
 		
 

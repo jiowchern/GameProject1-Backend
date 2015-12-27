@@ -59,8 +59,6 @@ D:\Develop\ItIsNotAGame1\Backend\Storage\bin\Debug\RegulusRemotingSoulNative.pdb
 D:\Develop\ItIsNotAGame1\Backend\Storage\bin\Debug\RegulusRemotingSoulNative.xml
 D:\Develop\ItIsNotAGame1\Backend\Storage\obj\Debug\ItIsNotAGame1Storage.dll
 D:\Develop\ItIsNotAGame1\Backend\Storage\obj\Debug\ItIsNotAGame1Storage.pdb
-E:\Develop\Project\ItIsNotAGame1\Backend\Storage\obj\Debug\ItIsNotAGame1Storage.dll
-E:\Develop\Project\ItIsNotAGame1\Backend\Storage\obj\Debug\ItIsNotAGame1Storage.pdb
 E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Debug\ItIsNotAGame1Storage.dll
 E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Debug\ItIsNotAGame1Storage.pdb
 E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Debug\ItIsNotAGame1Data.dll
@@ -78,12 +76,14 @@ E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Debug\ItIsNotAGame1Data.pdb
 E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Debug\ItIsNotAGame1Game.pdb
 E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Debug\MongoDB.Bson.xml
 E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Debug\MongoDB.Driver.xml
+E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Debug\protobuf-net.pdb
 E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Debug\protobuf-net.xml
+E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Debug\RegulusLibrary.pdb
 E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Debug\RegulusLibrary.xml
+E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Debug\RegulusRemoting.pdb
 E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Debug\RegulusRemoting.xml
+E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Debug\RegulusRemotingSoulNative.pdb
 E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Debug\RegulusRemotingSoulNative.xml
 E:\Develop\Project\ItIsNotAGame1\Backend\Storage\obj\Debug\Storage.csprojResolveAssemblyReference.cache
-E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Debug\protobuf-net.pdb
-E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Debug\RegulusLibrary.pdb
-E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Debug\RegulusRemoting.pdb
-E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Debug\RegulusRemotingSoulNative.pdb
+E:\Develop\Project\ItIsNotAGame1\Backend\Storage\obj\Debug\ItIsNotAGame1Storage.dll
+E:\Develop\Project\ItIsNotAGame1\Backend\Storage\obj\Debug\ItIsNotAGame1Storage.pdb

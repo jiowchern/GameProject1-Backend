@@ -11,7 +11,8 @@
     <AssemblyName>ItIsNotAGame1Game</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
   </PropertyGroup>
@@ -47,18 +48,20 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DummyFrature.cs" />
+    <Compile Include="Play\ActorStatus.cs" />
     <Compile Include="Play\Cell.cs" />
     <Compile Include="Play\Center.cs" />
+    <Compile Include="Play\ControlStatus.cs" />
     <Compile Include="Play\EntityProvider.cs" />
+    <Compile Include="Play\ExploreStatus.cs" />
+    <Compile Include="Play\ExtendPolygon.cs" />
     <Compile Include="Play\GameStage.cs" />
-    <Compile Include="Play\IObservable.cs" />
+    <Compile Include="Play\Inventory.cs" />
     <Compile Include="Play\IIndividual.cs" />
     <Compile Include="Play\LoadRecordStage.cs" />
     <Compile Include="Play\Map.cs" />
@@ -67,6 +70,7 @@
     <Compile Include="Play\MAZEWALL.cs" />
     <Compile Include="Play\Mover.cs" />
     <Compile Include="Play\Entity.cs" />
+    <Compile Include="Play\NormalStatus.cs" />
     <Compile Include="Play\Realm.cs" />
     <Compile Include="Play\Zone.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

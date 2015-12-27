@@ -17,19 +17,19 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         public LoadRecordStage(Guid account_id , ISoulBinder binder, IGameRecorder gameRecorder)
         {
-            _AccountId = account_id;
-            _Binder = binder;
-            _GameRecorder = gameRecorder;
+            this._AccountId = account_id;
+            this._Binder = binder;
+            this._GameRecorder = gameRecorder;
         }
 
         void IStage.Enter()
         {
-            _GameRecorder.Load(_AccountId).OnValue += _LoadResult; 
+            this._GameRecorder.Load(this._AccountId).OnValue += this._LoadResult; 
         }
 
         private void _LoadResult(GamePlayerRecord obj)
         {
-            DoneEvent(obj);
+            this.DoneEvent(obj);
         }
 
         void IStage.Leave()

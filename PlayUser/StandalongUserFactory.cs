@@ -22,13 +22,13 @@ namespace Regulus.Project.ItIsNotAGame1
 
 		public StandaloneUserFactory(ICore core)
 		{
-			_Standalone = core;
+		    this._Standalone = core;
 		}
 
 		IUser IUserFactoty<IUser>.SpawnUser()
 		{
 			var agent = new Agent();
-			agent.ConnectedEvent += () => { _Standalone.AssignBinder(agent); };
+			agent.ConnectedEvent += () => { this._Standalone.AssignBinder(agent); };
 
 			return new User(agent);
 		}

@@ -18,19 +18,19 @@ namespace Regulus.Project.ItIsNotAGame1.Storage.User
 		public ConnectStorageStage(IUser user, string ipaddress, int port)
 		{
 			// TODO: Complete member initialization
-			_User = user;
-			_IpAddress = ipaddress;
-			_Port = port;
+		    this._User = user;
+		    this._IpAddress = ipaddress;
+		    this._Port = port;
 		}
 
 		void IStage.Enter()
 		{
-			_User.Remoting.ConnectProvider.Supply += _Connect;
+		    this._User.Remoting.ConnectProvider.Supply += this._Connect;
 		}
 
 		void IStage.Leave()
 		{
-			_User.Remoting.ConnectProvider.Supply -= _Connect;
+		    this._User.Remoting.ConnectProvider.Supply -= this._Connect;
 		}
 
 		void IStage.Update()
@@ -39,8 +39,8 @@ namespace Regulus.Project.ItIsNotAGame1.Storage.User
 
 		private void _Connect(IConnect obj)
 		{
-			var result = obj.Connect(_IpAddress, _Port);
-			result.OnValue += val => { OnDoneEvent(val); };
+			var result = obj.Connect(this._IpAddress, this._Port);
+			result.OnValue += val => { this.OnDoneEvent(val); };
 		}
 	}
 }

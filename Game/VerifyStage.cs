@@ -5,34 +5,34 @@ using System.Text;
 
 namespace Regulus.Project.ItIsNotAGame1.Game
 {
-	class VerifyStage : Regulus.Utility.IStage
+	class VerifyStage : Utility.IStage
 	{
 		public event Verify.DoneCallback DoneEvent;
 
-		private readonly Regulus.Remoting.ISoulBinder _Binder;
+		private readonly Remoting.ISoulBinder _Binder;
 
 		private readonly Verify _Verify;
 
-		public VerifyStage(Regulus.Remoting.ISoulBinder binder, Verify verify)
+		public VerifyStage(Remoting.ISoulBinder binder, Verify verify)
 		{
-			_Verify = verify;
-			_Binder = binder;
+		    this._Verify = verify;
+		    this._Binder = binder;
 		}
 
-		void Regulus.Utility.IStage.Enter()
+		void Utility.IStage.Enter()
 		{
-			_Verify.OnDoneEvent += DoneEvent;
+		    this._Verify.OnDoneEvent += this.DoneEvent;
 
-			_Binder.Bind<Regulus.Project.ItIsNotAGame1.Data.IVerify>(_Verify);
+		    this._Binder.Bind<Data.IVerify>(this._Verify);
 		}
 
-		void Regulus.Utility.IStage.Leave()
+		void Utility.IStage.Leave()
 		{
-			_Binder.Unbind<Regulus.Project.ItIsNotAGame1.Data.IVerify>(_Verify);
-			_Verify.OnDoneEvent -= DoneEvent;
+		    this._Binder.Unbind<Data.IVerify>(this._Verify);
+		    this._Verify.OnDoneEvent -= this.DoneEvent;
 		}
 
-		void Regulus.Utility.IStage.Update()
+		void Utility.IStage.Update()
 		{
 		}
 	}

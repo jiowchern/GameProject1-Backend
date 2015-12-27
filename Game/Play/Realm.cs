@@ -50,7 +50,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
             public Vector2 GetDatum(Rect bound)
             {
-                return _ShiftHandler(bound , _Offset);
+                return this._ShiftHandler(bound , this._Offset);
             }
         }
 
@@ -61,64 +61,86 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         public Realm()
         {
-            _WallToEntity = new Dictionary<MAZEWALL, ENTITY>();
-            _WallToEntity.Add(MAZEWALL.EAST, ENTITY.WALL_EAST);
-            _WallToEntity.Add(MAZEWALL.SOUTH, ENTITY.WALL_SOUTH);
-            _WallToEntity.Add(MAZEWALL.WESTERN, ENTITY.WALL_WESTERN);
-            _WallToEntity.Add(MAZEWALL.NORTH, ENTITY.WALL_NORTH);
-            
+            this._WallToEntity = new Dictionary<MAZEWALL, ENTITY>();
+            this._WallToEntity.Add(MAZEWALL.EAST, ENTITY.WALL_EAST);
+            this._WallToEntity.Add(MAZEWALL.SOUTH, ENTITY.WALL_SOUTH);
+            this._WallToEntity.Add(MAZEWALL.WESTERN, ENTITY.WALL_WESTERN);
+            this._WallToEntity.Add(MAZEWALL.NORTH, ENTITY.WALL_NORTH);
 
-            _Witdh = 10;
-            _Height = 10;
+            this._Witdh = 10;
+            this._Height = 10;
 
-            _DirectionPoints = new Dictionary<MAZEWALL, WallShift>();
-            _DirectionPoints.Add(MAZEWALL.EAST, new WallShift(new Vector2(_Witdh / 2  , 0) , WallShift._East));
-            _DirectionPoints.Add(MAZEWALL.SOUTH, new WallShift(new Vector2(0, -_Height / 2), WallShift._South));
-            _DirectionPoints.Add(MAZEWALL.WESTERN, new WallShift(new Vector2(-_Witdh/ 2, 0), WallShift._Western));
-            _DirectionPoints.Add(MAZEWALL.NORTH, new WallShift(new Vector2(0, _Height / 2), WallShift._North));
+            this._DirectionPoints = new Dictionary<MAZEWALL, WallShift>();
+            this._DirectionPoints.Add(MAZEWALL.EAST, new WallShift(new Vector2(this._Witdh / 2  , 0) , WallShift._East));
+            this._DirectionPoints.Add(MAZEWALL.SOUTH, new WallShift(new Vector2(0, -this._Height / 2), WallShift._South));
+            this._DirectionPoints.Add(MAZEWALL.WESTERN, new WallShift(new Vector2(-this._Witdh/ 2, 0), WallShift._Western));
+            this._DirectionPoints.Add(MAZEWALL.NORTH, new WallShift(new Vector2(0, this._Height / 2), WallShift._North));
 
-            _Map = _BuildMap();
+            this._Map = this._BuildMap();
 
         }
 
         private Map _BuildMap()
         {
             var map = new Map();
-            IEnumerable<MazeCell> cells = _BuildMaze();
+            IEnumerable<MazeCell> cells = this._BuildMaze();
             foreach(var cell in cells)
             {
                 foreach(var wall in cell.Walls)
                 {
-                    IIndividual entity = _BuildWall(wall , cell.Row , cell.Column  );
+                    IIndividual entity = this._BuildWall(wall , cell.Row , cell.Column  );
                     map.JoinStaff(entity);                    
                 }
             }
+
+            this._BuildDebirs(map);
             return map;
+        }
+
+        private void _BuildDebirs(Map map)
+        {
+            
+            for(int i = 0; i < 20; ++ i )
+            {
+                var entity = this._GetEntity(ENTITY.DEBIRS);
+                IIndividual individual = entity;
+                individual.SetPosition(Utility.Random.Instance.NextFloat(0, 100), Utility.Random.Instance.NextFloat(0, 100));
+                map.JoinStaff(entity);
+            }
+            
+           
         }
 
         private IIndividual _BuildWall(MAZEWALL wall, int row, int column)
         {
-            Entity entity = _GetEntity(wall);
+            Entity entity = this._GetEntity(wall);
             IIndividual individual = entity;
 
             var bound = individual.Mesh.Points.ToRect();
 
-            Vector2 offset = _GetOffset(wall , -row * _Witdh,- column * _Height , bound);
+            Vector2 offset = this._GetOffset(wall , -row * this._Witdh,- column * this._Height , bound);
 
-            individual.SetPosition(offset.X , offset.Y);
+            individual.SetPosition(-offset.X , -offset.Y);
             return entity;
         }
 
         private Vector2 _GetOffset(MAZEWALL wall, float center_x, float center_y, Rect bound)
         {
-            Vector2 directPoint = _DirectionPoints[wall].GetDatum(bound);
+            Vector2 directPoint = this._DirectionPoints[wall].GetDatum(bound);
             return new Vector2(directPoint.X + center_x , directPoint.Y + center_y);
         }
 
         private Entity _GetEntity(MAZEWALL wall)
         {            
             var record = new GamePlayerRecord();
-            record.Entity = _WallToEntity[wall];
+            record.Entity = this._WallToEntity[wall];
+            return EntityProvider.Create(record);
+        }
+
+        private Entity _GetEntity(ENTITY entity)
+        {
+            var record = new GamePlayerRecord();
+            record.Entity = entity;
             return EntityProvider.Create(record);
         }
 
@@ -163,7 +185,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         public Map Query()
         {
-            return _Map;
+            return this._Map;
         }
     }
 }

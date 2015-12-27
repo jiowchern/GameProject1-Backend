@@ -11,7 +11,8 @@ namespace Regulus.Project.ItIsNotAGame1.Data
 
         string Name { get; }
 
-        event Action<Vector2, Vector2> MoveEvent;
+        //起始位置 , 速度 ,方向, 位移
+        event Action<Vector2, float , float ,float> MoveEvent;
 
         Vector2 Position { get; }
     }

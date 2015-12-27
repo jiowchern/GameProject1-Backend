@@ -14,9 +14,9 @@ namespace Regulus.Project.ItIsNotAGame1.Game
 
         public DummyFrature()
         {
-            _Records = new List<GamePlayerRecord>();
+            this._Records = new List<GamePlayerRecord>();
 
-            _Accounts = new List<Account>
+            this._Accounts = new List<Account>
 			{
 				new Account
 				{
@@ -45,6 +45,34 @@ namespace Regulus.Project.ItIsNotAGame1.Game
                     Password = "1",
                     Name = "1",
                     Competnces = Account.AllCompetnce()
+                },
+                new Account
+                {
+                    Id = Guid.NewGuid(),
+                    Password = "1",
+                    Name = "2",
+                    Competnces = Account.AllCompetnce()
+                },
+                new Account
+                {
+                    Id = Guid.NewGuid(),
+                    Password = "1",
+                    Name = "3",
+                    Competnces = Account.AllCompetnce()
+                },
+                new Account
+                {
+                    Id = Guid.NewGuid(),
+                    Password = "1",
+                    Name = "4",
+                    Competnces = Account.AllCompetnce()
+                },
+                new Account
+                {
+                    Id = Guid.NewGuid(),
+                    Password = "1",
+                    Name = "5",
+                    Competnces = Account.AllCompetnce()
                 }
 
             };
@@ -52,34 +80,34 @@ namespace Regulus.Project.ItIsNotAGame1.Game
 
         Value<Account> IAccountFinder.FindAccountByName(string id)
         {
-            return _Accounts.Find(a => a.Name == id);
+            return this._Accounts.Find(a => a.Name == id);
         }
 
         Value<Account> IAccountFinder.FindAccountById(Guid account_id)
         {
-            return _Accounts.Find(a => a.Id == account_id);
+            return this._Accounts.Find(a => a.Id == account_id);
         }
 
         
 
         Value<Account[]> IAccountManager.QueryAllAccount()
         {
-            return _Accounts.ToArray();
+            return this._Accounts.ToArray();
         }
 
         
 
         Value<ACCOUNT_REQUEST_RESULT> IAccountManager.Delete(string account)
         {
-            _Accounts.RemoveAll(a => a.Name == account);
+            this._Accounts.RemoveAll(a => a.Name == account);
             return ACCOUNT_REQUEST_RESULT.OK;
         }
 
         Value<ACCOUNT_REQUEST_RESULT> IAccountManager.Update(Account account)
         {
-            if (_Accounts.RemoveAll(a => a.Id == account.Id) > 0)
+            if (this._Accounts.RemoveAll(a => a.Id == account.Id) > 0)
             {
-                _Accounts.Add(account);
+                this._Accounts.Add(account);
                 return ACCOUNT_REQUEST_RESULT.OK;
             }
 
@@ -88,17 +116,24 @@ namespace Regulus.Project.ItIsNotAGame1.Game
 
         Value<GamePlayerRecord> IGameRecorder.Load(Guid account_id)
         {
-            var account = _Accounts.Find(a => a.Id == account_id);
+            var account = this._Accounts.Find(a => a.Id == account_id);
             if (account.IsPlayer())
             {
-                var record = _Records.Find(r => r.Owner == account.Id);
+                var record = this._Records.Find(r => r.Owner == account.Id);
                 if (record == null)
                 {
                     record = new GamePlayerRecord
                     {
                         Id = Guid.NewGuid(),
         
-                        Owner = account_id
+                        Owner = account_id,
+                        Items = new Item[]
+                        {
+                            new Item() { Id = Guid.NewGuid() , Weight = 10 , Name = "東西1"}, 
+                            new Item() { Id = Guid.NewGuid() , Weight = 10 , Name = "東西2"}
+                        }
+
+                        
                     };
                 }
 
@@ -110,12 +145,12 @@ namespace Regulus.Project.ItIsNotAGame1.Game
 
         void IGameRecorder.Save(GamePlayerRecord game_player_record)
         {
-            var account = _Accounts.Find(a => a.Id == game_player_record.Owner);
+            var account = this._Accounts.Find(a => a.Id == game_player_record.Owner);
             if (account.IsPlayer())
             {
-                var old = _Records.Find(r => r.Owner == account.Id);
-                _Records.Remove(old);
-                _Records.Add(game_player_record);
+                var old = this._Records.Find(r => r.Owner == account.Id);
+                this._Records.Remove(old);
+                this._Records.Add(game_player_record);
             }
         }
 
@@ -123,7 +158,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game
 
         Value<ACCOUNT_REQUEST_RESULT> IAccountManager.Create(Account account)
         {
-            _Accounts.Add(account);
+            this._Accounts.Add(account);
             return ACCOUNT_REQUEST_RESULT.OK;
         }
     }

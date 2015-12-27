@@ -17,27 +17,27 @@ namespace Regulus.Project.ItIsNotAGame1
 
 		public CommandParser(Command command, Console.IViewer view, IUser user)
 		{
-			_Command = command;
-			_View = view;
-			_User = user;
+		    this._Command = command;
+		    this._View = view;
+		    this._User = user;
 		}
 
 		void ICommandParsable<IUser>.Clear()
 		{
-			_DestroySystem();
+		    this._DestroySystem();
 		}
 
 		void ICommandParsable<IUser>.Setup(IGPIBinderFactory factory)
 		{
-			_CreateSystem();
+		    this._CreateSystem();
 
-			_CreateConnect(factory);
+		    this._CreateConnect(factory);
 
-			_CreateOnline(factory);
+		    this._CreateOnline(factory);
 
-			_CreateVerify(factory);
+		    this._CreateVerify(factory);
 
-            _CreateControll(factory);
+		    this._CreateControll(factory);
 
         }
 
@@ -50,7 +50,7 @@ namespace Regulus.Project.ItIsNotAGame1
 
 		private void _ConnectResult(bool result)
 		{
-			_View.WriteLine(string.Format("Connect result {0}", result));
+		    this._View.WriteLine(string.Format("Connect result {0}", result));
 		}
 
 		
@@ -65,39 +65,39 @@ namespace Regulus.Project.ItIsNotAGame1
         private void _CreateControll(IGPIBinderFactory factory)
         {
             
-            var controller = factory.Create(_User.ControllerProvider);
-            controller.Bind("Move[Angle]", gpi=> new CommandParamBuilder().Build<float>(gpi.Move));
-            controller.Bind("Stop", gpi => new CommandParamBuilder().Build(gpi.Stop));
+            var controller = factory.Create(this._User.MoveControllerProvider);
+            //controller.Bind("Move[Angle]", gpi=> new CommandParamBuilder().Build<float>(gpi.Move));
+            //controller.Bind("Stop", gpi => new CommandParamBuilder().Build(gpi.Stop));
         }
 
         private void _CreateVerify(IGPIBinderFactory factory)
 		{
-			var verify = factory.Create(_User.VerifyProvider);
+			var verify = factory.Create(this._User.VerifyProvider);
 			verify.Bind(
 				"Login[result,id,password]", 
-				gpi => { return new CommandParamBuilder().BuildRemoting<string, string, bool>(gpi.Login, _VerifyResult); });
+				gpi => { return new CommandParamBuilder().BuildRemoting<string, string, bool>(gpi.Login, this._VerifyResult); });
 		}
 
 		private void _CreateOnline(IGPIBinderFactory factory)
 		{
-			var online = factory.Create(_User.Remoting.OnlineProvider);
+			var online = factory.Create(this._User.Remoting.OnlineProvider);
 			online.Bind(
 				"Ping", 
-				gpi => { return new CommandParamBuilder().Build(() => { _View.WriteLine("Ping : " + gpi.Ping); }); });
+				gpi => { return new CommandParamBuilder().Build(() => { this._View.WriteLine("Ping : " + gpi.Ping); }); });
 			online.Bind(gpi => gpi.Disconnect());
 		}
 
 		private void _CreateConnect(IGPIBinderFactory factory)
 		{
-			var connect = factory.Create(_User.Remoting.ConnectProvider);
+			var connect = factory.Create(this._User.Remoting.ConnectProvider);
 			connect.Bind(
 				"Connect[result , ipaddr ,port]", 
-				gpi => { return new CommandParamBuilder().BuildRemoting<string, int, bool>(gpi.Connect, _ConnectResult); });
+				gpi => { return new CommandParamBuilder().BuildRemoting<string, int, bool>(gpi.Connect, this._ConnectResult); });
 		}
 
 		private void _VerifyResult(bool result)
 		{
-			_View.WriteLine(string.Format("Verify result {0}", result));
+		    this._View.WriteLine(string.Format("Verify result {0}", result));
 		}
 	}
 }

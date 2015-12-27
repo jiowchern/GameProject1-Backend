@@ -14,5 +14,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         event Action BoundsEvent;
 
         void SetPosition(float x, float y);
+
+        Item[] Stolen();
     }
 }

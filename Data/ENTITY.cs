@@ -10,6 +10,7 @@ namespace Regulus.Project.ItIsNotAGame1.Data
         WALL_EAST,
         WALL_SOUTH,
         WALL_WESTERN,
-        WALL_NORTH
+        WALL_NORTH,
+        DEBIRS
     }
 }

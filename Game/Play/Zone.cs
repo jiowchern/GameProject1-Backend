@@ -10,7 +10,7 @@ using Regulus.Utility;
 using Regulus.Project.ItIsNotAGame1.Data;
 namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
-    public class Zone :Regulus.Utility.IUpdatable
+    public class Zone :IUpdatable
     {
         
 
@@ -21,19 +21,18 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             if (realm_materials == null)
                 throw new System.NullReferenceException();
 
-            _Realms = new Dictionary<string, Realm>();
+            this._Realms = new Dictionary<string, Realm>();
 
             foreach (var material in realm_materials)
             {
-                
-                _Realms.Add(material.Name , new Realm());
+                this._Realms.Add(material.Name , new Realm());
             }            
         }
         
         public Map FindMap(string name)
         {
             Realm map = null;
-            return _Realms.TryGetValue(name, out map)
+            return this._Realms.TryGetValue(name, out map)
                 ? map.Query()
                 : null;
         }

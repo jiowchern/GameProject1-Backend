@@ -27,7 +27,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         /// <summary>
         /// The total cells.
         /// </summary>
-        private int TotalCells = kDimension * kDimension;
+        private int TotalCells = Maze.kDimension * Maze.kDimension;
 
         /// <summary>
         /// The visited cells.
@@ -40,7 +40,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         public Maze()
         {
             // TODO: Add constructor logic here
-            Initialize();
+            this.Initialize();
         }
 
         /// <summary>
@@ -55,21 +55,21 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         private ArrayList GetNeighborsWithWalls(Cell aCell)
         {
             var Neighbors = new ArrayList();
-            var count = 0;
+            
             for (var countRow = -1; countRow <= 1; countRow++)
                 for (var countCol = -1; countCol <= 1; countCol++)
                 {
-                    if ((aCell.Row + countRow < kDimension) &&
-                        (aCell.Column + countCol < kDimension) &&
+                    if ((aCell.Row + countRow < Maze.kDimension) &&
+                        (aCell.Column + countCol < Maze.kDimension) &&
                         (aCell.Row + countRow >= 0) &&
                         (aCell.Column + countCol >= 0) &&
                         ((countCol == 0) || (countRow == 0)) &&
                         (countRow != countCol)
                         )
                     {
-                        if (Cells[aCell.Row + countRow, aCell.Column + countCol].HasAllWalls())
+                        if (this.Cells[aCell.Row + countRow, aCell.Column + countCol].HasAllWalls())
                         {
-                            Neighbors.Add(Cells[aCell.Row + countRow, aCell.Column + countCol]);
+                            Neighbors.Add(this.Cells[aCell.Row + countRow, aCell.Column + countCol]);
                         }
                     }
                 }
@@ -82,19 +82,19 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         /// </summary>
         public void Initialize()
         {
-            Cells = new Cell[kDimension, kDimension];
-            TotalCells = kDimension * kDimension;
-            for (var i = 0; i < kDimension; i++)
-                for (var j = 0; j < kDimension; j++)
+            this.Cells = new Cell[Maze.kDimension, Maze.kDimension];
+            this.TotalCells = Maze.kDimension * Maze.kDimension;
+            for (var i = 0; i < Maze.kDimension; i++)
+                for (var j = 0; j < Maze.kDimension; j++)
                 {
-                    Cells[i, j] = new Cell();
-                    Cells[i, j].Row = i;
-                    Cells[i, j].Column = j;
+                    this.Cells[i, j] = new Cell();
+                    this.Cells[i, j].Row = i;
+                    this.Cells[i, j].Column = j;
                 }
 
-            CurrentCell = Cells[0, 0];
-            VisitedCells = 1;
-            CellStack.Clear();
+            this.CurrentCell = this.Cells[0, 0];
+            this.VisitedCells = 1;
+            this.CellStack.Clear();
         }
 
         /// <summary>
@@ -102,10 +102,10 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         /// </summary>
         public void Generate()
         {
-            while (VisitedCells < TotalCells)
+            while (this.VisitedCells < this.TotalCells)
             {
                 // get a list of the neighboring cells with all walls intact
-                var AdjacentCells = GetNeighborsWithWalls(CurrentCell);
+                var AdjacentCells = this.GetNeighborsWithWalls(this.CurrentCell);
 
                 // test if a cell like this exists
                 if (AdjacentCells.Count > 0)
@@ -113,15 +113,15 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                     // yes, choose one of them, and knock down the wall between it and the current cell
                     var randomCell = Cell.TheRandom.Next(0, AdjacentCells.Count);
                     var theCell = (Cell)AdjacentCells[randomCell];
-                    CurrentCell.KnockDownWall(theCell);
-                    CellStack.Push(CurrentCell); // push the current cell onto the stack
-                    CurrentCell = theCell; // make the random neighbor the new current cell
-                    VisitedCells++;
+                    this.CurrentCell.KnockDownWall(theCell);
+                    this.CellStack.Push(this.CurrentCell); // push the current cell onto the stack
+                    this.CurrentCell = theCell; // make the random neighbor the new current cell
+                    this.VisitedCells++;
                 }
                 else
                 {
                     // No cells with walls intact, pop current cell from stack
-                    CurrentCell = (Cell)CellStack.Pop();
+                    this.CurrentCell = (Cell)this.CellStack.Pop();
                 }
             }
         }

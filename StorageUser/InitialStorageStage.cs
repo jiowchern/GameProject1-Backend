@@ -19,9 +19,9 @@ namespace Regulus.Project.ItIsNotAGame1.Storage.User
 
 		public VerifyStorageStage(IUser user, string account, string password)
 		{
-			_Account = account;
-			_Password = password;
-			_User = user;
+		    this._Account = account;
+		    this._Password = password;
+		    this._User = user;
 		}
 
 		void IStage.Update()
@@ -30,18 +30,18 @@ namespace Regulus.Project.ItIsNotAGame1.Storage.User
 
 		void IStage.Leave()
 		{
-			_User.VerifyProvider.Supply -= _ToVerify;
+		    this._User.VerifyProvider.Supply -= this._ToVerify;
 		}
 
 		void IStage.Enter()
 		{
-			_User.VerifyProvider.Supply += _ToVerify;
+		    this._User.VerifyProvider.Supply += this._ToVerify;
 		}
 
-		private void _ToVerify(Regulus.Project.ItIsNotAGame1.Data.IVerify obj)
+		private void _ToVerify(Data.IVerify obj)
 		{
-			var result = obj.Login(_Account, _Password);
-			result.OnValue += val => { OnDoneEvent(val); };
+			var result = obj.Login(this._Account, this._Password);
+			result.OnValue += val => { this.OnDoneEvent(val); };
 		}
 	}
 }

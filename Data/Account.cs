@@ -39,29 +39,28 @@ namespace Regulus.Project.ItIsNotAGame1.Data
 
 		public Account()
 		{
-		
-			Id = Guid.NewGuid();
-			Name = Id.ToString();
-			Password = Id.ToString(); 
+		    this.Id = Guid.NewGuid();
+		    this.Name = this.Id.ToString();
+		    this.Password = this.Id.ToString(); 
 		}
 
 		public bool IsPassword(string password)
 		{
-			return Password == password;
+			return this.Password == password;
 		}
 
 
         public bool IsPlayer()
         {
-            return _HasCompetence(COMPETENCE.GAME_PLAYER);
+            return this._HasCompetence(COMPETENCE.GAME_PLAYER);
         }
         private bool _HasCompetence(COMPETENCE competence)
         {
-            return Competnces[competence];
+            return this.Competnces[competence];
         }
         public bool HasCompetnce(COMPETENCE cOMPETENCE)
         {
-            return _HasCompetence(cOMPETENCE);
+            return this._HasCompetence(cOMPETENCE);
         }
         public static Flag<COMPETENCE> AllCompetnce()
         {

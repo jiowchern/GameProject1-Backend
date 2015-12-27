@@ -63,9 +63,6 @@ D:\Develop\ItIsNotAGame1\Backend\Test\obj\Debug\ItIsNotAGame1Test.dll
 D:\Develop\ItIsNotAGame1\Backend\Test\obj\Debug\ItIsNotAGame1Test.pdb
 D:\Develop\ItIsNotAGame1\Backend\Test\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
 D:\Develop\ItIsNotAGame1\Backend\Test\bin\Debug\zh-Hant\Microsoft.VisualStudio.QualityTools.UnitTestFramework.resources.dll
-E:\Develop\Project\ItIsNotAGame1\Backend\Test\obj\Debug\ItIsNotAGame1Test.dll
-E:\Develop\Project\ItIsNotAGame1\Backend\Test\obj\Debug\ItIsNotAGame1Test.pdb
-E:\Develop\Project\ItIsNotAGame1\Backend\Test\obj\Debug\Test.csprojResolveAssemblyReference.cache
 E:\Develop\Project\ItIsNotAGame1\Backend\Test\bin\Debug\ItIsNotAGame1Test.dll
 E:\Develop\Project\ItIsNotAGame1\Backend\Test\bin\Debug\ItIsNotAGame1Test.pdb
 E:\Develop\Project\ItIsNotAGame1\Backend\Test\bin\Debug\ItIsNotAGame1Data.dll
@@ -78,11 +75,14 @@ E:\Develop\Project\ItIsNotAGame1\Backend\Test\bin\Debug\RegulusRemoting.dll
 E:\Develop\Project\ItIsNotAGame1\Backend\Test\bin\Debug\ItIsNotAGame1Data.pdb
 E:\Develop\Project\ItIsNotAGame1\Backend\Test\bin\Debug\ItIsNotAGame1Game.pdb
 E:\Develop\Project\ItIsNotAGame1\Backend\Test\bin\Debug\NSubstitute.xml
+E:\Develop\Project\ItIsNotAGame1\Backend\Test\bin\Debug\protobuf-net.pdb
 E:\Develop\Project\ItIsNotAGame1\Backend\Test\bin\Debug\protobuf-net.xml
+E:\Develop\Project\ItIsNotAGame1\Backend\Test\bin\Debug\RegulusLibrary.pdb
 E:\Develop\Project\ItIsNotAGame1\Backend\Test\bin\Debug\RegulusLibrary.xml
+E:\Develop\Project\ItIsNotAGame1\Backend\Test\bin\Debug\RegulusRemoting.pdb
 E:\Develop\Project\ItIsNotAGame1\Backend\Test\bin\Debug\RegulusRemoting.xml
 E:\Develop\Project\ItIsNotAGame1\Backend\Test\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.xml
 E:\Develop\Project\ItIsNotAGame1\Backend\Test\bin\Debug\zh-Hant\Microsoft.VisualStudio.QualityTools.UnitTestFramework.resources.dll
-E:\Develop\Project\ItIsNotAGame1\Backend\Test\bin\Debug\protobuf-net.pdb
-E:\Develop\Project\ItIsNotAGame1\Backend\Test\bin\Debug\RegulusLibrary.pdb
-E:\Develop\Project\ItIsNotAGame1\Backend\Test\bin\Debug\RegulusRemoting.pdb
+E:\Develop\Project\ItIsNotAGame1\Backend\Test\obj\Debug\Test.csprojResolveAssemblyReference.cache
+E:\Develop\Project\ItIsNotAGame1\Backend\Test\obj\Debug\ItIsNotAGame1Test.dll
+E:\Develop\Project\ItIsNotAGame1\Backend\Test\obj\Debug\ItIsNotAGame1Test.pdb

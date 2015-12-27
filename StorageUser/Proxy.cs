@@ -16,25 +16,25 @@ namespace Regulus.Project.ItIsNotAGame1.Storage.User
 
 		public bool Enable
 		{
-			get { return _Client.Enable; }
+			get { return this._Client.Enable; }
 		}
 
 		public Proxy(IUserFactoty<IUser> custom)
 		{
-			_UserFactory = custom;
-			_Client = new Client<IUser>(this, this);
-			_Updater = new Updater();
+		    this._UserFactory = custom;
+		    this._Client = new Client<IUser>(this, this);
+		    this._Updater = new Updater();
 
-			Client_ModeSelectorEvent(_Client.Selector);
+		    this.Client_ModeSelectorEvent(this._Client.Selector);
 		}
 
 		public Proxy()
 		{
-			_UserFactory = new RemotingFactory();
-			_Client = new Client<IUser>(this, this);
-			_Updater = new Updater();
+		    this._UserFactory = new RemotingFactory();
+		    this._Client = new Client<IUser>(this, this);
+		    this._Updater = new Updater();
 
-			Client_ModeSelectorEvent(_Client.Selector);
+		    this.Client_ModeSelectorEvent(this._Client.Selector);
 		}
 
 		event Console.OnOutput Console.IInput.OutputEvent
@@ -45,18 +45,18 @@ namespace Regulus.Project.ItIsNotAGame1.Storage.User
 
 		bool IUpdatable.Update()
 		{
-			_Updater.Working();
-			return _Client.Enable;
+		    this._Updater.Working();
+			return this._Client.Enable;
 		}
 
 		void IBootable.Launch()
 		{
-			_Updater.Add(_Client);
+		    this._Updater.Add(this._Client);
 		}
 
 		void IBootable.Shutdown()
 		{
-			_Updater.Shutdown();
+		    this._Updater.Shutdown();
 		}
 
 		void Console.IViewer.WriteLine(string message)
@@ -69,18 +69,18 @@ namespace Regulus.Project.ItIsNotAGame1.Storage.User
 
 		private void Client_ModeSelectorEvent(GameModeSelector<IUser> selector)
 		{
-			selector.AddFactoty("fac", _UserFactory);
-			_UserProvider = selector.CreateUserProvider("fac");
+			selector.AddFactoty("fac", this._UserFactory);
+		    this._UserProvider = selector.CreateUserProvider("fac");
 		}
 
 		public IUser SpawnUser(string name)
 		{
-			return _UserProvider.Spawn(name);
+			return this._UserProvider.Spawn(name);
 		}
 
 		public void UnspawnUser(string name)
 		{
-			_UserProvider.Unspawn(name);
+		    this._UserProvider.Unspawn(name);
 		}
 	}
 }

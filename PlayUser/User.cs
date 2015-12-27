@@ -14,56 +14,66 @@ namespace Regulus.Project.ItIsNotAGame1
 
 		private readonly Updater _Updater;
 
-		private readonly Regulus.Remoting.User _User;
+		private readonly Remoting.User _User;
 
 		public User(IAgent agent)
 		{
-			_Agent = agent;
-			_Updater = new Updater();
-			_User = new Regulus.Remoting.User(_Agent);
+		    this._Agent = agent;
+		    
+		    this._Updater = new Updater();
+		    this._User = new Remoting.User(this._Agent);
 		}
 
 		bool IUpdatable.Update()
 		{
-			_Updater.Working();
+		    this._Updater.Working();
 			return true;
 		}
 
 		void IBootable.Launch()
 		{
-			_Updater.Add(_User);
+		    this._Updater.Add(this._User);
 		}
 
 		void IBootable.Shutdown()
 		{
-			_Updater.Shutdown();
+		    this._Updater.Shutdown();
 		}
 
-		Regulus.Remoting.User IUser.Remoting
+		Remoting.User IUser.Remoting
 		{
-			get { return _User; }
+			get { return this._User; }
 		}
 
-		INotifier<Regulus.Project.ItIsNotAGame1.Data.IVerify> IUser.VerifyProvider
+		INotifier<IVerify> IUser.VerifyProvider
 		{
-			get { return _Agent.QueryNotifier<Regulus.Project.ItIsNotAGame1.Data.IVerify>(); }
+			get { return this._Agent.QueryNotifier<IVerify>(); }
 		}
 
 	    INotifier<IVisible> IUser.VisibleProvider
 	    {
-            get { return _Agent.QueryNotifier<Regulus.Project.ItIsNotAGame1.Data.IVisible>(); }
+            get { return this._Agent.QueryNotifier<IVisible>(); }
         }
 
-	    INotifier<IController> IUser.ControllerProvider
+	    INotifier<IMoveController> IUser.MoveControllerProvider
 	    {
-            get { return _Agent.QueryNotifier<Regulus.Project.ItIsNotAGame1.Data.IController>(); }
+            get { return this._Agent.QueryNotifier<IMoveController>(); }
         }
 
-	    INotifier<Regulus.Project.ItIsNotAGame1.Data.IAccountStatus> IUser.AccountStatusProvider
+	    INotifier<IPlayerProperys> IUser.PlayerProperysProvider { get { return this._Agent.QueryNotifier<IPlayerProperys>(); } }
+
+	    INotifier<IAccountStatus> IUser.AccountStatusProvider
 		{
-			get { return _Agent.QueryNotifier<IAccountStatus>(); }
+			get { return this._Agent.QueryNotifier<IAccountStatus>(); }
 		}
 
-	
+        INotifier<IInventoryNotifier> IUser.InventoryNotifierProvider
+        {
+            get { return this._Agent.QueryNotifier<IInventoryNotifier>(); }
+        }
+
+	    INotifier<ISkillController> IUser.SkillControllerProvider { get { return this._Agent.QueryNotifier<ISkillController>(); } }
+
+	    INotifier<IActorStatus> IUser.ActorStatusProvider { get { return this._Agent.QueryNotifier<IActorStatus>(); } }
 	}
 }

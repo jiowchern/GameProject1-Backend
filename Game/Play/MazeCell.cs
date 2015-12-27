@@ -7,6 +7,6 @@
         public int Column;
 
         
-        public Regulus.CustomType.Flag<MAZEWALL> Walls;
+        public CustomType.Flag<MAZEWALL> Walls;
     }
 }

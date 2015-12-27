@@ -24,11 +24,14 @@ namespace Regulus.Project.ItIsNotAGame1.Data
         [ProtoMember(4)]
 
         public ENTITY Entity { get; set; }
+        [ProtoMember(5)]
+        public Item[] Items { get; set; }
 
         public GamePlayerRecord()
 	    {
-	        Name = "無名" + System.DateTime.Now.ToLocalTime();
+            this.Name = "無名" + DateTime.Now.ToLocalTime();
 	    }
+
 
     }
 }

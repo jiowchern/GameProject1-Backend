@@ -20,30 +20,30 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Storage
 
         public Center(IStorage storage)
         {
-            _Stroage = storage;
-            _Hall = new Hall();
-            _Update = new Updater();
+            this._Stroage = storage;
+            this._Hall = new Hall();
+            this._Update = new Updater();
         }
 
         void ICore.AssignBinder(ISoulBinder binder)
         {
-            _Hall.PushUser(new User(binder, _Stroage));
+            this._Hall.PushUser(new User(binder, this._Stroage));
         }
 
         bool IUpdatable.Update()
         {
-            _Update.Working();
+            this._Update.Working();
             return true;
         }
 
         void IBootable.Launch()
         {
-            _Update.Add(_Hall);
+            this._Update.Add(this._Hall);
         }
 
         void IBootable.Shutdown()
         {
-            _Update.Shutdown();
+            this._Update.Shutdown();
         }
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Regulus.Framework;
-using Regulus.Game;
+
 using Regulus.Project.ItIsNotAGame1.Data;
 using Regulus.Remoting;
 using Regulus.Utility;
@@ -12,9 +12,9 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Storage
 {
     internal class User : Regulus.Game.IUser
     {
-        private event OnQuit _QuitEvent;
+        private event Regulus.Game.OnQuit _QuitEvent;
 
-        private event OnNewUser _VerifySuccessEvent;
+        private event Regulus.Game.OnNewUser _VerifySuccessEvent;
 
         private readonly ISoulBinder _Binder;
 
@@ -26,75 +26,75 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Storage
 
         public User(ISoulBinder binder, IStorage storage)
         {
-            _Storage = storage;
-            _Binder = binder;
-            _Machine = new StageMachine();
+            this._Storage = storage;
+            this._Binder = binder;
+            this._Machine = new StageMachine();
         }
 
         void Regulus.Game.IUser.OnKick(Guid id)
         {
         }
 
-        event OnNewUser Regulus.Game.IUser.VerifySuccessEvent
+        event Regulus.Game.OnNewUser Regulus.Game.IUser.VerifySuccessEvent
         {
-            add { _VerifySuccessEvent += value; }
-            remove { _VerifySuccessEvent -= value; }
+            add { this._VerifySuccessEvent += value; }
+            remove { this._VerifySuccessEvent -= value; }
         }
 
-        event OnQuit Regulus.Game.IUser.QuitEvent
+        event Regulus.Game.OnQuit Regulus.Game.IUser.QuitEvent
         {
-            add { _QuitEvent += value; }
-            remove { _QuitEvent -= value; }
+            add { this._QuitEvent += value; }
+            remove { this._QuitEvent -= value; }
         }
 
         bool IUpdatable.Update()
         {
-            _Machine.Update();
+            this._Machine.Update();
             return true;
         }
 
         void IBootable.Launch()
         {
-            _ToVerify();
+            this._ToVerify();
         }
 
         void IBootable.Shutdown()
         {
-            _Machine.Termination();
+            this._Machine.Termination();
         }
 
         private void _ToVerify()
         {
-            var verify = _CreateVerify();
-            _AddVerifyToStage(verify);
+            var verify = this._CreateVerify();
+            this._AddVerifyToStage(verify);
         }
 
         private Verify _CreateVerify()
         {
-            _Account = null;
-            var verify = new Verify(_Storage);
+            this._Account = null;
+            var verify = new Verify(this._Storage);
             return verify;
         }
 
         private void _AddVerifyToStage(Verify verify)
         {
-            var stage = new VerifyStage(_Binder, verify);
-            stage.DoneEvent += _VerifySuccess;
-            _Machine.Push(stage);
+            var stage = new VerifyStage(this._Binder, verify);
+            stage.DoneEvent += this._VerifySuccess;
+            this._Machine.Push(stage);
         }
 
         private void _VerifySuccess(Account account)
         {
-            _VerifySuccessEvent(account.Id);
-            _Account = account;
-            _ToRelease(account);
+            this._VerifySuccessEvent(account.Id);
+            this._Account = account;
+            this._ToRelease(account);
         }
 
         private void _ToRelease(Account account)
         {
-            var stage = new StroageAccess(_Binder, account, _Storage);
-            stage.DoneEvent += _ToVerify;
-            _Machine.Push(stage);
+            var stage = new StroageAccess(this._Binder, account, this._Storage);
+            stage.DoneEvent += this._ToVerify;
+            this._Machine.Push(stage);
         }
     }
 }

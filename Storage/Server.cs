@@ -11,124 +11,124 @@ using Regulus.Utility;
 
 namespace Regulus.Project.ItIsNotAGame1.Storage
 {
-    public class Server : Regulus.Remoting.ICore, Regulus.Project.ItIsNotAGame1.Data.IStorage
+    public class Server : ICore, Data.IStorage
     {
-        private readonly Regulus.Project.ItIsNotAGame1.Game.Storage.Center _Center;
+        private readonly Game.Storage.Center _Center;
 
-        private readonly Regulus.NoSQL.Database _Database;
+        private readonly NoSQL.Database _Database;
 
         private readonly string _DefaultAdministratorName;
 
         private readonly string _Ip;
 
-        private readonly Regulus.Utility.LogFileRecorder _LogRecorder;
+        private readonly LogFileRecorder _LogRecorder;
 
         private readonly string _Name;
 
-        private readonly Regulus.Utility.Updater _Updater;
+        private readonly Updater _Updater;
 
         
 
         public Server()
         {
-            _LogRecorder = new Regulus.Utility.LogFileRecorder("Storage");
-            _DefaultAdministratorName = "itisnotagame";
-            _Ip = "mongodb://127.0.0.1:27017";
-            _Name = "ItIsNotAGame1";
-            _Updater = new Regulus.Utility.Updater();
-            _Database = new Regulus.NoSQL.Database(_Ip);
-            _Center = new Regulus.Project.ItIsNotAGame1.Game.Storage.Center(this);
+            this._LogRecorder = new LogFileRecorder("Storage");
+            this._DefaultAdministratorName = "itisnotagame";
+            this._Ip = "mongodb://127.0.0.1:27017";
+            this._Name = "ItIsNotAGame1";
+            this._Updater = new Updater();
+            this._Database = new NoSQL.Database(this._Ip);
+            this._Center = new Game.Storage.Center(this);
         }
 
-        void Regulus.Remoting.ICore.AssignBinder(Regulus.Remoting.ISoulBinder binder)
+        void ICore.AssignBinder(ISoulBinder binder)
         {
-            _Core.AssignBinder(binder);
+            this._Core.AssignBinder(binder);
         }
 
-        public Regulus.Remoting.ICore _Core { get { return _Center; } }
+        public ICore _Core { get { return this._Center; } }
 
-        bool Regulus.Utility.IUpdatable.Update()
+        bool IUpdatable.Update()
         {
-            _Updater.Working();
+            this._Updater.Working();
             return true;
         }
 
-        void Regulus.Framework.IBootable.Launch()
+        void Framework.IBootable.Launch()
         {
-            Regulus.Utility.Singleton<Regulus.Utility.Log>.Instance.RecordEvent += _LogRecorder.Record;
-            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+            Singleton<Log>.Instance.RecordEvent += this._LogRecorder.Record;
+            AppDomain.CurrentDomain.UnhandledException += this.CurrentDomain_UnhandledException;
 
-            _Updater.Add(_Center);
-            _Database.Launch(_Name);
+            this._Updater.Add(this._Center);
+            this._Database.Launch(this._Name);
 
-            _HandleAdministrator();
+            this._HandleAdministrator();
 
             
 
             
         }
 
-        void Regulus.Framework.IBootable.Shutdown()
+        void Framework.IBootable.Shutdown()
         {
-            _Database.Shutdown();
-            _Updater.Shutdown();
+            this._Database.Shutdown();
+            this._Updater.Shutdown();
 
-            AppDomain.CurrentDomain.UnhandledException -= CurrentDomain_UnhandledException;
-            Regulus.Utility.Singleton<Regulus.Utility.Log>.Instance.RecordEvent -= _LogRecorder.Record;
+            AppDomain.CurrentDomain.UnhandledException -= this.CurrentDomain_UnhandledException;
+            Singleton<Log>.Instance.RecordEvent -= this._LogRecorder.Record;
         }
 
-        Regulus.Remoting.Value<Regulus.Project.ItIsNotAGame1.Data.Account> Regulus.Project.ItIsNotAGame1.Data.IAccountFinder.FindAccountByName(string name)
+        Value<Data.Account> Data.IAccountFinder.FindAccountByName(string name)
         {
-            var account = _Find(name);
+            var account = this._Find(name);
 
             if (account != null)
             {
                 return account;
             }
 
-            return new Regulus.Remoting.Value<Regulus.Project.ItIsNotAGame1.Data.Account>(null);
+            return new Value<Data.Account>(null);
         }
 
         
 
-        Regulus.Remoting.Value<Regulus.Project.ItIsNotAGame1.Data.ACCOUNT_REQUEST_RESULT> Regulus.Project.ItIsNotAGame1.Data.IAccountManager.Delete(string account)
+        Value<Data.ACCOUNT_REQUEST_RESULT> Data.IAccountManager.Delete(string account)
         {
-            var result = _Find(account);
-            if (result != null && _Database.Remove<Regulus.Project.ItIsNotAGame1.Data.Account>(a => a.Id == result.Id))
+            var result = this._Find(account);
+            if (result != null && this._Database.Remove<Data.Account>(a => a.Id == result.Id))
             {
-                return Regulus.Project.ItIsNotAGame1.Data.ACCOUNT_REQUEST_RESULT.OK;
+                return Data.ACCOUNT_REQUEST_RESULT.OK;
             }
 
-            return Regulus.Project.ItIsNotAGame1.Data.ACCOUNT_REQUEST_RESULT.NOTFOUND;
+            return Data.ACCOUNT_REQUEST_RESULT.NOTFOUND;
         }
 
-        Value<Regulus.Project.ItIsNotAGame1.Data.Account[]> Regulus.Project.ItIsNotAGame1.Data.IAccountManager.QueryAllAccount()
+        Value<Data.Account[]> Data.IAccountManager.QueryAllAccount()
         {
-            return _QueryAllAccount();
+            return this._QueryAllAccount();
         }
 
-        Value<Regulus.Project.ItIsNotAGame1.Data.ACCOUNT_REQUEST_RESULT> Regulus.Project.ItIsNotAGame1.Data.IAccountManager.Update(Regulus.Project.ItIsNotAGame1.Data.Account account)
+        Value<Data.ACCOUNT_REQUEST_RESULT> Data.IAccountManager.Update(Data.Account account)
         {
-            if (_Database.Update(account, a => a.Id == account.Id))
+            if (this._Database.Update(account, a => a.Id == account.Id))
             {
-                return Regulus.Project.ItIsNotAGame1.Data.ACCOUNT_REQUEST_RESULT.OK;
+                return Data.ACCOUNT_REQUEST_RESULT.OK;
             }
 
-            return Regulus.Project.ItIsNotAGame1.Data.ACCOUNT_REQUEST_RESULT.NOTFOUND;
+            return Data.ACCOUNT_REQUEST_RESULT.NOTFOUND;
         }
 
-        Value<Regulus.Project.ItIsNotAGame1.Data.Account> Regulus.Project.ItIsNotAGame1.Data.IAccountFinder.FindAccountById(Guid accountId)
+        Value<Data.Account> Data.IAccountFinder.FindAccountById(Guid accountId)
         {
-            return _Find(accountId);
+            return this._Find(accountId);
         }
 
-        Value<Regulus.Project.ItIsNotAGame1.Data.GamePlayerRecord> Regulus.Project.ItIsNotAGame1.Data.IGameRecorder.Load(Guid account_id)
+        Value<Data.GamePlayerRecord> Data.IGameRecorder.Load(Guid account_id)
         {
-            var val = new Value<Regulus.Project.ItIsNotAGame1.Data.GamePlayerRecord>();
-            var account = _Find(account_id);
+            var val = new Value<Data.GamePlayerRecord>();
+            var account = this._Find(account_id);
             if (account.IsPlayer())
             {
-                var recordTask = _Database.Find<Regulus.Project.ItIsNotAGame1.Data.GamePlayerRecord>(r => r.Owner == account_id);
+                var recordTask = this._Database.Find<Data.GamePlayerRecord>(r => r.Owner == account_id);
                 recordTask.ContinueWith(
                     task =>
                     {
@@ -138,13 +138,13 @@ namespace Regulus.Project.ItIsNotAGame1.Storage
                         }
                         else
                         {
-                            var newRecord = new Regulus.Project.ItIsNotAGame1.Data.GamePlayerRecord
+                            var newRecord = new Data.GamePlayerRecord
                             {
                                 Id = Guid.NewGuid(),
                                 Owner = account_id,
                                 
                             };
-                            _Database.Add(newRecord).Wait();
+                            this._Database.Add(newRecord).Wait();
                             val.SetValue(newRecord);
                         }
                     });
@@ -157,33 +157,33 @@ namespace Regulus.Project.ItIsNotAGame1.Storage
             return val;
         }
 
-        void Regulus.Project.ItIsNotAGame1.Data.IGameRecorder.Save(Regulus.Project.ItIsNotAGame1.Data.GamePlayerRecord record)
+        void Data.IGameRecorder.Save(Data.GamePlayerRecord record)
         {
-            _Database.Update(record, r => r.Id == record.Id);
+            this._Database.Update(record, r => r.Id == record.Id);
         }
 
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             var ex = (Exception)e.ExceptionObject;
-            _LogRecorder.Record(ex.ToString());
-            _LogRecorder.Save();
+            this._LogRecorder.Record(ex.ToString());
+            this._LogRecorder.Save();
         }
 
         private async void _HandleAdministrator()
         {
-            var accounts = await _Database.Find<Regulus.Project.ItIsNotAGame1.Data.Account>(a => a.Name == _DefaultAdministratorName);
+            var accounts = await this._Database.Find<Data.Account>(a => a.Name == this._DefaultAdministratorName);
 
             if (accounts.Count == 0)
             {
-                var account = new Regulus.Project.ItIsNotAGame1.Data.Account
+                var account = new Data.Account
                 {
                     Id = Guid.NewGuid(),
-                    Name = _DefaultAdministratorName,
+                    Name = this._DefaultAdministratorName,
                     Password = "20150815",
-                    Competnces = Regulus.Project.ItIsNotAGame1.Data.Account.AllCompetnce()
+                    Competnces = Data.Account.AllCompetnce()
                 };
 
-                await _Database.Add(account);
+                await this._Database.Add(account);
 
                 
             }
@@ -191,24 +191,24 @@ namespace Regulus.Project.ItIsNotAGame1.Storage
 
         
 
-        private Regulus.Project.ItIsNotAGame1.Data.Account _Find(string name)
+        private Data.Account _Find(string name)
         {
-            var task = _Database.Find<Regulus.Project.ItIsNotAGame1.Data.Account>(a => a.Name == name);
+            var task = this._Database.Find<Data.Account>(a => a.Name == name);
             task.Wait();
             return task.Result.FirstOrDefault();
         }
 
-        private Regulus.Project.ItIsNotAGame1.Data.Account _Find(Guid id)
+        private Data.Account _Find(Guid id)
         {
-            var task = _Database.Find<Regulus.Project.ItIsNotAGame1.Data.Account>(a => a.Id == id);
+            var task = this._Database.Find<Data.Account>(a => a.Id == id);
             task.Wait();
             return task.Result.FirstOrDefault();
         }
 
-        private Value<Regulus.Project.ItIsNotAGame1.Data.Account[]> _QueryAllAccount()
+        private Value<Data.Account[]> _QueryAllAccount()
         {
-            var val = new Value<Regulus.Project.ItIsNotAGame1.Data.Account[]>();
-            var t = _Database.Find<Regulus.Project.ItIsNotAGame1.Data.Account>(a => true);
+            var val = new Value<Data.Account[]>();
+            var t = this._Database.Find<Data.Account>(a => true);
             t.ContinueWith(list => { val.SetValue(list.Result.ToArray()); });
             return val;
         }
@@ -221,14 +221,14 @@ namespace Regulus.Project.ItIsNotAGame1.Storage
 
         Value<Data.ACCOUNT_REQUEST_RESULT> Data.IAccountManager.Create(Data.Account account)
         {
-            var result = _Find(account.Name);
+            var result = this._Find(account.Name);
             if (result != null)
             {
-                return Regulus.Project.ItIsNotAGame1.Data.ACCOUNT_REQUEST_RESULT.REPEAT;
+                return Data.ACCOUNT_REQUEST_RESULT.REPEAT;
             }
 
-            _Database.Add(account);
-            return Regulus.Project.ItIsNotAGame1.Data.ACCOUNT_REQUEST_RESULT.OK;
+            this._Database.Add(account);
+            return Data.ACCOUNT_REQUEST_RESULT.OK;
         }
     }
 }

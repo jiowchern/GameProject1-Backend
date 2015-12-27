@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Globalization;
+
+
 using System.Linq;
-using System.Runtime.InteropServices;
+
 
 using Regulus.Collection;
-using Regulus.CustomType;
-using Regulus.Game;
+
 using Regulus.Project.ItIsNotAGame1.Data;
 using Regulus.Remoting;
 using Regulus.Utility;
 
+
 namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
-    internal class GameStage : IStage , IController , IQuitable
+    internal class GameStage : IStage , IQuitable, IInventoryNotifier ,IPlayerProperys
     {
         private readonly GamePlayerRecord _Record;
         private readonly IGameRecorder _Recoder;
@@ -22,68 +22,119 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private readonly Map _Map;
 
-        private readonly Regulus.Utility.TimeCounter _SaveTimeCounter;
-        private readonly Regulus.Utility.TimeCounter _DeltaTimeCounter;
+        private readonly TimeCounter _SaveTimeCounter;
+        private readonly TimeCounter _DeltaTimeCounter;
+        private const float _UpdateTime = 1.0f / 30.0f;
+
+        private float _UpdateAllItemTime;
 
         private readonly Entity _Player;
 
         private readonly Mover _Mover;
+        
+        private readonly DifferenceNoticer<IIndividual> _DifferenceNoticer;
 
-        private readonly Regulus.Utility.StageMachine _Status;
-        private readonly Regulus.Collection.DifferenceNoticer<IIndividual> _DifferenceNoticer;
+        float _UpdateTimeCount;
+
+        private bool _RequestAllItems;
+
+        private ControlStatus _ControlStatus;
+
+        public Regulus.Utility.Updater _Updater;
 
         public GameStage(ISoulBinder binder, GamePlayerRecord record, IGameRecorder recoder, Map map)
         {
-            _Map = map;            
+            _Map = map;
             _Record = record;
             _Recoder = recoder;
             _Binder = binder;
             _SaveTimeCounter = new TimeCounter();
             _DeltaTimeCounter = new TimeCounter();
+            _Updater = new Updater();
             _DifferenceNoticer = new DifferenceNoticer<IIndividual>();
 
-            _Player = _CreatePlayer();
-            _Mover = new Mover(_Player);
+            _Player = this._CreatePlayer();
+            _Mover = new Mover(this._Player);
+            _ControlStatus = new ControlStatus(binder, _Player, _Mover , _Map);
 
-            _Status = new StageMachine();
         }
         void IStage.Leave()
         {
-            _Status.Termination();
-            _DifferenceNoticer.JoinEvent -= _BroadcastJoin;
-            _DifferenceNoticer.LeftEvent -= _BroadcastLeft;
+            _Updater.Shutdown();
+            _DifferenceNoticer.JoinEvent -= this._BroadcastJoin;
+            _DifferenceNoticer.LeftEvent -= this._BroadcastLeft;
 
-            _Binder.Unbind<IController>(this);
+            _Binder.Unbind<IInventoryNotifier>(this);
+            _Binder.Unbind<IPlayerProperys>(this);
             _Map.Left(_Player);
             _Save();
         }        
 
         void IStage.Enter()
         {
-            _DifferenceNoticer.JoinEvent += _BroadcastJoin;
-            _DifferenceNoticer.LeftEvent += _BroadcastLeft;
+            this._DifferenceNoticer.JoinEvent += this._BroadcastJoin;
+            this._DifferenceNoticer.LeftEvent += this._BroadcastLeft;
 
-            _Map.JoinChallenger(_Player);
-            _Binder.Bind<IController>(this);
+            this._Map.JoinChallenger(this._Player);            
+            this._Binder.Bind<IPlayerProperys>(this);
+            this._Binder.Bind<IInventoryNotifier>(this);
 
-            _ToIdle();
+            _Updater.Add(_ControlStatus);
         }
 
         private Entity _CreatePlayer()
         {
-            return EntityProvider.Create(_Record );
+            var player = EntityProvider.Create(this._Record);
+                        
+            foreach (var item in _Record.Items)                
+            {
+                player.Bag.Add(item);
+            }
+            return player;
         }
 
         void IStage.Update()
         {
+            _Updater.Working();
             _UpdateSave();
+            
+            var deltaTime = this._GetDeltaTime();
+            if (_TimeUp(deltaTime))
+            {                
+                _Move(deltaTime + GameStage._UpdateTime);
+                _Broadcast(_Map.Find(_Player.GetView()));
+            }
+            
+            _ResponseItems(deltaTime);
 
-            var deltaTime = _GetDeltaTime();
+        }
 
-            _Status.Update();
-            this._Move(deltaTime);
+        private void _ResponseItems(float deltaTime)
+        {
+            if (_UpdateAllItemTime - deltaTime <= 0)
+            {
+                if (_RequestAllItems)
+                {
+                    _AllItemEvent.Invoke(_Player.Bag.GetAll());
+                    _UpdateAllItemTime = 10f;
+                    _RequestAllItems = false;
+                }
+            }
+            else
+            {
+                _UpdateAllItemTime -= deltaTime;
+            }
+        }
 
-            _Broadcast(_Map.Find(_Player));
+        private bool _TimeUp(float deltaTime)
+        {
+            this._UpdateTimeCount += deltaTime;
+            if(this._UpdateTimeCount >= GameStage._UpdateTime)
+            {
+                this._UpdateTimeCount %= GameStage._UpdateTime;
+                return true;
+            }
+            return false;
         }
 
         private void _Move(float deltaTime)
@@ -99,14 +150,14 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private void _Broadcast(IEnumerable<IIndividual> controllers)
         {
-            _DifferenceNoticer.Set(controllers);
+            this._DifferenceNoticer.Set(controllers);
         }
 
         private void _BroadcastLeft(IEnumerable<IIndividual> controllers)
         {
             foreach (var controller in controllers)
             {
-                _Binder.Unbind<IVisible>(controller);
+                this._Binder.Unbind<IVisible>(controller);
             }
         }
 
@@ -114,49 +165,72 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         {
             foreach (var controller in controllers)
             {
-                _Binder.Bind<IVisible>(controller);
+                this._Binder.Bind<IVisible>(controller);
             }
         }
 
         private float _GetDeltaTime()
         {
-            var second = _DeltaTimeCounter.Second;
-            _DeltaTimeCounter.Reset();
+            var second = this._DeltaTimeCounter.Second;
+            this._DeltaTimeCounter.Reset();
             return second;
         }
         
 
         private void _UpdateSave()
         {
-            if (_SaveTimeCounter.Second >= 60)
+            if (this._SaveTimeCounter.Second >= 60)
             {
-                _Save();
-                _SaveTimeCounter.Reset();
+                this._Save();
+                this._SaveTimeCounter.Reset();
             }
         }
 
         private void _Save()
         {
-            _Recoder.Save(_Record);
+            this._Recoder.Save(this._Record);
         }
 
         public event Action DoneEvent;
 
-        Guid IController.Id { get { return _Player.Id; } }
+        Guid IPlayerProperys.Id { get { return this._Player.Id; } }
 
-        void IController.Move(float angle)
-        {
-            _Player.Move(angle);
-        }
-
-        void IController.Stop()
-        {
-            _Player.Stop();
-        }
+       
 
         public void Quit()
         {
-            DoneEvent.Invoke();
+            this.DoneEvent.Invoke();
         }
+
+        void IInventoryNotifier.Query()
+        {
+            _RequestAllItems = true;
+        }
+
+        void IInventoryNotifier.Discard(Guid id)
+        {
+            _Player.Bag.Remove(id);
+        }
+
+        private event Action<Item[]> _AllItemEvent;
+        event Action<Item[]> IInventoryNotifier.AllItemEvent
+        {
+            add { _AllItemEvent += value; }
+            remove { _AllItemEvent -= value; }
+        }
+
+        event Action<Item> IInventoryNotifier.AddEvent
+        {
+            add { _Player.Bag.AddEvent += value; }
+            remove { _Player.Bag.AddEvent -= value; }
+        }
+
+        event Action<Guid> IInventoryNotifier.RemoveEvent
+        {
+            add { _Player.Bag.RemoveEvent += value; }
+            remove { _Player.Bag.RemoveEvent -= value; }
+        }
+
+        
     }
 }

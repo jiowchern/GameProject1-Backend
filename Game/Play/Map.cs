@@ -11,37 +11,37 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
     {
 
         
-        private readonly Regulus.Collection.QuadTree<Visible> _QuadTree;
+        private readonly QuadTree<Visible> _QuadTree;
 
         private readonly List<Visible> _Set;
 
         public Map()
         {
-            _Set = new List<Visible>();
-            _QuadTree = new QuadTree<Visible>(new Size(2, 2), 100);
+            this._Set = new List<Visible>();
+            this._QuadTree = new QuadTree<Visible>(new Size(2, 2), 100);
         }
 
-        public class Visible : Regulus.Collection.IQuadObject
+        public class Visible : IQuadObject
         {
             public Visible(IIndividual noumenon)
             {
-                Noumenon = noumenon;
+                this.Noumenon = noumenon;
                 
             }
 
             public void Initial()
             {
-                Noumenon.BoundsEvent += _Changed; // this -> Noumenon.EventSet
+                this.Noumenon.BoundsEvent += this._Changed; // this -> Noumenon.EventSet
             }
 
             public void Release()
             {
-                Noumenon.BoundsEvent -= _Changed;
+                this.Noumenon.BoundsEvent -= this._Changed;
             }
 
             private void _Changed()
             {
-                _BoundsChanged(this , EventArgs.Empty ); 
+                this._BoundsChanged(this , EventArgs.Empty ); 
             }
 
             ~Visible()
@@ -51,14 +51,14 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
             Rect IQuadObject.Bounds
             {
-                get { return Noumenon.Bounds ; }
+                get { return this.Noumenon.Bounds ; }
             }
 
             private event EventHandler _BoundsChanged;
             event EventHandler IQuadObject.BoundsChanged
             {
-                add { _BoundsChanged += value; }
-                remove { _BoundsChanged -= value; }
+                add { this._BoundsChanged += value; }
+                remove { this._BoundsChanged -= value; }
             }
 
             public IIndividual Noumenon { get; private set; }
@@ -66,12 +66,12 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         public void JoinStaff(IIndividual individual)
         {
-            _Join(individual);
+            this._Join(individual);
         }
         public void JoinChallenger(IIndividual individual)
         {
-            _Join(individual);
-            individual.SetPosition(Regulus.Utility.Random.Instance.NextFloat(0,2.5f) , Regulus.Utility.Random.Instance.NextFloat(0, 2.5f));
+            this._Join(individual);
+            individual.SetPosition(Utility.Random.Instance.NextFloat(0,2.5f) , Utility.Random.Instance.NextFloat(0, 2.5f));
         }
 
         private void _Join(IIndividual individual)
@@ -84,18 +84,18 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         public void Left(IIndividual individual)
         {
-            var results = _Set.FindAll(v => v.Noumenon.Id == individual.Id);
+            var results = this._Set.FindAll(v => v.Noumenon.Id == individual.Id);
             foreach (var result in results)
             {
-                _QuadTree.Remove(result);
-                _Set.Remove(result);
+                this._QuadTree.Remove(result);
+                this._Set.Remove(result);
                 result.Release();
             }
         }
 
-        public IIndividual[] Find(IObservable observable)
+        public IIndividual[] Find(Rect bound)
         {
-            var results = _QuadTree.Query(observable.Vision);
+            var results = this._QuadTree.Query(bound);
 
             return (from r in results select r.Noumenon).ToArray();
         }

@@ -20,52 +20,52 @@ namespace Regulus.Project.ItIsNotAGame1.Storage.User
 	{
 		private readonly IAgent _Agent;
 
-		private readonly Regulus.Remoting.User _Remoting;
+		private readonly Remoting.User _Remoting;
 
 		private readonly Updater _Updater;
 
 		public User(IAgent agent)
 		{
-			_Agent = agent;
-			_Updater = new Updater();
-			_Remoting = new Regulus.Remoting.User(agent);
+		    this._Agent = agent;
+		    this._Updater = new Updater();
+		    this._Remoting = new Remoting.User(agent);
 		}
 
-		Regulus.Remoting.User IUser.Remoting
+		Remoting.User IUser.Remoting
 		{
-			get { return _Remoting; }
+			get { return this._Remoting; }
 		}
 
-		INotifier<Regulus.Project.ItIsNotAGame1.Data.IVerify> IUser.VerifyProvider
+		INotifier<IVerify> IUser.VerifyProvider
 		{
-			get { return _Agent.QueryNotifier<Regulus.Project.ItIsNotAGame1.Data.IVerify>(); }
+			get { return this._Agent.QueryNotifier<IVerify>(); }
 		}
 
 		bool IUpdatable.Update()
 		{
-			_Updater.Working();
+		    this._Updater.Working();
 			return true;
 		}
 
 		void IBootable.Launch()
 		{
-			_Updater.Add(_Agent);
-			_Updater.Add(_Remoting);
+		    this._Updater.Add(this._Agent);
+		    this._Updater.Add(this._Remoting);
 		}
 
 		void IBootable.Shutdown()
 		{
-			_Updater.Shutdown();
+		    this._Updater.Shutdown();
 		}
 
 		INotifier<T> IUser.QueryProvider<T>()
 		{
-			return _Agent.QueryNotifier<T>();
+			return this._Agent.QueryNotifier<T>();
 		}
 
-		INotifier<Regulus.Project.ItIsNotAGame1.Data.IStorageCompetences> IUser.StorageCompetencesProvider
+		INotifier<IStorageCompetences> IUser.StorageCompetencesProvider
 		{
-			get { return _Agent.QueryNotifier<IStorageCompetences>(); }
+			get { return this._Agent.QueryNotifier<IStorageCompetences>(); }
 		}
 	}
 }

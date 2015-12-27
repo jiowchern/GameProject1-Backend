@@ -9,27 +9,6 @@
                 伺服器端
             </summary>
         </member>
-        <member name="M:Regulus.Remoting.Soul.Native.Server.#ctor(Regulus.Remoting.ICore,System.Int32)">
-            <summary>
-                Initializes a new instance of the <see cref="T:Regulus.Remoting.Soul.Native.Server"/> class.
-            </summary>
-            <param name="core">
-                進入點物件
-            </param>
-            <param name="port">
-                監聽的埠
-            </param>
-        </member>
-        <member name="M:Regulus.Remoting.Soul.Native.Server.Launch">
-            <summary>
-                啟動系統
-            </summary>
-        </member>
-        <member name="M:Regulus.Remoting.Soul.Native.Server.Shutdown">
-            <summary>
-                關閉系統
-            </summary>
-        </member>
         <member name="P:Regulus.Remoting.Soul.Native.Server.PeerFPS">
             <summary>
                 網路核心每秒執行次數
@@ -83,6 +62,27 @@
         <member name="P:Regulus.Remoting.Soul.Native.Server.WaitingToWrittenPackages">
             <summary>
                 等待寫入的封包
+            </summary>
+        </member>
+        <member name="M:Regulus.Remoting.Soul.Native.Server.#ctor(Regulus.Remoting.ICore,System.Int32)">
+            <summary>
+                Initializes a new instance of the <see cref="T:Regulus.Remoting.Soul.Native.Server" /> class.
+            </summary>
+            <param name="core">
+                進入點物件
+            </param>
+            <param name="port">
+                監聽的埠
+            </param>
+        </member>
+        <member name="M:Regulus.Remoting.Soul.Native.Server.Launch">
+            <summary>
+                啟動系統
+            </summary>
+        </member>
+        <member name="M:Regulus.Remoting.Soul.Native.Server.Shutdown">
+            <summary>
+                關閉系統
             </summary>
         </member>
     </members>

@@ -3,81 +3,82 @@ using System;
 using System.Reflection.Emit;
 
 using Regulus.Project.ItIsNotAGame1.Data;
+using Regulus.Utility;
 
 namespace Regulus.Project.ItIsNotAGame1.Play
 {
-    public class Server : Regulus.Remoting.ICore
+    public class Server : Remoting.ICore
     {
-        private readonly Regulus.Utility.LogFileRecorder _LogRecorder;
+        private readonly Utility.LogFileRecorder _LogRecorder;
 
-        private readonly Regulus.Utility.StageMachine _Machine;
+        private readonly Utility.StageMachine _Machine;
 
-        private readonly Regulus.Utility.Updater _Updater;
+        private readonly Utility.Updater _Updater;
 
-        private Regulus.Project.ItIsNotAGame1.Game.Play.Center _Center;
+        private Center _Center;
 
-        private Regulus.Project.ItIsNotAGame1.Storage.User.Proxy _Storage;
+        private Storage.User.Proxy _Storage;
 
-        private Regulus.Project.ItIsNotAGame1.Storage.User.IUser _StorageUser;
+        private Storage.User.IUser _StorageUser;
 
-        private Regulus.CustomType.Verify _StorageVerifyData;
+        private CustomType.Verify _StorageVerifyData;
 
         public Server()
         {
-            _LogRecorder = new Regulus.Utility.LogFileRecorder("Play");
+            this._LogRecorder = new Utility.LogFileRecorder("Play");
 
-            _StorageVerifyData = new Regulus.CustomType.Verify();
-            
-            _Machine = new Regulus.Utility.StageMachine();
-            _Updater = new Regulus.Utility.Updater();
+            this._StorageVerifyData = new CustomType.Verify();
 
-            _BuildParams();
-            _BuildUser();
+            this._Machine = new Utility.StageMachine();
+            this._Updater = new Utility.Updater();
+
+            this._BuildParams();
+            this._BuildUser();
         }
 
-        void Regulus.Remoting.ICore.AssignBinder(Regulus.Remoting.ISoulBinder binder)
+        void Remoting.ICore.AssignBinder(Remoting.ISoulBinder binder)
         {
-            _Center.Join(binder);
+            this._Center.Join(binder);
         }
 
-        bool Regulus.Utility.IUpdatable.Update()
+        bool Utility.IUpdatable.Update()
         {
-            _Updater.Working();
-            _Machine.Update();
+            this._Updater.Working();
+            this._Machine.Update();
             return true;
         }
 
-        void Regulus.Framework.IBootable.Shutdown()
-        {            
-            _Updater.Shutdown();
-            Regulus.Utility.Singleton<Regulus.Utility.Log>.Instance.RecordEvent -= _LogRecorder.Record;
-            AppDomain.CurrentDomain.UnhandledException -= CurrentDomain_UnhandledException;
+        void Framework.IBootable.Shutdown()
+        {
+            this._Updater.Shutdown();
+            Utility.Singleton<Utility.Log>.Instance.RecordEvent -= this._LogRecorder.Record;
+            AppDomain.CurrentDomain.UnhandledException -= this.CurrentDomain_UnhandledException;
         }
 
-        void Regulus.Framework.IBootable.Launch()
+        void Framework.IBootable.Launch()
         {
-            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-            _LoadData();
-            Regulus.Utility.Singleton<Regulus.Utility.Log>.Instance.RecordEvent += _LogRecorder.Record;
-            _Updater.Add(_Storage);            
-            _ToConnectStorage(_StorageUser);
+            AppDomain.CurrentDomain.UnhandledException += this.CurrentDomain_UnhandledException;
+            this._LoadData();
+            Utility.Singleton<Utility.Log>.Instance.RecordEvent += this._LogRecorder.Record;
+            this._Updater.Add(this._Storage);
+            this._ToConnectStorage(this._StorageUser);
         }
 
         private void _LoadData()
         {
             var buffer = System.IO.File.ReadAllBytes("entitys.txt");
-            var entitys = Regulus.Utility.Serialization.Read<EntityData[]>(buffer);
-            Resource.Instance.Entitys = entitys;
+            var entitys = Utility.Serialization.Read<EntityData[]>(buffer);
+            Singleton<Resource>.Instance.Entitys = entitys;
         }
 
         private void _BuildParams()
         {
-            var config = new Regulus.Utility.Ini(_ReadConfig());
+            var config = new Utility.Ini(this._ReadConfig());
 
-            _StorageVerifyData.IPAddress = config.Read("Storage", "ipaddr");
-            _StorageVerifyData.Port = int.Parse(config.Read("Storage", "port"));
-            _StorageVerifyData.Account = config.Read("Storage", "account");
-            _StorageVerifyData.Password = config.Read("Storage", "password");
+            this._StorageVerifyData.IPAddress = config.Read("Storage", "ipaddr");
+            this._StorageVerifyData.Port = int.Parse(config.Read("Storage", "port"));
+            this._StorageVerifyData.Account = config.Read("Storage", "account");
+            this._StorageVerifyData.Password = config.Read("Storage", "password");
 
             
         }
@@ -86,18 +87,18 @@ namespace Regulus.Project.ItIsNotAGame1.Play
         {
             
 
-            if (_IsIpAddress(_StorageVerifyData.IPAddress))
+            if (this._IsIpAddress(this._StorageVerifyData.IPAddress))
             {
-                _Storage = new Regulus.Project.ItIsNotAGame1.Storage.User.Proxy(new Regulus.Project.ItIsNotAGame1.Storage.User.RemotingFactory());
-                _StorageUser = _Storage.SpawnUser("user");
+                this._Storage = new Storage.User.Proxy(new Storage.User.RemotingFactory());
+                this._StorageUser = this._Storage.SpawnUser("user");
             }
             else
             {
-                var center = new Regulus.Project.ItIsNotAGame1.Game.Storage.Center(new Regulus.Project.ItIsNotAGame1.Game.DummyFrature());
-                _Updater.Add(center);
-                var factory = new Regulus.Project.ItIsNotAGame1.Storage.User.StandaloneFactory(center);
-                _Storage = new Regulus.Project.ItIsNotAGame1.Storage.User.Proxy(factory);
-                _StorageUser = _Storage.SpawnUser("user");
+                var center = new Game.Storage.Center(new Game.DummyFrature());
+                this._Updater.Add(center);
+                var factory = new Storage.User.StandaloneFactory(center);
+                this._Storage = new Storage.User.Proxy(factory);
+                this._StorageUser = this._Storage.SpawnUser("user");
             }
         }
 
@@ -110,22 +111,22 @@ namespace Regulus.Project.ItIsNotAGame1.Play
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             var ex = (Exception)e.ExceptionObject;
-            _LogRecorder.Record(ex.ToString());
-            _LogRecorder.Save();
+            this._LogRecorder.Record(ex.ToString());
+            this._LogRecorder.Save();
         }
 
-        private void _ToConnectStorage(Regulus.Project.ItIsNotAGame1.Storage.User.IUser user)
+        private void _ToConnectStorage(Storage.User.IUser user)
         {
-            var stage = new Regulus.Project.ItIsNotAGame1.Storage.User.ConnectStorageStage(user, _StorageVerifyData.IPAddress, _StorageVerifyData.Port);
-            stage.OnDoneEvent += _ConnectResult;
-            _Machine.Push(stage);
+            var stage = new Storage.User.ConnectStorageStage(user, this._StorageVerifyData.IPAddress, this._StorageVerifyData.Port);
+            stage.OnDoneEvent += this._ConnectResult;
+            this._Machine.Push(stage);
         }
 
         private void _ConnectResult(bool result)
         {
             if (result)
             {
-                _ToVerifyStorage(_StorageUser);
+                this._ToVerifyStorage(this._StorageUser);
             }
             else
             {
@@ -133,18 +134,18 @@ namespace Regulus.Project.ItIsNotAGame1.Play
             }
         }
 
-        private void _ToVerifyStorage(Regulus.Project.ItIsNotAGame1.Storage.User.IUser user)
+        private void _ToVerifyStorage(Storage.User.IUser user)
         {
-            var stage = new Regulus.Project.ItIsNotAGame1.Storage.User.VerifyStorageStage(user, _StorageVerifyData.Account, _StorageVerifyData.Password);
-            stage.OnDoneEvent += _VerifyResult;
-            _Machine.Push(stage);
+            var stage = new Storage.User.VerifyStorageStage(user, this._StorageVerifyData.Account, this._StorageVerifyData.Password);
+            stage.OnDoneEvent += this._VerifyResult;
+            this._Machine.Push(stage);
         }
 
         private void _VerifyResult(bool verify_result)
         {
             if (verify_result)
             {
-                _ToBuildClient();
+                this._ToBuildClient();
             }
             else
             {
@@ -158,21 +159,21 @@ namespace Regulus.Project.ItIsNotAGame1.Play
 
         private void _ToBuildClient()
         {
-            var stage = new BuildCenterStage(_StorageUser);
+            var stage = new BuildCenterStage(this._StorageUser);
 
-            stage.OnBuiledEvent += _Play;
+            stage.OnBuiledEvent += this._Play;
 
-            _Machine.Push(stage);
+            this._Machine.Push(stage);
         }
 
         private void _Play(BuildCenterStage.ExternalFeature features)
         {
-            _Center = new Center(
+            this._Center = new Center(
                 features.AccountFinder,                
                 features.GameRecorder
                 );
 
-            _Updater.Add(_Center);
+            this._Updater.Add(this._Center);
         }
 
         

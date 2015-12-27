@@ -20,24 +20,24 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Storage
 
         public StroageAccess(ISoulBinder binder, Account account, IStorage storage)
         {
-            _Binder = binder;
-            _Account = account;
-            _Storage = storage;
+            this._Binder = binder;
+            this._Account = account;
+            this._Storage = storage;
         }
 
         void IQuitable.Quit()
         {
-            DoneEvent();
+            this.DoneEvent();
         }
 
         void IStage.Enter()
         {
-            _Attach(_Account);
+            this._Attach(this._Account);
         }
 
         void IStage.Leave()
         {
-            _Detach(_Account);
+            this._Detach(this._Account);
         }
 
         void IStage.Update()
@@ -46,27 +46,27 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Storage
 
         Value<Account.COMPETENCE[]> IStorageCompetences.Query()
         {
-            return _Account.Competnces.ToArray();
+            return this._Account.Competnces.ToArray();
         }
 
         Value<Guid> IStorageCompetences.QueryForId()
         {
-            return _Account.Id;
+            return this._Account.Id;
         }
 
         private void _Attach(Account account)
         {
-            _Binder.Bind<IStorageCompetences>(this);
+            this._Binder.Bind<IStorageCompetences>(this);
 
             if (account.HasCompetnce(Account.COMPETENCE.ACCOUNT_FINDER))
             {
-                _Binder.Bind<IAccountFinder>(_Storage);
-                _Binder.Bind<IGameRecorder>(_Storage);
+                this._Binder.Bind<IAccountFinder>(this._Storage);
+                this._Binder.Bind<IGameRecorder>(this._Storage);
             }
 
             if (account.HasCompetnce(Account.COMPETENCE.ACCOUNT_MANAGER))
             {
-                _Binder.Bind<IAccountManager>(_Storage);
+                this._Binder.Bind<IAccountManager>(this._Storage);
             }
 
         }
@@ -75,16 +75,16 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Storage
         {
             if (account.HasCompetnce(Account.COMPETENCE.ACCOUNT_FINDER))
             {
-                _Binder.Unbind<IAccountFinder>(_Storage);
-                _Binder.Unbind<IGameRecorder>(_Storage);
+                this._Binder.Unbind<IAccountFinder>(this._Storage);
+                this._Binder.Unbind<IGameRecorder>(this._Storage);
             }
 
             if (account.HasCompetnce(Account.COMPETENCE.ACCOUNT_MANAGER))
             {
-                _Binder.Unbind<IAccountManager>(_Storage);
+                this._Binder.Unbind<IAccountManager>(this._Storage);
             }
 
-            _Binder.Unbind<IStorageCompetences>(this);
+            this._Binder.Unbind<IStorageCompetences>(this);
         }
     }
 }

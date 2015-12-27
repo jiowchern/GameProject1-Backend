@@ -11,18 +11,18 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private Entity _Entity;
 
-        private IIndividual _Individual { get { return _Entity; } }        
+        private IIndividual _Individual { get { return this._Entity; } }        
 
         public Mover(Entity entity)
         {
-            _Entity = entity;
+            this._Entity = entity;
         }
-        public IObservable GetOrbit(Vector2 velocity)
+        public Rect GetOrbit(Vector2 velocity)
         {                            
-            return new Orbit(_Individual.Mesh, velocity);
+            return new Orbit(this._Individual.Mesh, velocity).Vision;
         }
 
-        public class Orbit : IObservable
+        public class Orbit 
         {
             private readonly Rect _Rect;
 
@@ -35,36 +35,36 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                 polygon.Offset(velocity);
 
                 points.AddRange(polygon.Points);
-                _Rect = points.ToRect();
+                this._Rect = points.ToRect();
             }
 
-            Rect IObservable.Vision { get { return _Rect; } }
+            public Rect Vision { get { return this._Rect; } }
         }
         
         public void Set(Vector2 velocity)
         {
-            _Entity.UpdatePosition(velocity);
+            this._Entity.UpdatePosition(velocity);
         }
 
         public bool Move(Vector2 velocity, IEnumerable<IIndividual> entitys )
         {
-            var polygon = _GetThroughRange(velocity);
+            var polygon = this._GetThroughRange(velocity);
 
-            if (entitys.Any(x => _Collide(x, polygon )))
+            if (entitys.Any(x => this._Collide(x, polygon ) && x.EntityType != Data.ENTITY.ACTOR1 ))
             {
                 return false;
             }
-            Set(velocity);
+            this.Set(velocity);
             return true;
         }        
 
         private Polygon _GetThroughRange(Vector2 velocity)
         {
-            var after = _Individual.Mesh.Clone();
+            var after = this._Individual.Mesh.Clone();
             after.Offset(velocity);
 
             List<Vector2> points = new List<Vector2>();
-            points.AddRange(_Individual.Mesh.Points);
+            points.AddRange(this._Individual.Mesh.Points);
             points.AddRange(after.Points);
             var polygon = new Polygon(points.FindHull().ToArray());            
             return polygon;

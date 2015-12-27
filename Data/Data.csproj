@@ -11,7 +11,8 @@
     <AssemblyName>ItIsNotAGame1Data</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
   </PropertyGroup>
@@ -47,14 +48,13 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Account.cs" />
     <Compile Include="ACCOUNT_REQUEST_RESULT.cs" />
+    <Compile Include="ACTOR_STATUS_TYPE.cs" />
     <Compile Include="ENTITY.cs" />
     <Compile Include="EntityData.cs" />
     <Compile Include="GamePlayerRecord.cs" />
@@ -62,11 +62,16 @@
     <Compile Include="IAccountFinder.cs" />
     <Compile Include="IAccountManager.cs" />
     <Compile Include="IAccountStatus.cs" />
-    <Compile Include="IController.cs" />
+    <Compile Include="IActorStatus.cs" />
+    <Compile Include="IMoveController.cs" />
+    <Compile Include="IInventoryNotifier.cs" />
+    <Compile Include="IPlayerProperys.cs" />
     <Compile Include="IPlayerRecordHandler.cs" />
     <Compile Include="IQuitable.cs" />
+    <Compile Include="ISkillController.cs" />
     <Compile Include="IStorage.cs" />
     <Compile Include="IStorageCompetnces.cs" />
+    <Compile Include="Item.cs" />
     <Compile Include="IVerify.cs" />
     <Compile Include="IVisible.cs" />
     <Compile Include="Location.cs" />
