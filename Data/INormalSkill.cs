@@ -5,9 +5,10 @@ using System.Text;
 
 namespace Regulus.Project.ItIsNotAGame1.Data
 {
-    public interface ISkillController
+    public interface INormalSkill
     {
 
-        void Explore(Guid target);        
+        void Explore(Guid target);
+        void Battle();
     }
 }

@@ -1,0 +1,32 @@
+using System;
+
+using Regulus.CustomType;
+
+namespace Regulus.Project.ItIsNotAGame1.Data
+{
+    [Serializable]
+    public class SkillData
+    {
+        public ACTOR_STATUS_TYPE Id;
+
+        public Vector2[] Lefts;
+
+        public Vector2[] Rights;
+
+        public float Total;
+
+
+        public float Begin;
+
+        public float End;
+
+        public ACTOR_STATUS_TYPE[] Nexts;
+
+        public SkillData()
+        {
+            Lefts = new Vector2[0];
+            Rights = new Vector2[0];
+            Nexts = new ACTOR_STATUS_TYPE[0];
+        }
+    }
+}

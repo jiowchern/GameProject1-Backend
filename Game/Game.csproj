@@ -53,10 +53,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DummyFrature.cs" />
+    <Compile Include="Play\ActorSkill.cs" />
     <Compile Include="Play\ActorStatus.cs" />
+    <Compile Include="Play\BattleCasterStatus.cs" />
+    <Compile Include="Play\BattleStatus.cs" />
     <Compile Include="Play\Cell.cs" />
     <Compile Include="Play\Center.cs" />
     <Compile Include="Play\ControlStatus.cs" />
+    <Compile Include="Play\DamageStage.cs" />
     <Compile Include="Play\EntityProvider.cs" />
     <Compile Include="Play\ExploreStatus.cs" />
     <Compile Include="Play\ExtendPolygon.cs" />
@@ -68,10 +72,12 @@
     <Compile Include="Play\Maze.cs" />
     <Compile Include="Play\MazeCell.cs" />
     <Compile Include="Play\MAZEWALL.cs" />
+    <Compile Include="Play\MoveController.cs" />
     <Compile Include="Play\Mover.cs" />
     <Compile Include="Play\Entity.cs" />
     <Compile Include="Play\NormalStatus.cs" />
     <Compile Include="Play\Realm.cs" />
+    <Compile Include="Play\SkillCaster.cs" />
     <Compile Include="Play\Zone.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Play\User.cs" />

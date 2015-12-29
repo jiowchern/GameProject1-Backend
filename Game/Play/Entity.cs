@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 
 using Regulus.CustomType;
 using Regulus.Extension;
@@ -18,10 +20,25 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private float _DetectionRange;
 
+        private SkillData[] _Datas  ;
+/*        {
+            new SkillData() { Id = ACTOR_STATUS_TYPE.BATTLE_AXE_BLOCK , Total =1.833f },
+            new SkillData() { Id = ACTOR_STATUS_TYPE.BATTLE_AXE_ATTACK1 , Total =2.4f },
+            new SkillData() { Id = ACTOR_STATUS_TYPE.BATTLE_AXE_ATTACK2 , Total =3.167f }
+        };*/
+
         public Inventory Bag { get; private set; }
 
-        public Entity(Polygon mesh, GamePlayerRecord record)
+        public Entity(Polygon mesh, GamePlayerRecord record )
         {
+            _SkillCasters = new Dictionary<Guid, SkillCaster>();
+            //_Datas = Resource.Instance.SkillDatas;
+            _Datas = new []
+            {
+                new SkillData() { Id = ACTOR_STATUS_TYPE.BATTLE_AXE_BLOCK , Total =1.833f },
+                new SkillData() { Id = ACTOR_STATUS_TYPE.BATTLE_AXE_ATTACK1 , Total =2.4f },
+                new SkillData() { Id = ACTOR_STATUS_TYPE.BATTLE_AXE_ATTACK2 , Total =3.167f }
+            };
             this._Id = Guid.NewGuid();
             this._View = 30.0f;
             _DetectionRange = 1.0f;
@@ -32,6 +49,9 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             this._Bound = this._BuildBound(this._Mesh);
 
             Bag = new Inventory();
+
+            _IdleStatus = ACTOR_STATUS_TYPE.NORMAL_IDLE;
+            
         }
 
         
@@ -83,7 +103,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         private Action _BoundsEvent;
         private float _Trun;
 
-        
+        private ACTOR_STATUS_TYPE _IdleStatus;
 
         public Guid Id { get { return this._Id; } }
 
@@ -112,6 +132,13 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             return new [] { new Item() { Id = Guid.NewGuid() , Weight = 5 , Name = "探索到的物品"} } ;
         }
 
+        private Dictionary<Guid, SkillCaster> _SkillCasters;
+        void IIndividual.AttachDamage(Guid id, SkillCaster caster)
+        {
+            if(_SkillCasters.ContainsKey(id) == false)
+                _SkillCasters.Add(id , caster);
+        }
+
         public void UpdatePosition(Vector2 velocity)
         {
             if (velocity.X == 0 && velocity.Y == 0)
@@ -130,17 +157,21 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             this._Speed = 0.0f ;
             this._SetMove(0);
         }
-
+        internal void Trun(int trun)
+        {
+            this._Trun = trun;
+            _InvokeStatusEvent(_IdleStatus);
+        }
         public void Move(float angle , bool run)
         {
             this._Speed = 1.0f + (run? 3.0f : 0.0f);
-            this._SetMove(angle);
+            this._SetMove(angle );
         }
 
         private void _SetMove(float angle)
         {
             this.Direction = (this.Direction + angle) % 360;
-            _InvokeStatusEvent(ACTOR_STATUS_TYPE.WALK);
+            _InvokeStatusEvent(_IdleStatus);
         }
 
         private void _InvokeStatusEvent(ACTOR_STATUS_TYPE type)
@@ -182,12 +213,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             return rect;
         }
 
-        internal void Trun(int trun)
-        {
-            this._Trun = trun;
-
-            _InvokeStatusEvent(ACTOR_STATUS_TYPE.WALK);            
-        }
+        
 
         public Polygon GetExploreBound()
         {
@@ -200,14 +226,54 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             return _BuildVidw();
         }
 
-        public void Idle()
+        public void Normal()
         {
-            _InvokeStatusEvent(ACTOR_STATUS_TYPE.IDLE);
+            _IdleStatus = ACTOR_STATUS_TYPE.NORMAL_IDLE;
+            Stop();            
         }
 
         public void Explore()
         {
-            _InvokeStatusEvent(ACTOR_STATUS_TYPE.EXPLORE);
+            _InvokeStatusEvent(ACTOR_STATUS_TYPE.NORMAL_EXPLORE);            
+        }
+
+        public void Battle()
+        {
+            _IdleStatus = ACTOR_STATUS_TYPE.BATTLE_AXE_IDLE;
+            Stop();
+        }
+
+        public ActorSkill FindSkill()
+        {            
+            return new ActorSkill(_Datas);
+        }
+
+        public void CastBegin(ACTOR_STATUS_TYPE id)
+        {
+            Stop();
+            _InvokeStatusEvent(id);
+        }
+
+        public void CastEnd(ACTOR_STATUS_TYPE id)
+        {            
+        }
+
+        public IEnumerable<SkillCaster> DequeueCaster()
+        {
+            var values = _SkillCasters.Values;
+            _SkillCasters.Clear();
+            return values;
+        }
+
+        public void Damage()
+        {
+            _InvokeStatusEvent(ACTOR_STATUS_TYPE.DAMAGE1);
+        }
+
+        public SkillCaster GetDamagrCaster()
+        {
+            var data = _Datas.First((s) => s.Id == ACTOR_STATUS_TYPE.DAMAGE1);
+            return new SkillCaster(data , new Determination(data.Lefts , data.Rights , data.Total , data.Begin , data.End));
         }
     }
 }

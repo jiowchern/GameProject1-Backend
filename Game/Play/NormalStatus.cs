@@ -6,7 +6,7 @@ using Regulus.Utility;
 
 namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
-    internal class NormalStatus : ActorStatus , IMoveController , ISkillController
+    internal class NormalStatus : ActorStatus , INormalSkill
     {
         private readonly ISoulBinder _Binder;
 
@@ -14,17 +14,23 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         public event Action<Guid> ExploreEvent;
 
-        public NormalStatus(ISoulBinder binder, Entity player) : base (ACTOR_STATUS_TYPE.IDLE )
+        public event Action BattleEvent;
+
+        private readonly MoveController _MoveController;
+
+        public NormalStatus(ISoulBinder binder, Entity player) 
         {
             _Binder = binder;
             _Player = player;
+
+            _MoveController = new MoveController(_Player);
         }
         
 
         public override void Leave()
         {
-            _Binder.Unbind<ISkillController>(this);
-            _Binder.Unbind<IMoveController>(this);
+            _Binder.Unbind<INormalSkill>(this);
+            _Binder.Unbind<IMoveController>(_MoveController);
         }
 
         public override void Update()
@@ -34,51 +40,23 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         public override void Enter()
         {
-            _Binder.Bind<IMoveController>(this);
-            _Binder.Bind<ISkillController>(this);
+            _Binder.Bind<IMoveController>(_MoveController);
+            _Binder.Bind<INormalSkill>(this);
 
-            _Player.Idle();
+            _Player.Normal();
         }
         
 
-        void IMoveController.Forward()
-        {
-            _Player.Move(0 , false);
-        }
+        
 
-        void IMoveController.Backward()
-        {
-            _Player.Move(180, false);
-        }
-
-        void IMoveController.StopMove()
-        {
-            _Player.Stop();
-        }
-
-        void IMoveController.TrunLeft()
-        {
-            _Player.Trun(-300);
-        }
-
-        void IMoveController.TrunRight()
-        {
-            _Player.Trun(300);
-        }
-
-        void IMoveController.StopTrun()
-        {
-            _Player.Trun(0);
-        }
-
-        void IMoveController.RunForward()
-        {
-            _Player.Move(0, true);
-        }
-
-        void ISkillController.Explore(Guid target)
+        void INormalSkill.Explore(Guid target)
         {
             ExploreEvent(target);
+        }
+
+        public void Battle()
+        {
+            BattleEvent();
         }
     }
 }

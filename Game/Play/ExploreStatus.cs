@@ -23,7 +23,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         public event Action DoneEvent;
 
-        public ExploreStatus(ISoulBinder binder, Entity player , Map map , Guid target_id) : base(ACTOR_STATUS_TYPE.EXPLORE)
+        public ExploreStatus(ISoulBinder binder, Entity player , Map map , Guid target_id)
         {
             _Binder = binder;
             _Player = player;

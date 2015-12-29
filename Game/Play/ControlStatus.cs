@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 
 using Regulus.Framework;
 using Regulus.Project.ItIsNotAGame1.Data;
@@ -18,8 +19,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         private readonly Map _Map;
 
         private readonly StageMachine _Status;
-
-        private ACTOR_STATUS_TYPE _Current;
+        
 
         public ControlStatus(ISoulBinder binder, Entity player, Mover mover , Map map)
         {
@@ -38,13 +38,29 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         private void _ToNormal()
         {            
             var status = new NormalStatus(_Binder, _Player);
-            status.ExploreEvent += _ToExplore; 
+            status.ExploreEvent += _ToExplore;
+            status.BattleEvent += _ToBattle;
             _SetStatus(status);
         }
 
-        private void _SetStatus(ActorStatus status)
+        private void _ToBattle()
         {
-            _Change(status.ActorStatusType);
+            var status = new BattleStatus(_Binder, _Player, _Map);
+            status.NormalEvent += _ToNormal;
+            status.CasterEvent += _ToCast;
+            _SetStatus(status);
+        }
+
+        private void _ToCast(SkillCaster caster)
+        {
+            var status = new BattleCasterStatus(_Binder, _Player, _Map , caster);
+            //status.NextCastEvent += _ToCast;
+            status.DoneEvent += _ToBattle;
+            _SetStatus(status);
+        }
+
+        private void _SetStatus(IStage status)
+        {            
             _Status.Push(status);
         }
 
@@ -57,25 +73,30 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         void IBootable.Shutdown()
         {
-            _Status.Termination();
-            
+            _Status.Termination();            
         }
 
         bool IUpdatable.Update()
         {
             _Status.Update();
+            _ProcessCaster();
             return true;
         }
 
-        
+        private void _ProcessCaster()
+        {
+            var casters = _Player.DequeueCaster();
 
-        
+            if (casters.Any())
+                _ToDamage();
+        }
 
-        
+        private void _ToDamage()
+        {
+            var stage = new DamageStage(_Binder, _Player);
+            stage.DoneEvent += _ToBattle;
 
-        protected void _Change(ACTOR_STATUS_TYPE arg1)
-        {                        
-            _Current = arg1;
+            _SetStatus(stage);
         }
     }
 }

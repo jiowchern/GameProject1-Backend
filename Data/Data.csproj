@@ -55,19 +55,23 @@
     <Compile Include="Account.cs" />
     <Compile Include="ACCOUNT_REQUEST_RESULT.cs" />
     <Compile Include="ACTOR_STATUS_TYPE.cs" />
+    <Compile Include="Determination.cs" />
     <Compile Include="ENTITY.cs" />
     <Compile Include="EntityData.cs" />
     <Compile Include="GamePlayerRecord.cs" />
+    <Compile Include="GrahamConvexHull.cs" />
     <Compile Include="IAccountCreator.cs" />
     <Compile Include="IAccountFinder.cs" />
     <Compile Include="IAccountManager.cs" />
     <Compile Include="IAccountStatus.cs" />
+    <Compile Include="IBattleSkill.cs" />
+    <Compile Include="ICastSkill.cs" />
     <Compile Include="IMoveController.cs" />
     <Compile Include="IInventoryNotifier.cs" />
     <Compile Include="IPlayerProperys.cs" />
     <Compile Include="IPlayerRecordHandler.cs" />
     <Compile Include="IQuitable.cs" />
-    <Compile Include="ISkillController.cs" />
+    <Compile Include="INormalSkill.cs" />
     <Compile Include="IStorage.cs" />
     <Compile Include="IStorageCompetnces.cs" />
     <Compile Include="Item.cs" />
@@ -77,6 +81,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RealmMaterial.cs" />
     <Compile Include="Resource.cs" />
+    <Compile Include="SkillData.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

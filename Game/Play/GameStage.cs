@@ -42,6 +42,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         public Regulus.Utility.Updater _Updater;
 
+        
+
         public GameStage(ISoulBinder binder, GamePlayerRecord record, IGameRecorder recoder, Map map)
         {
             _Map = map;
@@ -103,11 +105,17 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             {                
                 _Move(deltaTime + GameStage._UpdateTime);
                 _Broadcast(_Map.Find(_Player.GetView()));
+
+                
+
             }
             
             _ResponseItems(deltaTime);
 
         }
+        
+
+        
 
         private void _ResponseItems(float deltaTime)
         {
