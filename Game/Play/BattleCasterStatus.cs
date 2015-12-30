@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Regulus.CustomType;
@@ -19,13 +20,16 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private readonly SkillCaster _Caster;
 
+        public event Action<SkillCaster> NextEvent;
         public event Action DoneEvent;
 
-        private Guid _Id;
+        
+        
+        private readonly List<IIndividual> _Damages;
 
         public BattleCasterStatus(ISoulBinder binder, Entity player, Map map, SkillCaster caster)
         {
-            _Id = Guid.NewGuid();
+            _Damages = new List<IIndividual>();        
             _Binder = binder;
             _Player = player;
             _Map = map;
@@ -35,11 +39,26 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         void IStage.Enter()
         {
             _Player.CastBegin(_Caster.Data.Id);
+
+            if(_Caster.IsBlock())
+            {
+                _Player.SetBlock(true);
+            }
         }
 
         void IStage.Leave()
         {
             _Player.CastEnd(_Caster.Data.Id);
+            if (_Caster.IsBlock())
+            {
+                _Player.SetBlock(false);
+            }
+
+
+            foreach(var damage in _Damages)
+            {
+                damage.AttachDamage();
+            }
         }
 
         void IStage.Update()
@@ -54,7 +73,21 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                     var collision = Regulus.CustomType.Polygon.Collision(poly, individual.Mesh, new Vector2());
                     if (collision.Intersect)
                     {
-                        individual.AttachDamage(_Id, _Caster);
+                        if(_Caster.IsSmash())
+                        {
+                            _AttachDamage(individual);
+                            _AttachDamage(individual);
+                            _AttachDamage(individual);
+                        }
+                        else if(individual.IsBlock() == false && _Caster.IsPunch())
+                        {
+                            _AttachDamage(individual);
+                        }
+                        else if (individual.IsBlock() && _Caster.IsPunch())
+                        {                            
+                            NextEvent(SkillCaster.Build(ACTOR_STATUS_TYPE.GUARD_IMPACT));
+                            return;
+                        }
                     }
                 }
             }
@@ -63,6 +96,11 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
             if (_Caster.IsDone())
                 DoneEvent();
+        }
+
+        private void _AttachDamage(IIndividual target)
+        {
+            _Damages.Add(target);
         }
 
         ACTOR_STATUS_TYPE ICastSkill.Id { get { return _Caster.Data.Id; } }

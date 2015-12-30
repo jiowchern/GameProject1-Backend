@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 using Regulus.CustomType;
 
@@ -29,6 +30,10 @@ namespace Regulus.Project.ItIsNotAGame1.Data
             _End = end;
 
             _Lengeh = _End - _Begin;
+        }
+
+        public Determination(SkillData skill) :this(skill.Lefts , skill.Rights , skill.Total , skill.Begin , skill.End)
+        {            
         }
 
         public Regulus.CustomType.Polygon Find(float begin, float length)

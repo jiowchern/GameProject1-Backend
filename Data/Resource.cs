@@ -10,6 +10,13 @@ namespace Regulus.Project.ItIsNotAGame1.Data
         public EntityData FindEntity(ENTITY name)
         {
             return (from e in this.Entitys where e.Name == name select e).Single();
-        }        
+        }
+
+        public SkillData FindSkill(ACTOR_STATUS_TYPE name)
+        {
+            return (from e in this.SkillDatas where e.Id == name select e).Single();
+        }
+
+        
     }
 }

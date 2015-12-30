@@ -22,11 +22,17 @@ namespace Regulus.Project.ItIsNotAGame1.Data
 
         public ACTOR_STATUS_TYPE[] Nexts;
 
+        public bool Block;
+
+        public bool Smash;
+
         public SkillData()
         {
             Lefts = new Vector2[0];
             Rights = new Vector2[0];
             Nexts = new ACTOR_STATUS_TYPE[0];
         }
+
+        public bool Punch;
     }
 }

@@ -17,6 +17,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         Item[] Stolen();
 
-        void AttachDamage(Guid id, SkillCaster caster);
+        void AttachDamage();
+
+        bool IsBlock();
     }
 }

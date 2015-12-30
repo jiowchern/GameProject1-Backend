@@ -10,5 +10,9 @@ namespace Regulus.Project.ItIsNotAGame1.Data
         BATTLE_AXE_ATTACK2,
         BATTLE_AXE_BLOCK,
         DAMAGE1,
+
+        GUARD_IMPACT,
+
+        KNOCKOUT1
     }
 }

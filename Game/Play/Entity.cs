@@ -31,7 +31,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         public Entity(Polygon mesh, GamePlayerRecord record )
         {
-            _SkillCasters = new Dictionary<Guid, SkillCaster>();
+            
             //_Datas = Resource.Instance.SkillDatas;
             _Datas = new []
             {
@@ -132,11 +132,22 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             return new [] { new Item() { Id = Guid.NewGuid() , Weight = 5 , Name = "探索到的物品"} } ;
         }
 
-        private Dictionary<Guid, SkillCaster> _SkillCasters;
-        void IIndividual.AttachDamage(Guid id, SkillCaster caster)
+        
+
+        bool IIndividual.IsBlock()
         {
-            if(_SkillCasters.ContainsKey(id) == false)
-                _SkillCasters.Add(id , caster);
+            return _Block;
+        }
+
+        
+
+        private bool _Block;
+
+        private int _DamageCount;
+
+        void IIndividual.AttachDamage()
+        {
+            _DamageCount ++;
         }
 
         public void UpdatePosition(Vector2 velocity)
@@ -265,15 +276,17 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         {            
         }
 
-        public IEnumerable<SkillCaster> DequeueCaster()
+        public int HaveDamage()
         {
-            var values = _SkillCasters.Values;
-            _SkillCasters.Clear();
+            var values = _DamageCount;
+            _DamageCount = 0;
             return values;
         }
 
         public void Damage()
         {
+            _Speed = 0.0f;
+            _Trun = 0.0f;
             _InvokeStatusEvent(ACTOR_STATUS_TYPE.DAMAGE1);
         }
 
@@ -281,6 +294,11 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         {
             var data = _Datas.First((s) => s.Id == ACTOR_STATUS_TYPE.DAMAGE1);
             return new SkillCaster(data , new Determination(data.Lefts , data.Rights , data.Total , data.Begin , data.End));
+        }
+
+        public void SetBlock(bool set)
+        {
+            _Block = set;
         }
     }
 }

@@ -60,7 +60,6 @@
     <Compile Include="Play\Cell.cs" />
     <Compile Include="Play\Center.cs" />
     <Compile Include="Play\ControlStatus.cs" />
-    <Compile Include="Play\DamageStage.cs" />
     <Compile Include="Play\EntityProvider.cs" />
     <Compile Include="Play\ExploreStatus.cs" />
     <Compile Include="Play\ExtendPolygon.cs" />

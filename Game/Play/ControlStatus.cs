@@ -19,6 +19,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         private readonly Map _Map;
 
         private readonly StageMachine _Status;
+
         
 
         public ControlStatus(ISoulBinder binder, Entity player, Mover mover , Map map)
@@ -54,7 +55,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         private void _ToCast(SkillCaster caster)
         {
             var status = new BattleCasterStatus(_Binder, _Player, _Map , caster);
-            //status.NextCastEvent += _ToCast;
+            status.NextEvent += _ToCast;
             status.DoneEvent += _ToBattle;
             _SetStatus(status);
         }
@@ -79,23 +80,35 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         bool IUpdatable.Update()
         {
             _Status.Update();
-            _ProcessCaster();
+            this._ProcessDamage();
             return true;
         }
 
-        private void _ProcessCaster()
+        private void _ProcessDamage()
         {
-            var casters = _Player.DequeueCaster();
+            var casters = _Player.HaveDamage();
 
-            if (casters.Any())
+            if (casters > 2)
+                _ToKnockout();
+            else if (casters > 0)
                 _ToDamage();
+        }
+
+        private void _ToKnockout()
+        {
+            var skill = Resource.Instance.FindSkill(ACTOR_STATUS_TYPE.KNOCKOUT1);
+            var caster = new SkillCaster(skill, new Determination(skill));
+            var stage = new BattleCasterStatus(_Binder, _Player, _Map, caster);
+            stage.DoneEvent += _ToBattle;
+            _SetStatus(stage);
         }
 
         private void _ToDamage()
         {
-            var stage = new DamageStage(_Binder, _Player);
+            var skill = Resource.Instance.FindSkill(ACTOR_STATUS_TYPE.DAMAGE1);
+            var caster = new SkillCaster(skill , new Determination(skill));
+            var stage = new BattleCasterStatus(_Binder , _Player , _Map , caster);
             stage.DoneEvent += _ToBattle;
-
             _SetStatus(stage);
         }
     }
