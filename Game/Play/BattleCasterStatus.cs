@@ -64,6 +64,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         void IStage.Update()
         {
             Regulus.CustomType.Polygon poly =  _Caster.Find();
+
+            bool guardImpact = false;
             if (poly != null)
             {
                 var results = _Map.Find(poly.Points.ToRect());
@@ -84,17 +86,19 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                             _AttachDamage(individual);
                         }
                         else if (individual.IsBlock() && _Caster.IsPunch())
-                        {                            
-                            NextEvent(SkillCaster.Build(ACTOR_STATUS_TYPE.GUARD_IMPACT));
-                            return;
+                        {
+                            guardImpact = true;
+                            
+                            
                         }
                     }
                 }
             }
             
             
-
-            if (_Caster.IsDone())
+            if(guardImpact)
+                NextEvent(SkillCaster.Build(ACTOR_STATUS_TYPE.GUARD_IMPACT));
+            else if (_Caster.IsDone())
                 DoneEvent();
         }
 
