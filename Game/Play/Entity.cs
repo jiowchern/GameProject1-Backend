@@ -250,7 +250,14 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         public void CastBegin(ACTOR_STATUS_TYPE id)
         {
-            Stop();
+            _Cast(id);
+            
+        }
+
+        private void _Cast(ACTOR_STATUS_TYPE id)
+        {
+            _Speed = 0.0f;
+            _Trun = 0.0f;            
             _InvokeStatusEvent(id);
         }
 
