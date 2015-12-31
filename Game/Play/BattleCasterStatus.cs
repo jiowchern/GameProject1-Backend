@@ -23,13 +23,11 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         public event Action<SkillCaster> NextEvent;
         public event Action DoneEvent;
 
-        
-        
-        private readonly List<IIndividual> _Damages;
+        public HashSet<Guid> _Attacked;
 
         public BattleCasterStatus(ISoulBinder binder, Entity player, Map map, SkillCaster caster)
         {
-            _Damages = new List<IIndividual>();        
+            _Attacked = new HashSet<Guid>();
             _Binder = binder;
             _Player = player;
             _Map = map;
@@ -53,37 +51,55 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             {
                 _Player.SetBlock(false);
             }
-
-
-            foreach(var damage in _Damages)
-            {
-                damage.AttachDamage();
-            }
         }
+        /*
+        Unity Debug Code
+        private void _Draw(Polygon result , Color color)
+        {
+            var points = (from p in result.Points select new UnityEngine.Vector3(p.X, 1, p.Y)).ToArray();
+            var len = points.Length;
+            if (len < 2)
+            {
+                return;
+            }
+            for (int i = 0; i < len - 1; i++)
+            {
+                var p1 = points[i];
+                var p2 = points[i + 1];
+                UnityEngine.Debug.DrawLine( p1, p2, color);
+            }
 
+            UnityEngine.Debug.DrawLine(points[len - 1], points[0], color);
+        }*/
         void IStage.Update()
         {
             Regulus.CustomType.Polygon poly =  _Caster.Find();
+            
 
             bool guardImpact = false;
             if (poly != null)
             {
+                var center = _Player.GetPosition();
+                poly.Rotation(_Player.Direction);                
+                poly.Offset(center);
+
+
                 var results = _Map.Find(poly.Points.ToRect());
 
                 foreach (var individual in results)
                 {
+                    if(individual.Id == _Player.Id)
+                        continue;
                     var collision = Regulus.CustomType.Polygon.Collision(poly, individual.Mesh, new Vector2());
                     if (collision.Intersect)
                     {
                         if(_Caster.IsSmash())
                         {
-                            _AttachDamage(individual);
-                            _AttachDamage(individual);
-                            _AttachDamage(individual);
+                            _AttachDamage(individual , true);                            
                         }
                         else if(individual.IsBlock() == false && _Caster.IsPunch())
                         {
-                            _AttachDamage(individual);
+                            _AttachDamage(individual , false);
                         }
                         else if (individual.IsBlock() && _Caster.IsPunch())
                         {
@@ -102,9 +118,13 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                 DoneEvent();
         }
 
-        private void _AttachDamage(IIndividual target)
+        private void _AttachDamage(IIndividual target , bool smash)
         {
-            _Damages.Add(target);
+            if (_Attacked.Contains(target.Id) == false)
+            {
+                target.AttachDamage(smash);
+                _Attacked.Add(target.Id);
+            }
         }
 
         ACTOR_STATUS_TYPE ICastSkill.Id { get { return _Caster.Data.Id; } }

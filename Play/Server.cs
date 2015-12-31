@@ -70,9 +70,9 @@ namespace Regulus.Project.ItIsNotAGame1.Play
             var entitys = Utility.Serialization.Read<EntityData[]>(buffer);
             Singleton<Resource>.Instance.Entitys = entitys;
 
-            /*var skillBuffer = System.IO.File.ReadAllBytes("skills.txt");
+            var skillBuffer = System.IO.File.ReadAllBytes("skills.txt");
             var skillDatas = Utility.Serialization.Read<SkillData[]>(skillBuffer);
-            Singleton<Resource>.Instance.SkillDatas= skillDatas;*/
+            Singleton<Resource>.Instance.SkillDatas= skillDatas;
         }
 
         private void _BuildParams()

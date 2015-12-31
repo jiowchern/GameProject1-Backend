@@ -17,7 +17,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         Item[] Stolen();
 
-        void AttachDamage();
+        void AttachDamage(bool smash);
 
         bool IsBlock();
     }

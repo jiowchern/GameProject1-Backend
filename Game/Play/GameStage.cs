@@ -105,9 +105,6 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             {                
                 _Move(deltaTime + GameStage._UpdateTime);
                 _Broadcast(_Map.Find(_Player.GetView()));
-
-                
-
             }
             
             _ResponseItems(deltaTime);

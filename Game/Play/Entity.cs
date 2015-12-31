@@ -32,13 +32,13 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         public Entity(Polygon mesh, GamePlayerRecord record )
         {
             
-            //_Datas = Resource.Instance.SkillDatas;
-            _Datas = new []
+            _Datas = Resource.Instance.SkillDatas;
+            /*_Datas = new []
             {
                 new SkillData() { Id = ACTOR_STATUS_TYPE.BATTLE_AXE_BLOCK , Total =1.833f },
                 new SkillData() { Id = ACTOR_STATUS_TYPE.BATTLE_AXE_ATTACK1 , Total =2.4f },
                 new SkillData() { Id = ACTOR_STATUS_TYPE.BATTLE_AXE_ATTACK2 , Total =3.167f }
-            };
+            };*/
             this._Id = Guid.NewGuid();
             this._View = 30.0f;
             _DetectionRange = 1.0f;
@@ -145,9 +145,12 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private int _DamageCount;
 
-        void IIndividual.AttachDamage()
+        void IIndividual.AttachDamage( bool smash)
         {
-            _DamageCount ++;
+            if (smash)
+                _DamageCount += 3;
+            else
+                _DamageCount++;
         }
 
         public void UpdatePosition(Vector2 velocity)
@@ -299,6 +302,11 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         public void SetBlock(bool set)
         {
             _Block = set;
+        }
+
+        public Vector2 GetPosition()
+        {
+            return _Mesh.Center;
         }
     }
 }
