@@ -8,7 +8,7 @@ using Regulus.Utility;
 
 namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
-    internal class ControlStatus : Regulus.Utility.IUpdatable 
+    internal class ControlStatus : Regulus.Utility.IUpdatable , IEmotion
     {
         private readonly ISoulBinder _Binder;
 
@@ -32,22 +32,31 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         }
 
         void IBootable.Launch()
-        {            
-            _ToNormal();
+        {
+            _Binder.Bind<IEmotion>(this);
+            ToDone();
         }
 
-        private void _ToNormal()
+        private void ToDone()
         {            
             var status = new NormalStatus(_Binder, _Player);
             status.ExploreEvent += _ToExplore;
             status.BattleEvent += _ToBattle;
+            status.MakeEvent += _ToMake;
+            _SetStatus(status);
+        }
+
+        private void _ToMake()
+        {
+            var status = new MakeStatus(_Binder, _Player);
+            status.DoneEvent += ToDone;
             _SetStatus(status);
         }
 
         private void _ToBattle()
         {
             var status = new BattleStatus(_Binder, _Player, _Map);
-            status.NormalEvent += _ToNormal;
+            status.NormalEvent += ToDone;
             status.CasterEvent += _ToCast;
             _SetStatus(status);
         }
@@ -68,13 +77,14 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         private void _ToExplore(Guid obj)
         {
             var status = new ExploreStatus(_Binder, _Player , _Map , obj);
-            status.DoneEvent += _ToNormal;
+            status.DoneEvent += ToDone;
             _SetStatus(status);
         }
 
         void IBootable.Shutdown()
         {
-            _Status.Termination();            
+            _Status.Termination();
+            _Binder.Unbind<IEmotion>(this);
         }
 
         bool IUpdatable.Update()
@@ -110,6 +120,11 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             var stage = new BattleCasterStatus(_Binder , _Player , _Map , caster);
             stage.DoneEvent += _ToBattle;
             _SetStatus(stage);
+        }
+
+        void IEmotion.Talk(string message)
+        {
+            _Player.Talk(message);
         }
     }
 }

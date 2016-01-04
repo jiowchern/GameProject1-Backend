@@ -15,6 +15,35 @@ namespace Regulus.Project.ItIsNotAGame1.Test
     public class UnitTest
     {
         [TestMethod]
+        public void TestBuildItemEffect()
+        {
+            var ip = new ItemProvider();
+            var item = new Item() ;
+            var effects = new ItemEffect[]
+            {
+                new ItemEffect() { Quality = 100 , Effects = new []
+                {
+                    new Effect() { Type = EFFECT_TYPE.ATTACK_ADD , Value = 10},
+                    new Effect() { Type = EFFECT_TYPE.ATTACK_ADD , Value = 1}
+                }},
+                new ItemEffect() { Quality = 80 , Effects = new []
+                {
+                    new Effect() { Type = EFFECT_TYPE.ATTACK_ADD , Value = 8},
+                    new Effect() { Type = EFFECT_TYPE.ATTACK_ADD , Value = 2}
+                }},
+                new ItemEffect() { Quality = 0 , Effects = new []
+                {
+                    new Effect() { Type = EFFECT_TYPE.ATTACK_ADD , Value = 7},
+                    new Effect() { Type = EFFECT_TYPE.ATTACK_ADD , Value = 3}
+                }}
+
+            };
+            item = ip.BuildItem(80, item, effects);
+
+            Assert.AreEqual(EFFECT_TYPE.ATTACK_ADD , item.Effects[0].Type );
+            Assert.AreEqual(20, item.Effects[0].Value);
+        }
+        [TestMethod]
         public void TestExtendingPolygon()
         {
             var polygon = new Polygon( new []

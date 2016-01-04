@@ -128,9 +128,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game
         
                         Owner = account_id,
                         Items = new Item[]
-                        {
-                            new Item() { Id = Guid.NewGuid() , Weight = 10 , Name = "東西1"}, 
-                            new Item() { Id = Guid.NewGuid() , Weight = 10 , Name = "東西2"}
+                        {                            
                         }
 
                         

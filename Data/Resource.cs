@@ -7,6 +7,10 @@ namespace Regulus.Project.ItIsNotAGame1.Data
         public EntityData[] Entitys;
         public SkillData[] SkillDatas;
 
+        public ItemPrototype[] Items;
+
+        public ItemFormula[] Formulas;
+
         public EntityData FindEntity(ENTITY name)
         {
             return (from e in this.Entitys where e.Name == name select e).Single();

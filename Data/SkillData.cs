@@ -13,6 +13,8 @@ namespace Regulus.Project.ItIsNotAGame1.Data
 
         public Vector2[] Rights;
 
+        public Vector2[] Roots;
+
         public float Total;
 
 
@@ -31,6 +33,7 @@ namespace Regulus.Project.ItIsNotAGame1.Data
             Lefts = new Vector2[0];
             Rights = new Vector2[0];
             Nexts = new ACTOR_STATUS_TYPE[0];
+            Roots = new Vector2[0];
         }
 
         public bool Punch;

@@ -38,9 +38,9 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private bool _RequestAllItems;
 
-        private ControlStatus _ControlStatus;
+        private readonly ControlStatus _ControlStatus;
 
-        public Regulus.Utility.Updater _Updater;
+        private readonly Regulus.Utility.Updater _Updater;
 
         
 

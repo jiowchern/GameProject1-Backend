@@ -13,6 +13,11 @@ namespace Regulus.Project.ItIsNotAGame1.Data
 
         GUARD_IMPACT,
 
-        KNOCKOUT1
+        KNOCKOUT1,
+        CHEST_OPEN,
+        CHEST_CLOSE,
+        LONG_IDLE,
+
+        MAKE
     }
 }

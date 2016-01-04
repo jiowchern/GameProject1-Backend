@@ -15,6 +15,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         public event Action<Guid> ExploreEvent;
 
         public event Action BattleEvent;
+        public event Action MakeEvent;
 
         private readonly MoveController _MoveController;
 
@@ -40,6 +41,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         public override void Enter()
         {
+
+
             _Binder.Bind<IMoveController>(_MoveController);
             _Binder.Bind<INormalSkill>(this);
 
@@ -57,6 +60,11 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         public void Battle()
         {
             BattleEvent();
+        }
+
+        void INormalSkill.Make()
+        {
+            MakeEvent();
         }
     }
 }

@@ -23,6 +23,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         public event Action DoneEvent;
 
+        private bool _Done;
         public ExploreStatus(ISoulBinder binder, Entity player , Map map , Guid target_id)
         {
             _Binder = binder;
@@ -36,6 +37,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         public override void Leave()
         {
+            if (_Done == false)
+                return;
             var explore = _Player.GetExploreBound();
             var results = _Map.Find(explore.Points.ToRect());
             var target = (from indivude in results where indivude.Id == _TargetId select indivude).SingleOrDefault();
@@ -58,6 +61,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         {
             if (_CastTimer.Second > 1.0f)
             {
+                _Done = true;
                 DoneEvent();
             }
         }

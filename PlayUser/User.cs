@@ -78,6 +78,9 @@ namespace Regulus.Project.ItIsNotAGame1
 
         INotifier<ICastSkill> IUser.BattleCastControllerProvider { get { return this._Agent.QueryNotifier<ICastSkill>(); } }
 
+        INotifier<IEmotion> IUser.EmotionControllerProvider { get { return this._Agent.QueryNotifier<IEmotion>(); } }
+        INotifier<IMakeSkill> IUser.MakeControllerProvider { get { return this._Agent.QueryNotifier<IMakeSkill>(); } }
+
 
     }
 }

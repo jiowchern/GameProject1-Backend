@@ -73,6 +73,14 @@ namespace Regulus.Project.ItIsNotAGame1.Play
             var skillBuffer = System.IO.File.ReadAllBytes("skills.txt");
             var skillDatas = Utility.Serialization.Read<SkillData[]>(skillBuffer);
             Singleton<Resource>.Instance.SkillDatas= skillDatas;
+
+            var itemsBuffer = System.IO.File.ReadAllBytes("items.txt");
+            var items = Utility.Serialization.Read<ItemPrototype[]>(itemsBuffer);
+            Singleton<Resource>.Instance.Items = items;
+
+            var itemFormulasBuffer = System.IO.File.ReadAllBytes("itemFormulas.txt");
+            var itemFormulas = Utility.Serialization.Read<ItemFormula[]>(itemFormulasBuffer);
+            Singleton<Resource>.Instance.Formulas = itemFormulas;
         }
 
         private void _BuildParams()

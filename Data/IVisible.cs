@@ -29,5 +29,9 @@ namespace Regulus.Project.ItIsNotAGame1.Data
         event Action<VisibleStatus> StatusEvent;
         
         Vector2 Position { get; }
+
+        void QueryStatus();
+
+        event Action<string> TalkMessageEvent;
     }
 }

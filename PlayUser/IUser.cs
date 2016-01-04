@@ -26,6 +26,9 @@ namespace Regulus.Project.ItIsNotAGame1
 
         INotifier<Data.ICastSkill> BattleCastControllerProvider { get; }
 
+        INotifier<Data.IEmotion> EmotionControllerProvider { get; }
+        INotifier<Data.IMakeSkill> MakeControllerProvider { get; }
+
 
 
 

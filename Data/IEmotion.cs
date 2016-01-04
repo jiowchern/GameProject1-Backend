@@ -5,12 +5,8 @@ using System.Text;
 
 namespace Regulus.Project.ItIsNotAGame1.Data
 {
-    public interface INormalSkill
+    public interface IEmotion
     {
-
-        void Explore(Guid target);
-        void Battle();
-        void Make();
-        
+        void Talk(string message);
     }
 }

@@ -13,7 +13,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private readonly Determination _Determination;
 
-        private float _Begin;
+        
         public SkillCaster(SkillData data, Determination determination)
         {
             
@@ -27,16 +27,14 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         public int Damage { get; set; }
 
-        public bool IsDone()
+        public bool IsDone(float second)
         {
             return _Timer.Second >= Data.Total;
         }
 
-        public Polygon Find()
-        {
-            var end = _Timer.Second;            
-            var result =  _Determination.Find(_Begin , end);
-            _Begin = end;
+        public Polygon FindDetermination(float begin , float end)
+        {            
+            var result =  _Determination.Find(begin, end - begin);            
             return result;
         }
 

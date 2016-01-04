@@ -21,6 +21,12 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         }
         public void Add(Item item)
         {
+            if (item.Effects.Length == 0)
+            {
+                var inBagItem = (from i in _Items where i.Name == item.Name && i.Effects.Length == 0 select i).FirstOrDefault();
+                item.Count += inBagItem.Count;
+                Remove(inBagItem.Id);
+            }
             this._Items.Add(item);
             this._Weight += item.Weight;
 

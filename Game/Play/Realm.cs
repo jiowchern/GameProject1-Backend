@@ -100,9 +100,10 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         private void _BuildDebirs(Map map)
         {
             
-            for(int i = 0; i < 20; ++ i )
+            for(int i = 0; i < 50; ++ i )
             {
                 var entity = this._GetEntity(ENTITY.DEBIRS);
+                entity.SetRotation(Utility.Random.Instance.NextFloat(0, 360));
                 IIndividual individual = entity;
                 individual.SetPosition(Utility.Random.Instance.NextFloat(0, 100), Utility.Random.Instance.NextFloat(0, 100));
                 map.JoinStaff(entity);
