@@ -69,11 +69,13 @@ namespace Regulus.Project.ItIsNotAGame1.Test
             Item item1 = new Item();
             item1.Id = Guid.NewGuid();
             item1.Weight = 10;
+            item1.Effects = new Effect[0];
             inventory.Add(item1);
             
             Item item2 = new Item();
             item2.Id = Guid.NewGuid();
             item2.Weight = 10;
+            item2.Effects = new Effect[0];
             inventory.Add(item2);
 
             inventory.Remove(item1.Id);
@@ -194,9 +196,12 @@ namespace Regulus.Project.ItIsNotAGame1.Test
             var inventory = new Inventory();
             Item item1 = new Item();
             item1.Weight = 10;
+            item1.Effects = new Effect[0];
             inventory.Add(item1);
             Item item2 = new Item();
+
             item2.Weight = 10;
+            item2.Effects = new Effect[0];
             inventory.Add(item2);
             var weight = inventory.GetWeight();
 

@@ -25,12 +25,16 @@ namespace Regulus.Project.ItIsNotAGame1.Data
         {
             var newItem = this;
             newItem.Id = Guid.NewGuid();
+            newItem.Count = Count;
+            newItem.Effects = this.Effects;
+            newItem.Name = Name;
+            newItem.Weight = Weight;
             return newItem;
         }
 
         public bool IsValid()
-        {
-            return Id != Guid.Empty && Count > 0;
+        {            
+            return Id != Guid.Empty && Count > 0 && Effects != null;
         }
     }
 }

@@ -82,9 +82,11 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                 if(amount < amounts[i])
                     return;
 
-                _Player.Bag.Remove(needItems[i].Item , amounts[i]);
+                
             }
-            
+            for (int i = 0; i < needItems.Length; i++)
+                _Player.Bag.Remove(needItems[i].Item, amounts[i]);
+
 
             _Create(formula , amounts);
         }
