@@ -19,6 +19,18 @@ namespace Regulus.Project.ItIsNotAGame1.Data
 
         [ProtoBuf.ProtoMember(5)]
         public int Count { get; set; }
+        
 
+        public Item Clone()
+        {
+            var newItem = this;
+            newItem.Id = Guid.NewGuid();
+            return newItem;
+        }
+
+        public bool IsValid()
+        {
+            return Id != Guid.Empty && Count > 0;
+        }
     }
 }

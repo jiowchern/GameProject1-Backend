@@ -43,7 +43,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             return BuildItem(quality , item , item_effects);
         }
 
-        private Item CreateItem(string name)
+        public Item CreateItem(string name)
         {
             return (from i in Resource.Instance.Items where i.Name == name
                    select new Item() { Id = Guid.NewGuid() , Name =  name , Weight =  10 , Effects =  new Effect[0] , Count = 1}).Single();

@@ -20,12 +20,15 @@ namespace Regulus.Project.ItIsNotAGame1.Data
         }
     }
 
-
+    [ProtoBuf.ProtoContract]
     public class ItemFormulaLite
     {
+        [ProtoBuf.ProtoMember(1)]
         public string Name;
+        [ProtoBuf.ProtoMember(2)]
         public string Item;
 
+        [ProtoBuf.ProtoMember(3)]
         public ItemFormulaNeedLite[] NeedItems;
 
         public ItemFormulaLite()

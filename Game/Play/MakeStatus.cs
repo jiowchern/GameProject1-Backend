@@ -69,12 +69,23 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             var needItems = formula.NeedItems;
             if(needItems.Length != amounts.Length)
                 return;            
+
             for (int i = 0; i < amounts.Length  ; ++i)
             {
                 if(needItems[i].Min > amounts[i])
                     return;
             }
+
+            for(int i = 0; i < needItems.Length; i++)
+            {
+                var amount = _Player.Bag.GetItemAmount(needItems[i].Item);
+                if(amount < amounts[i])
+                    return;
+
+                _Player.Bag.Remove(needItems[i].Item , amounts[i]);
+            }
             
+
             _Create(formula , amounts);
         }
 

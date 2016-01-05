@@ -4,13 +4,14 @@ using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
 
+using Regulus.Game.Data;
 using Regulus.Project.ItIsNotAGame1.Data;
 
 namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
     public class Inventory 
     {
-        private List<Item> _Items;
+        private readonly List<Item> _Items;
 
         private int _Weight;
 
@@ -68,5 +69,49 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         public event Action<Item> AddEvent;
 
         public event Action<Guid> RemoveEvent;
+
+        public int GetItemAmount(string item)
+        {
+
+            return (from i in _Items
+                    where i.Name == item
+                    select i.Count).Sum();
+        }
+
+        public int Remove(string name, int amount)
+        {
+            List<Guid> removeItems = new List<Guid>();
+            Item newItem = new Item();
+            foreach(var item in _Items)
+            {
+                if(item.Name != name)
+                    continue;
+
+                amount -= item.Count;
+                removeItems.Add(item.Id);
+
+                if (amount == 0)
+                    break;
+                
+                if (amount < 0)
+                {
+                    newItem = item.Clone();
+                    newItem.Count += amount;
+                    break;
+                }                
+            }
+            
+
+            foreach(var item in removeItems)
+            {
+                Remove(item);
+            }
+
+            if (newItem.IsValid())
+            {
+                Add(newItem);
+            }
+            return amount ;
+        }
     }
 }

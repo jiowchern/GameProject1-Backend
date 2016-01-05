@@ -9,10 +9,12 @@
         public int Max;
     }
 
+    [ProtoBuf.ProtoContract]
     public struct ItemFormulaNeedLite
     {
+        [ProtoBuf.ProtoMember(1)]
         public string Item;
-
+        [ProtoBuf.ProtoMember(2)]
         public int Min;
     }
 }

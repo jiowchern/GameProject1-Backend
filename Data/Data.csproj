@@ -84,6 +84,7 @@
     <Compile Include="ItemPrototype.cs" />
     <Compile Include="ITEM_FEATURES.cs" />
     <Compile Include="IVerify.cs" />
+    <Compile Include="IVersion.cs" />
     <Compile Include="IVisible.cs" />
     <Compile Include="Location.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -83,6 +83,110 @@ namespace Regulus.Project.ItIsNotAGame1.Test
             Assert.AreEqual(10, weight);
         }
 
+        [TestMethod]
+        public void TestInventoryGetSum1()
+        {
+            var inventory = new Inventory();
+            Item item1 = new Item();
+            item1.Id = Guid.NewGuid();
+            item1.Name = "a";
+            item1.Weight = 10;
+            item1.Count = 9;
+            item1.Effects = new Effect[0];
+            inventory.Add(item1);
+
+            Item item2 = new Item();
+            item2.Id = Guid.NewGuid();
+            item2.Name = "a";
+            item2.Weight = 10;
+            item2.Count = 11;
+            item2.Effects = new Effect[0];
+            inventory.Add(item2);
+
+            var amount = inventory.GetItemAmount("a");
+
+            Assert.AreEqual(20, amount);
+        }
+
+        [TestMethod]
+        public void TestInventoryGetSum2()
+        {
+            var inventory = new Inventory();
+            Item item1 = new Item();
+            item1.Id = Guid.NewGuid();
+            item1.Name = "a";
+            item1.Weight = 10;
+            item1.Count = 9;
+            item1.Effects = new Effect[0];
+            inventory.Add(item1);
+
+            Item item2 = new Item();
+            item2.Id = Guid.NewGuid();
+            item2.Name = "a";
+            item2.Weight = 10;
+            item2.Count = 11;
+            item2.Effects = new Effect[0];
+            inventory.Add(item2);
+
+            inventory.Remove("a", 10);
+
+            var amount = inventory.GetItemAmount("a");
+
+            Assert.AreEqual(10, amount);
+        }
+
+        [TestMethod]
+        public void TestInventoryGetSum3()
+        {
+            var inventory = new Inventory();
+            Item item1 = new Item();
+            item1.Id = Guid.NewGuid();
+            item1.Name = "a";
+            item1.Weight = 10;
+            item1.Count = 1;
+            item1.Effects = new Effect[] { new Effect() { Type = EFFECT_TYPE.ATTACK_ADD } };
+            inventory.Add(item1);
+
+            Item item2 = new Item();
+            item2.Id = Guid.NewGuid();
+            item2.Name = "a";
+            item2.Weight = 10;
+            item2.Count = 1;
+            item2.Effects = new Effect[] { new Effect() { Type = EFFECT_TYPE.ATTACK_ADD } };
+            inventory.Add(item2);
+
+            var amount = inventory.GetItemAmount("a");
+
+            Assert.AreEqual(2, amount);
+        }
+
+        [TestMethod]
+        public void TestInventoryGetSum4()
+        {
+            var inventory = new Inventory();
+            Item item1 = new Item();
+            item1.Id = Guid.NewGuid();
+            item1.Name = "a";
+            item1.Weight = 10;
+            item1.Count = 1;
+            item1.Effects = new Effect[] { new Effect() { Type = EFFECT_TYPE.ATTACK_ADD } };
+            inventory.Add(item1);
+
+            Item item2 = new Item();
+            item2.Id = Guid.NewGuid();
+            item2.Name = "a";
+            item2.Weight = 10;
+            item2.Count = 1;
+            item2.Effects = new Effect[] { new Effect() { Type = EFFECT_TYPE.ATTACK_ADD } };
+            inventory.Add(item2);
+
+            inventory.Remove("a", 1);
+
+            var amount = inventory.GetItemAmount("a");
+
+            Assert.AreEqual(1, amount);
+        }
+
 
         [TestMethod]
         public void TestInventoryWeight1()

@@ -1,4 +1,7 @@
-﻿using Regulus.Framework;
+﻿using System;
+using System.Reflection;
+
+using Regulus.Framework;
 using Regulus.Project.ItIsNotAGame1.Data;
 using Regulus.Remoting;
 using Regulus.Utility;
@@ -26,21 +29,38 @@ namespace Regulus.Project.ItIsNotAGame1
 
 		bool IUpdatable.Update()
 		{
-		    this._Updater.Working();
+            
+            this._Updater.Working();
 			return true;
 		}
 
 		void IBootable.Launch()
 		{
 		    this._Updater.Add(this._User);
-		}
+            _Agent.QueryNotifier<IVersion>().Supply += _VersionSupply;
+        }
 
 		void IBootable.Shutdown()
 		{
-		    this._Updater.Shutdown();
+            _Agent.QueryNotifier<IVersion>().Supply -= _VersionSupply;
+            this._Updater.Shutdown();
 		}
 
-		Remoting.User IUser.Remoting
+	    void _VersionSupply(IVersion version)
+	    {
+	        if(typeof(IVersion).Assembly.GetName().Version.ToString() != version.Number )
+                _VersionErrorEvent();
+	    }
+
+	    private event Action _VersionErrorEvent;
+
+	    event Action IUser.VersionErrorEvent
+	    {
+	        add { this._VersionErrorEvent += value; }
+	        remove { this._VersionErrorEvent -= value; }
+	    }
+
+	    Remoting.User IUser.Remoting
 		{
 			get { return this._User; }
 		}

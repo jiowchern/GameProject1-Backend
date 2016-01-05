@@ -1,4 +1,6 @@
-﻿using Regulus.Remoting;
+﻿using System;
+
+using Regulus.Remoting;
 using Regulus.Utility;
 
 
@@ -7,6 +9,7 @@ namespace Regulus.Project.ItIsNotAGame1
 {
 	public interface IUser : IUpdatable
 	{
+	    event Action VersionErrorEvent;
 		Remoting.User Remoting { get; }
 
 		INotifier<Data.IVerify> VerifyProvider { get; }

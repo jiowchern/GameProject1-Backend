@@ -7,7 +7,7 @@ using Regulus.Utility;
 
 namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
-    public class User : Regulus.Game.IUser, IAccountStatus
+    public class User : Regulus.Game.IUser, IAccountStatus , IVersion
     {
         private event Action _KickEvent;
 
@@ -31,6 +31,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private GamePlayerRecord _GamePlayerRecord;
 
+        private string _Version;
         public User(ISoulBinder binder, IAccountFinder account_finder, IGameRecorder game_record_handler, Zone zone)
         {
             this._Machine = new StageMachine();
@@ -39,6 +40,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             this._AccountFinder = account_finder;
             this._GameRecorder = game_record_handler;
             this._Zone = zone;
+            _Version = typeof(IVerify).Assembly.GetName().Version.ToString();
         }
 
         event Action IAccountStatus.KickEvent
@@ -81,6 +83,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         void IBootable.Launch()
         {
             this._Binder.BreakEvent += this._Quit;
+            this._Binder.Bind<IVersion>(this);
             this._Binder.Bind<IAccountStatus>(this);
             this._ToVerify();
         }
@@ -88,6 +91,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         void IBootable.Shutdown()
         {
             this._SaveRecord();
+            this._Binder.Unbind<IVersion>(this);
             this._Binder.Unbind<IAccountStatus>(this);
             this._Machine.Termination();
             this._Binder.BreakEvent -= this._Quit;
@@ -152,6 +156,10 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             var stage = new GameStage(this._Binder, record , this._GameRecorder , map);
             stage.DoneEvent += this._ToVerify;
             this._Machine.Push(stage);
+        }
+
+        string IVersion.Number {
+            get { return _Version; }
         }
     }
 }
