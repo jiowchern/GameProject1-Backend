@@ -52,6 +52,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                     {
                         Item = f.Item,
                         Name = f.Name,
+                        NeedLimit =  f.NeedLimit,
                         NeedItems = (from need in f.NeedItems
                                      select new ItemFormulaNeedLite
                                      {

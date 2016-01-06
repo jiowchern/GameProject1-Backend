@@ -13,6 +13,8 @@ namespace Regulus.Project.ItIsNotAGame1.Data
         public string Name;
         public string Item;
 
+        public int NeedLimit;
+
         public ItemFormula()
         {
             NeedItems = new ItemFormulaNeed[0];
@@ -30,6 +32,8 @@ namespace Regulus.Project.ItIsNotAGame1.Data
 
         [ProtoBuf.ProtoMember(3)]
         public ItemFormulaNeedLite[] NeedItems;
+        [ProtoBuf.ProtoMember(4)]
+        public int NeedLimit;
 
         public ItemFormulaLite()
         {

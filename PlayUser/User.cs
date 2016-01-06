@@ -36,7 +36,7 @@ namespace Regulus.Project.ItIsNotAGame1
 
 		void IBootable.Launch()
 		{
-		    this._Updater.Add(this._User);
+            this._Updater.Add(this._User);
             _Agent.QueryNotifier<IVersion>().Supply += _VersionSupply;
         }
 
@@ -48,17 +48,13 @@ namespace Regulus.Project.ItIsNotAGame1
 
 	    void _VersionSupply(IVersion version)
 	    {
-	        if(typeof(IVersion).Assembly.GetName().Version.ToString() != version.Number )
-                _VersionErrorEvent();
-	    }
 
-	    private event Action _VersionErrorEvent;
 
-	    event Action IUser.VersionErrorEvent
-	    {
-	        add { this._VersionErrorEvent += value; }
-	        remove { this._VersionErrorEvent -= value; }
-	    }
+            Regulus.Utility.Log.Instance.WriteInfo("server version: " + version.Number);
+
+        }
+	    
+	    
 
 	    Remoting.User IUser.Remoting
 		{

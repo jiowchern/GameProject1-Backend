@@ -30,7 +30,8 @@ namespace Regulus.Project.ItIsNotAGame1.Data
         public GamePlayerRecord()
 	    {
             this.Name = "無名" + DateTime.Now.ToLocalTime();
-	    }
+            Items = new Item[0];
+        }
 
 
     }

@@ -189,6 +189,61 @@ namespace Regulus.Project.ItIsNotAGame1.Test
             Assert.AreEqual(1, amount);
         }
 
+        [TestMethod]
+        public void TestInventoryGetSum5()
+        {
+            var inventory = new Inventory();
+            Item item1 = new Item();
+            item1.Id = Guid.NewGuid();
+            item1.Name = "a";
+            item1.Weight = 10;
+            item1.Count = 1;
+            item1.Effects = new Effect[] { new Effect() { Type = EFFECT_TYPE.ATTACK_ADD } };
+            inventory.Add(item1);
+
+            Item item2 = new Item();
+            item2.Id = Guid.NewGuid();
+            item2.Name = "a";
+            item2.Weight = 10;
+            item2.Count = 1;
+            item2.Effects = new Effect[] { new Effect() { Type = EFFECT_TYPE.ATTACK_ADD } };
+            inventory.Add(item2);
+
+            inventory.Remove("a", 2);
+
+            var amount = inventory.GetItemAmount("a");
+
+            Assert.AreEqual(0, amount);
+        }
+
+
+        [TestMethod]
+        public void TestInventoryGetSum6()
+        {
+            var inventory = new Inventory();
+            Item item1 = new Item();
+            item1.Id = Guid.NewGuid();
+            item1.Name = "a";
+            item1.Weight = 10;
+            item1.Count = 10;
+            item1.Effects = new Effect[] { };
+            inventory.Add(item1);
+
+            Item item2 = new Item();
+            item2.Id = Guid.NewGuid();
+            item2.Name = "a";
+            item2.Weight = 10;
+            item2.Count = 10;
+            item2.Effects = new Effect[] {  };
+            inventory.Add(item2);
+
+            inventory.Remove("a", 15);
+
+            var amount = inventory.GetItemAmount("a");
+
+            Assert.AreEqual(5, amount);
+        }
+
 
         [TestMethod]
         public void TestInventoryWeight1()

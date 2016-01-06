@@ -40,7 +40,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             this._AccountFinder = account_finder;
             this._GameRecorder = game_record_handler;
             this._Zone = zone;
-            _Version = typeof(IVerify).Assembly.GetName().Version.ToString();
+            _Version = "0.0.0.0";
         }
 
         event Action IAccountStatus.KickEvent
