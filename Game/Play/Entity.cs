@@ -49,7 +49,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             this._Bound = this._BuildBound(this._Mesh);
 
             Bag = new Inventory();
-
+            Equipment = new Equipment(this);
             _IdleStatus = ACTOR_STATUS_TYPE.NORMAL_IDLE;
 
         }
@@ -121,6 +121,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         public Guid Id { get { return this._Id; } }
 
         public float Direction { get; private set; }
+
+        public Equipment Equipment { get; set; }
 
         event Action IIndividual.BoundsEvent
         {

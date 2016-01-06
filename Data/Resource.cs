@@ -11,6 +11,14 @@ namespace Regulus.Project.ItIsNotAGame1.Data
 
         public ItemFormula[] Formulas;
 
+        public Resource()
+        {
+            Entitys = new EntityData[0];
+            SkillDatas = new SkillData[0];
+            Items = new ItemPrototype[0];
+            Formulas = new ItemFormula[0];
+        }
+
         public EntityData FindEntity(ENTITY name)
         {
             return (from e in this.Entitys where e.Name == name select e).Single();
@@ -21,6 +29,9 @@ namespace Regulus.Project.ItIsNotAGame1.Data
             return (from e in this.SkillDatas where e.Id == name select e).Single();
         }
 
-        
+        public ItemPrototype FindItem(string name)
+        {
+            return (from e in this.Items where e.Name == name select e).Single();
+        }
     }
 }

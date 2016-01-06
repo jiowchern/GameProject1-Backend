@@ -9,6 +9,7 @@ namespace Regulus.Project.ItIsNotAGame1.Data
         void Query();
 
         void Discard(Guid id);
+        void Equip(Guid id);
 
         event Action<Item[]> AllItemEvent;
         event Action<Item> AddEvent;

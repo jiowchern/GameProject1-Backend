@@ -88,7 +88,11 @@ namespace Regulus.Project.ItIsNotAGame1
             get { return this._Agent.QueryNotifier<IInventoryNotifier>(); }
         }
 
-	    INotifier<INormalSkill> IUser.NormalControllerProvider { get { return this._Agent.QueryNotifier<INormalSkill>(); } }
+	    INotifier<IEquipmentNotifier> IUser.EquipmentNotifierProvider
+        {
+            get { return this._Agent.QueryNotifier<IEquipmentNotifier>(); }
+        }
+        INotifier<INormalSkill> IUser.NormalControllerProvider { get { return this._Agent.QueryNotifier<INormalSkill>(); } }
 
         INotifier<IBattleSkill> IUser.BattleControllerProvider { get { return this._Agent.QueryNotifier<IBattleSkill>(); } }
 

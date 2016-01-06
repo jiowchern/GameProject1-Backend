@@ -61,6 +61,7 @@
     <Compile Include="Play\Center.cs" />
     <Compile Include="Play\ControlStatus.cs" />
     <Compile Include="Play\EntityProvider.cs" />
+    <Compile Include="Play\Equipment.cs" />
     <Compile Include="Play\ExploreStatus.cs" />
     <Compile Include="Play\ExtendPolygon.cs" />
     <Compile Include="Play\GameStage.cs" />

@@ -13,5 +13,7 @@ namespace Regulus.Project.ItIsNotAGame1.Data
         public ITEM_FEATURES Features;
 
         public string Description;
+
+        public EQUIP_PART EquipPart { get; set; }
     }
 }

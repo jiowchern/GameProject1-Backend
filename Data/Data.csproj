@@ -59,6 +59,7 @@
     <Compile Include="Effect.cs" />
     <Compile Include="ENTITY.cs" />
     <Compile Include="EntityData.cs" />
+    <Compile Include="EQUIP_PART.cs" />
     <Compile Include="GamePlayerRecord.cs" />
     <Compile Include="GrahamConvexHull.cs" />
     <Compile Include="IAccountCreator.cs" />
@@ -68,6 +69,7 @@
     <Compile Include="IBattleSkill.cs" />
     <Compile Include="ICastSkill.cs" />
     <Compile Include="IEmotion.cs" />
+    <Compile Include="IEquipment.cs" />
     <Compile Include="IMakeSkill.cs" />
     <Compile Include="IMoveController.cs" />
     <Compile Include="IInventoryNotifier.cs" />

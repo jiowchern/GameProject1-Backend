@@ -116,5 +116,10 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             }
             return amount ;
         }
+
+        public Item Find(Guid id)
+        {
+            return _Items.FirstOrDefault(i => i.Id == id);
+        }
     }
 }

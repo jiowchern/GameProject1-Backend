@@ -14,7 +14,10 @@ using Regulus.Utility;
 
 namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
-    internal class GameStage : IStage , IQuitable, IInventoryNotifier ,IPlayerProperys
+    internal class GameStage : IStage , IQuitable, 
+        IInventoryNotifier ,
+        IPlayerProperys , 
+        IEquipmentNotifier
     {
         private readonly GamePlayerRecord _Record;
         private readonly IGameRecorder _Recoder;
@@ -68,6 +71,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
             _Binder.Unbind<IInventoryNotifier>(this);
             _Binder.Unbind<IPlayerProperys>(this);
+            _Binder.Unbind<IEquipmentNotifier>(this);
             _Map.Left(_Player);
             _Save();
         }        
@@ -80,6 +84,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             this._Map.JoinChallenger(this._Player);            
             this._Binder.Bind<IPlayerProperys>(this);
             this._Binder.Bind<IInventoryNotifier>(this);
+            this._Binder.Bind<IEquipmentNotifier>(this);
 
             _Updater.Add(_ControlStatus);
         }
@@ -102,9 +107,11 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             
             var deltaTime = this._GetDeltaTime();
             if (_TimeUp(deltaTime))
-            {                
-                _Move(deltaTime + GameStage._UpdateTime);
+            {
+                var lastDeltaTime = deltaTime + GameStage._UpdateTime;
+                _Move(lastDeltaTime);
                 _Broadcast(_Map.Find(_Player.GetView()));
+                _Player.Equipment.UpdateEffect(lastDeltaTime);
             }
             
             _ResponseItems(deltaTime);
@@ -120,6 +127,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             {
                 if (_RequestAllItems)
                 {
+                    _FlushEvent(_Player.Equipment.GetAll());
                     _AllItemEvent.Invoke(_Player.Bag.GetAll());
                     _UpdateAllItemTime = 10f;
                     _RequestAllItems = false;
@@ -207,6 +215,27 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             this.DoneEvent.Invoke();
         }
 
+        private event Action<Item[]> _FlushEvent;
+        event Action<Item[]> IEquipmentNotifier.FlushEvent
+        {
+            add { _FlushEvent += value; }
+            remove { _FlushEvent += value; }
+        }
+
+        void IEquipmentNotifier.Query()
+        {
+            _RequestAllItems = true;
+        }
+
+        void IEquipmentNotifier.Unequip(Guid id)
+        {
+            var item = _Player.Equipment.Unequip(id);
+            if(item.IsValid())
+            {
+                _Player.Bag.Add(item);
+            }
+        }
+
         void IInventoryNotifier.Query()
         {
             _RequestAllItems = true;
@@ -215,6 +244,23 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         void IInventoryNotifier.Discard(Guid id)
         {
             _Player.Bag.Remove(id);
+        }
+
+        void IInventoryNotifier.Equip(Guid id)
+        {
+            var item = _Player.Bag.Find(id);
+            if(item.IsValid() && item.IsEquipable())
+            {
+                
+                var equipItem = _Player.Equipment.Unequip(item.GetEquipPart());
+                if(equipItem.IsValid())
+                {
+                    _Player.Bag.Add(equipItem);
+                }
+                _Player.Bag.Remove(item.Id);
+
+                _Player.Equipment.Equip(item);
+            }
         }
 
         private event Action<Item[]> _AllItemEvent;
@@ -228,6 +274,20 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         {
             add { _Player.Bag.AddEvent += value; }
             remove { _Player.Bag.AddEvent -= value; }
+        }
+
+        
+        event Action<Guid> IEquipmentNotifier.RemoveEvent
+        {
+            add { _Player.Equipment.RemoveEvent += value; }
+            remove { _Player.Equipment.RemoveEvent -= value; }
+        }
+
+        
+        event Action<Item> IEquipmentNotifier.AddEvent
+        {
+            add { _Player.Equipment.AddEvent += value; }
+            remove { _Player.Equipment.AddEvent -= value; }
         }
 
         event Action<Guid> IInventoryNotifier.RemoveEvent

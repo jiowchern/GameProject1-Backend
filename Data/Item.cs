@@ -36,5 +36,28 @@ namespace Regulus.Project.ItIsNotAGame1.Data
         {            
             return Id != Guid.Empty && Count > 0 && Effects != null;
         }
+
+        public ItemPrototype GetPrototype()
+        {
+            var result = Resource.Instance.FindItem(Name);
+            return result;
+        }
+
+        public bool IsEquipable()
+        {
+            var i = GetPrototype();
+            if(i != null)
+                return i.EquipPart != EQUIP_PART.NONE;
+
+            return false;
+        }
+
+        public EQUIP_PART GetEquipPart()
+        {
+            var i = GetPrototype();
+            if (i != null)
+                return i.EquipPart  ;
+            return EQUIP_PART.NONE;
+        }
     }
 }
