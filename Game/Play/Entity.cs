@@ -50,11 +50,34 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
             Bag = new Inventory();
             Equipment = new Equipment(this);
+            Equipment.AddEvent += _BroadcastEquipEvent;
+            Equipment.RemoveEvent += _BroadcastEquipEvent;
+                        
             _IdleStatus = ACTOR_STATUS_TYPE.NORMAL_IDLE;
 
         }
 
+        private void _BroadcastEquipEvent(Guid obj)
+        {
+            this._BroadcastEquipEvent();
+        }
 
+        private void _BroadcastEquipEvent()
+        {
+            var equipStatus = from item in this.Equipment.GetAll()
+                              select new EquipStatus()
+                              {
+                                  Item = item.Name,
+                                  Part = item.GetEquipPart()
+                              };
+
+            this._EquipEvent(equipStatus.ToArray());
+        }
+
+        private void _BroadcastEquipEvent(Item obj)
+        {
+            _BroadcastEquipEvent();
+        }
 
         ENTITY IVisible.EntityType { get { return this._Record.Entity; } }
 
@@ -67,6 +90,14 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         string IVisible.Name
         {
             get { return this._Record.Name; }
+        }
+
+        private event Action<EquipStatus[]> _EquipEvent;
+
+        event Action<EquipStatus[]> IVisible.EquipEvent
+        {
+            add { this._EquipEvent += value; }
+            remove { this._EquipEvent -= value; }
         }
 
         private event Action<VisibleStatus> _StatusEvent;
@@ -82,6 +113,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         void IVisible.QueryStatus()
         {
             _InvokeStatusEvent(_IdleStatus);
+            _BroadcastEquipEvent();
         }
 
         private event Action<string> _OnTalkMessageEvent;

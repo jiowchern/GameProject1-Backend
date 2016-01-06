@@ -25,7 +25,10 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             Item item;
             _Items.TryGetValue(equip_type, out item);
             if(item.IsValid())
+            {
+                _Items.Remove(equip_type);
                 RemoveEvent(item.Id);
+            }                
             return item;
         }
 
