@@ -73,7 +73,41 @@ namespace Regulus.Project.ItIsNotAGame1.Game
                     Password = "1",
                     Name = "5",
                     Competnces = Account.AllCompetnce()
+                },
+                new Account
+                {
+                    Id = Guid.NewGuid(),
+                    Password = "1",
+                    Name = "6",
+                    Competnces = Account.AllCompetnce()
+                },
+                new Account
+                {
+                    Id = Guid.NewGuid(),
+                    Password = "1",
+                    Name = "7",
+                    Competnces = Account.AllCompetnce()
+                },new Account
+                {
+                    Id = Guid.NewGuid(),
+                    Password = "1",
+                    Name = "8",
+                    Competnces = Account.AllCompetnce()
+                },new Account
+                {
+                    Id = Guid.NewGuid(),
+                    Password = "1",
+                    Name = "9",
+                    Competnces = Account.AllCompetnce()
+                },new Account
+                {
+                    Id = Guid.NewGuid(),
+                    Password = "1",
+                    Name = "10",
+                    Competnces = Account.AllCompetnce()
                 }
+
+
 
             };
         }
