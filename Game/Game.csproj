@@ -80,6 +80,7 @@
     <Compile Include="Play\NormalStatus.cs" />
     <Compile Include="Play\Realm.cs" />
     <Compile Include="Play\SkillCaster.cs" />
+    <Compile Include="Play\WallKind.cs" />
     <Compile Include="Play\Zone.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Play\User.cs" />

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Regulus.CustomType;
 using Regulus.Extension;
@@ -57,15 +58,15 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         private readonly Dictionary<MAZEWALL, WallShift> _DirectionPoints;
         
 
-        private readonly Dictionary<MAZEWALL ,ENTITY> _WallToEntity;
+        private readonly Dictionary<MAZEWALL ,WallKind > _WallToEntity;
 
         public Realm()
         {
-            this._WallToEntity = new Dictionary<MAZEWALL, ENTITY>();
-            this._WallToEntity.Add(MAZEWALL.EAST, ENTITY.WALL_EAST);
-            this._WallToEntity.Add(MAZEWALL.SOUTH, ENTITY.WALL_SOUTH);
-            this._WallToEntity.Add(MAZEWALL.WESTERN, ENTITY.WALL_WESTERN);
-            this._WallToEntity.Add(MAZEWALL.NORTH, ENTITY.WALL_NORTH);
+            this._WallToEntity = new Dictionary<MAZEWALL, WallKind>();
+            this._WallToEntity.Add(MAZEWALL.EAST, new WallKind(ENTITY.WALL_EAST , ENTITY.WALL_EAST_AISLE) );
+            this._WallToEntity.Add(MAZEWALL.SOUTH, new WallKind(ENTITY.WALL_SOUTH , ENTITY.WALL_SOUTH_AISLE ));
+            this._WallToEntity.Add(MAZEWALL.WESTERN, new WallKind(ENTITY.WALL_WESTERN , ENTITY.WALL_WESTERN_AISLE) );
+            this._WallToEntity.Add(MAZEWALL.NORTH, new WallKind(ENTITY.WALL_NORTH , ENTITY.WALL_NORTH_AISLE));
 
             this._Witdh = 30;
             this._Height = 30;
@@ -86,9 +87,10 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             IEnumerable<MazeCell> cells = this._BuildMaze();
             foreach(var cell in cells)
             {
-                foreach(var wall in cell.Walls)
+                var room = cell.Walls.Count() >= 3;
+                foreach (var wall in cell.Walls)
                 {
-                    IIndividual entity = this._BuildWall(wall , cell.Row , cell.Column  );
+                    IIndividual entity = this._BuildWall(wall , cell.Row , cell.Column  , room);
                     map.JoinStaff(entity);                    
                 }
             }
@@ -112,9 +114,9 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
            
         }
 
-        private IIndividual _BuildWall(MAZEWALL wall, int row, int column)
+        private IIndividual _BuildWall(MAZEWALL wall, int row, int column , bool room)
         {
-            Entity entity = this._GetEntity(wall);
+            Entity entity = this._GetEntity(wall , room);
             IIndividual individual = entity;
 
             var bound = individual.Mesh.Points.ToRect();
@@ -131,10 +133,10 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             return new Vector2(directPoint.X + center_x , directPoint.Y + center_y);
         }
 
-        private Entity _GetEntity(MAZEWALL wall)
+        private Entity _GetEntity(MAZEWALL wall , bool room)
         {            
             var record = new GamePlayerRecord();
-            record.Entity = this._WallToEntity[wall];
+            record.Entity = this._WallToEntity[wall].Get(room);
             return EntityProvider.Create(record);
         }
 
