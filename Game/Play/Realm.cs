@@ -67,8 +67,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             this._WallToEntity.Add(MAZEWALL.WESTERN, ENTITY.WALL_WESTERN);
             this._WallToEntity.Add(MAZEWALL.NORTH, ENTITY.WALL_NORTH);
 
-            this._Witdh = 10;
-            this._Height = 10;
+            this._Witdh = 30;
+            this._Height = 30;
 
             this._DirectionPoints = new Dictionary<MAZEWALL, WallShift>();
             this._DirectionPoints.Add(MAZEWALL.EAST, new WallShift(new Vector2(this._Witdh / 2  , 0) , WallShift._East));

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 
 using Regulus.CustomType;
@@ -58,23 +59,32 @@ namespace Regulus.Project.ItIsNotAGame1.Data
             var startScale = begin / _Lengeh;
             var endScale = end / _Lengeh;
 
-            var startLeftIndex = startScale * (_Lefts.Length - 1);
-            var endLeftIndex = endScale * (_Lefts.Length - 1);
-            var startLeft = _Lefts[(int)startLeftIndex];
-            var endLeft = _Lefts[(int)endLeftIndex];
+            var startLeftIndex = (int)(startScale * (_Lefts.Length - 1));
+            var endLeftIndex = (int)(endScale * (_Lefts.Length - 1));
+
+            var leftPoints = _Lefts.Skip(startLeftIndex).Take(endLeftIndex - startLeftIndex + 1);
+            //var startLeft = _Lefts[(int)startLeftIndex];
+            //var endLeft = _Lefts[(int)endLeftIndex];
 
 
-            var startRightIndex = startScale * (_Rights.Length - 1);
-            var endRightIndex = endScale * (_Rights.Length - 1);
-            var startRight = _Rights[(int)startRightIndex];
-            var endRight = _Rights[(int)endRightIndex];
-            var hull = AForge.Math.Geometry.GrahamConvexHull.FindHull(
+            var startRightIndex = (int)(startScale * (_Rights.Length - 1));
+            var endRightIndex = (int)(endScale * (_Rights.Length - 1));
+
+            var rightPoints = _Rights.Skip(startRightIndex).Take(endRightIndex - startRightIndex + 1);
+            //var startRight = _Rights[(int)startRightIndex];
+            //var endRight = _Rights[(int)endRightIndex];
+            /*var hull = AForge.Math.Geometry.GrahamConvexHull.FindHull(
                 new List<Vector2>(
                     new[]
                     {
                     startLeft,endLeft,
                     startRight,endRight
                     }));
+            return new Polygon(hull.ToArray());*/
+            var totalPoints = new List<Vector2>();
+            totalPoints.AddRange(leftPoints);
+            totalPoints.AddRange(rightPoints);
+            var hull = AForge.Math.Geometry.GrahamConvexHull.FindHull(totalPoints);
             return new Polygon(hull.ToArray());
         }
     }
