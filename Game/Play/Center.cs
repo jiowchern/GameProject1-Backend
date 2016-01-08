@@ -24,6 +24,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             this._Hall = new Hall();
             this._Updater = new Updater();
             this._Zone = new Zone(new RealmMaterial[] { new RealmMaterial { Name = "test", EntityDatas = new EntityData[0] } });
+
+            _AboriginalHall = new AboriginalHall(_Zone);
         }
         public void Join(Remoting.ISoulBinder binder)
         {

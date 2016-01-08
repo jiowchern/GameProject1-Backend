@@ -5,6 +5,13 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
     internal class AboriginalHall :Regulus.Utility.IUpdatable
     {
+        private readonly Zone _Zone;
+
+        public AboriginalHall(Zone zone)
+        {
+            this._Zone = zone;            
+        }
+
         void IBootable.Launch()
         {
             

@@ -38,3 +38,4 @@ E:\Develop\Project\ItIsNotAGame1\Backend\Data\bin\Release\RegulusRemoting.xml
 E:\Develop\Project\ItIsNotAGame1\Backend\Data\obj\Release\ItIsNotAGame1Data.dll
 E:\Develop\Project\ItIsNotAGame1\Backend\Data\obj\Release\ItIsNotAGame1Data.pdb
 E:\Develop\Project\ItIsNotAGame1\Backend\Data\obj\Release\Data.csprojResolveAssemblyReference.cache
+D:\Develop\ItIsNotAGame1\Backend\Data\obj\Release\Data.csprojResolveAssemblyReference.cache
