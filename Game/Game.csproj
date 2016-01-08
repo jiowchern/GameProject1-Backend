@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DummyFrature.cs" />
+    <Compile Include="Play\AboriginalHall.cs" />
     <Compile Include="Play\ActorSkill.cs" />
     <Compile Include="Play\ActorStatus.cs" />
     <Compile Include="Play\BattleCasterStatus.cs" />
@@ -65,6 +66,7 @@
     <Compile Include="Play\ExploreStatus.cs" />
     <Compile Include="Play\ExtendPolygon.cs" />
     <Compile Include="Play\GameStage.cs" />
+    <Compile Include="Play\Concierge.cs" />
     <Compile Include="Play\Inventory.cs" />
     <Compile Include="Play\IIndividual.cs" />
     <Compile Include="Play\ItemProvider.cs" />

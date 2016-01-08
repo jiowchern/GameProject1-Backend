@@ -341,11 +341,11 @@ namespace Regulus.Project.ItIsNotAGame1.Test
             meshs5.Offset(0, 8);
 
             IIndividual[] visables = {
-                new Entity(meshs1 , new GamePlayerRecord()), 
-                new Entity(meshs2, new GamePlayerRecord()), 
-                new Entity(meshs3, new GamePlayerRecord()), 
-                new Entity(meshs4, new GamePlayerRecord()), 
-                new Entity(meshs5, new GamePlayerRecord())
+                new Entity(meshs1), 
+                new Entity(meshs2), 
+                new Entity(meshs3), 
+                new Entity(meshs4), 
+                new Entity(meshs5)
             };
 
             foreach (var visable in visables)

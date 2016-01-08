@@ -14,6 +14,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         private readonly Hall _Hall;
         private readonly Updater _Updater;
 
+        private readonly AboriginalHall _AboriginalHall;
+
         private Zone _Zone;
         public Center(IAccountFinder accountFinder, IGameRecorder gameRecorder  )
         {
@@ -32,6 +34,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         {
             this._Updater.Add(this._Hall);
             this._Updater.Add(this._Zone);
+            //_Updater.Add(_AboriginalHall);
         }
 
         void IBootable.Shutdown()

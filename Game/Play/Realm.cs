@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 using Regulus.CustomType;
 using Regulus.Extension;
@@ -60,8 +61,15 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private readonly Dictionary<MAZEWALL ,WallKind > _WallToEntity;
 
+        private readonly Regulus.Utility.IRandom _Random;
+        public Realm(Regulus.Utility.IRandom rnd) :this()
+        {
+            _Random = rnd;
+        }
         public Realm()
         {
+            if(_Random == null)
+                _Random = Regulus.Utility.Random.Instance;
             this._WallToEntity = new Dictionary<MAZEWALL, WallKind>();
             this._WallToEntity.Add(MAZEWALL.EAST, new WallKind(ENTITY.WALL_EAST , ENTITY.WALL_EAST_AISLE) );
             this._WallToEntity.Add(MAZEWALL.SOUTH, new WallKind(ENTITY.WALL_SOUTH , ENTITY.WALL_SOUTH_AISLE ));
@@ -84,24 +92,69 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         private Map _BuildMap()
         {
             var map = new Map();
-            IEnumerable<MazeCell> cells = this._BuildMaze();
-            foreach(var cell in cells)
-            {
-                var room = cell.Walls.Count() >= 3;
-                foreach (var wall in cell.Walls)
-                {
-                    IIndividual entity = this._BuildWall(wall , cell.Row , cell.Column  , room);
-                    map.JoinStaff(entity);                    
-                }
-            }
-
+            this._BuildWall(map);
             this._BuildDebirs(map);
+            _BuildEnterance(map);
             return map;
         }
 
-        private void _BuildDebirs(Map map)
+        private void _BuildEnterance(Map map)
         {
-            
+            // player enterance
+            this._BuildPlayerEnternace(map);
+
+            this._BuildAboriginalEnternace(map);
+        }
+
+        private void _BuildAboriginalEnternace(Map map)
+        {
+            var types = new[]
+                {
+                    ENTITY.ACTOR2
+                };
+            this._BuildEnternace(map, types);
+        }
+
+        private void _BuildPlayerEnternace(Map map)
+        {
+            var types = new[]
+                {
+                    ENTITY.ACTOR1
+                };
+            this._BuildEnternace(map, types);
+        }
+
+        private void _BuildEnternace(Map map, ENTITY[] types)
+        {
+            var entity = EntityProvider.CreateEnterance(types);
+            IIndividual individual = entity;
+            var x = this._Random.NextInt(0, Maze.kDimension) * this._Witdh;
+            var y = this._Random.NextInt(0, Maze.kDimension) * this._Height;
+
+            individual.SetPosition(x, y);
+
+            map.JoinStaff(individual);
+        }
+
+        private void _BuildWall(Map map)
+        {
+            IEnumerable<MazeCell> cells = this._BuildMaze();
+            foreach(var cell in cells)
+            {
+                
+                foreach (var wall in cell.Walls)
+                {
+                    var room = _Random.NextInt(0, 2) == 0;
+                    if (cell.Walls.Count() >= 3)
+                        room = true;
+                    IIndividual entity = this._BuildWall(wall, cell.Row, cell.Column, room);
+                    map.JoinStaff(entity);
+                }
+            }
+        }
+
+        private void _BuildDebirs(Map map)
+        {            
             for(int i = 0; i < 50; ++ i )
             {
                 var entity = this._GetEntity(ENTITY.DEBIRS);
@@ -110,8 +163,6 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                 individual.SetPosition(Utility.Random.Instance.NextFloat(0, 100), Utility.Random.Instance.NextFloat(0, 100));
                 map.JoinStaff(entity);
             }
-            
-           
         }
 
         private IIndividual _BuildWall(MAZEWALL wall, int row, int column , bool room)
@@ -134,17 +185,14 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         }
 
         private Entity _GetEntity(MAZEWALL wall , bool room)
-        {            
-            var record = new GamePlayerRecord();
-            record.Entity = this._WallToEntity[wall].Get(room);
-            return EntityProvider.Create(record);
+        {                        
+            var entity  = this._WallToEntity[wall].Get(room);
+            return EntityProvider.Create(entity);
         }
 
         private Entity _GetEntity(ENTITY entity)
-        {
-            var record = new GamePlayerRecord();
-            record.Entity = entity;
-            return EntityProvider.Create(record);
+        {            
+            return EntityProvider.Create(entity);
         }
 
         private IEnumerable<MazeCell> _BuildMaze()

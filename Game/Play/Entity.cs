@@ -10,6 +10,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
     public class Entity : IIndividual
     {
+        private ENTITY _EntityType;
+        private string _Name;
         Rect _Bound;
         private readonly Polygon _Mesh;
         private readonly Guid _Id;
@@ -21,32 +23,44 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         private float _DetectionRange;
 
         private SkillData[] _Datas;
-        /*        {
-                    new SkillData() { Id = ACTOR_STATUS_TYPE.BATTLE_AXE_BLOCK , Total =1.833f },
-                    new SkillData() { Id = ACTOR_STATUS_TYPE.BATTLE_AXE_ATTACK1 , Total =2.4f },
-                    new SkillData() { Id = ACTOR_STATUS_TYPE.BATTLE_AXE_ATTACK2 , Total =3.167f }
-                };*/
+       
 
         public Inventory Bag { get; private set; }
 
-        public Entity(Polygon mesh, GamePlayerRecord record)
-        {
+        private Concierge _Concierge;
 
+        public Entity(ENTITY type, string name, Polygon mesh , Concierge concierge)
+            : this(type , name , mesh)
+        {
+            _Concierge = concierge;
+        }
+
+        public Entity(ENTITY type, Polygon mesh) : this(mesh)
+        {
+            _Name = "";
+            _EntityType = type;
             _Datas = Resource.Instance.SkillDatas;
-            /*_Datas = new []
-            {
-                new SkillData() { Id = ACTOR_STATUS_TYPE.BATTLE_AXE_BLOCK , Total =1.833f },
-                new SkillData() { Id = ACTOR_STATUS_TYPE.BATTLE_AXE_ATTACK1 , Total =2.4f },
-                new SkillData() { Id = ACTOR_STATUS_TYPE.BATTLE_AXE_ATTACK2 , Total =3.167f }
-            };*/
+
             this._Id = Guid.NewGuid();
             this._View = 60.0f;
             _DetectionRange = 1.0f;
-            this._Record = record;
 
-            this._Mesh = mesh;
+            Bag = new Inventory();
+            Equipment = new Equipment(this);
+            Equipment.AddEvent += _BroadcastEquipEvent;
+            Equipment.RemoveEvent += _BroadcastEquipEvent;
 
-            this._Bound = this._BuildBound(this._Mesh);
+            _IdleStatus = ACTOR_STATUS_TYPE.NORMAL_IDLE;
+        }
+        public Entity(ENTITY type, string name , Polygon mesh ) : this(mesh )
+        {
+            _Name = name;
+            _EntityType = type;
+            _Datas = Resource.Instance.SkillDatas;
+            
+            this._Id = Guid.NewGuid();
+            this._View = 60.0f;
+            _DetectionRange = 1.0f;
 
             Bag = new Inventory();
             Equipment = new Equipment(this);
@@ -55,6 +69,13 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                         
             _IdleStatus = ACTOR_STATUS_TYPE.NORMAL_IDLE;
 
+            
+        }
+
+        public Entity(Polygon mesh)
+        {
+            this._Mesh = mesh;
+            this._Bound = this._BuildBound(this._Mesh);
         }
 
         private void _BroadcastEquipEvent(Guid obj)
@@ -79,17 +100,17 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _BroadcastEquipEvent();
         }
 
-        ENTITY IVisible.EntityType { get { return this._Record.Entity; } }
+        
+        ENTITY IVisible.EntityType { get { return _EntityType; } }
 
         Guid IVisible.Id
         {
             get { return this._Id; }
         }
-
-        private GamePlayerRecord _Record;
+        
         string IVisible.Name
         {
-            get { return this._Record.Name; }
+            get { return _Name; }
         }
 
         private event Action<EquipStatus[]> _EquipEvent;
@@ -188,7 +209,10 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             return _Block;
         }
 
-
+        Concierge IIndividual.GetConcierge()
+        {
+            return _Concierge;
+        }
 
         private bool _Block;
 

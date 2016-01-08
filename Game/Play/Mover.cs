@@ -50,7 +50,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         {
             var polygon = this._GetThroughRange(velocity);
 
-            if (entitys.Any(x => this._Collide(x, polygon ) && x.EntityType != Data.ENTITY.ACTOR1 ))
+            if (entitys.Any(x => x.EntityType != Data.ENTITY.ACTOR1  && x.EntityType != Data.ENTITY.ENTRANCE && this._Collide(x, polygon )   ))
             {
                 return false;
             }

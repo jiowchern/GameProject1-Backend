@@ -4,29 +4,17 @@ using System.Collections.Generic;
 
 using Regulus.Collection;
 using Regulus.CustomType;
+using Regulus.Project.ItIsNotAGame1.Data;
 
 namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
     public class Map 
     {
-
-        
-        private readonly QuadTree<Visible> _QuadTree;
-
-        private readonly List<Visible> _Set;
-
-        public Map()
-        {
-            this._Set = new List<Visible>();
-            this._QuadTree = new QuadTree<Visible>(new Size(2, 2), 100);
-        }
-
         public class Visible : IQuadObject
         {
             public Visible(IIndividual noumenon)
             {
                 this.Noumenon = noumenon;
-                
             }
 
             public void Initial()
@@ -41,17 +29,17 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
             private void _Changed()
             {
-                this._BoundsChanged(this , EventArgs.Empty ); 
+                this._BoundsChanged(this, EventArgs.Empty);
             }
 
             ~Visible()
             {
-                
+
             }
 
             Rect IQuadObject.Bounds
             {
-                get { return this.Noumenon.Bounds ; }
+                get { return this.Noumenon.Bounds; }
             }
 
             private event EventHandler _BoundsChanged;
@@ -64,14 +52,59 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             public IIndividual Noumenon { get; private set; }
         }
 
+        private readonly QuadTree<Visible> _QuadTree;
+
+        private readonly List<Visible> _Set;
+
+        private readonly List<Visible> _EntranceSet;
+
+        private Regulus.Utility.IRandom _Random;
+        public Map()
+        {
+            _Random = Regulus.Utility.Random.Instance;
+            _EntranceSet = new List<Visible>();
+            this._Set = new List<Visible>();
+            this._QuadTree = new QuadTree<Visible>(new Size(2, 2), 100);
+        }
+
+        public Map(Regulus.Utility.IRandom random)
+        {
+            _Random = random;
+            _EntranceSet = new List<Visible>();
+            this._Set = new List<Visible>();
+            this._QuadTree = new QuadTree<Visible>(new Size(2, 2), 100);
+        }
+
+
+
         public void JoinStaff(IIndividual individual)
         {
             this._Join(individual);
         }
-        public void JoinChallenger(IIndividual individual)
-        {
+        public bool JoinChallenger(IIndividual individual)
+        {            
             this._Join(individual);
-            individual.SetPosition(Utility.Random.Instance.NextFloat(0,2.5f) , Utility.Random.Instance.NextFloat(0, 2.5f));
+
+
+            var concierges = this._FindConcierges(individual);
+            var count = concierges.Count();
+            var index = _Random.NextInt(0, count);
+            var concierge = concierges.Skip(index).FirstOrDefault();
+            if(concierge != null)
+            {
+                Vector2 position = concierge.GetPosition();
+                individual.SetPosition(position.X, position.Y);
+                return true;
+            }
+            return false;
+        }
+
+        private IEnumerable<Concierge> _FindConcierges(IIndividual individual)
+        {
+            return (from e in this._EntranceSet
+                    let concierge = e.Noumenon.GetConcierge()
+                    where concierge != null && concierge.IsAcceptsType(individual)
+                    select concierge);
         }
 
         private void _Join(IIndividual individual)
@@ -80,6 +113,12 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             v.Initial();
             this._Set.Add(v);
             this._QuadTree.Insert(v);
+
+            if(individual.EntityType == ENTITY.ENTRANCE)
+            {
+                _EntranceSet.Add(v);
+            }
+            
         }
 
         public void Left(IIndividual individual)
@@ -89,6 +128,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             {
                 this._QuadTree.Remove(result);
                 this._Set.Remove(result);
+                _EntranceSet.Remove(result);
                 result.Release();
             }
         }

@@ -16,6 +16,6 @@ namespace Regulus.Project.ItIsNotAGame1.Data
         WALL_SOUTH_AISLE,
         WALL_WESTERN_AISLE,
         WALL_NORTH_AISLE,
-
+        ENTRANCE,
     }
 }

@@ -20,5 +20,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         void AttachDamage(bool smash);
 
         bool IsBlock();
+
+        Concierge GetConcierge();
+
     }
 }
