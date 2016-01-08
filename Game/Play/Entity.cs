@@ -40,7 +40,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                 new SkillData() { Id = ACTOR_STATUS_TYPE.BATTLE_AXE_ATTACK2 , Total =3.167f }
             };*/
             this._Id = Guid.NewGuid();
-            this._View = 30.0f;
+            this._View = 60.0f;
             _DetectionRange = 1.0f;
             this._Record = record;
 
