@@ -82,3 +82,4 @@ E:\Develop\Project\ItIsNotAGame1\Backend\Play\bin\Release\RegulusRemotingGhostNa
 E:\Develop\Project\ItIsNotAGame1\Backend\Play\obj\Release\Play.csprojResolveAssemblyReference.cache
 E:\Develop\Project\ItIsNotAGame1\Backend\Play\obj\Release\ItIsNotAGame1Play.dll
 E:\Develop\Project\ItIsNotAGame1\Backend\Play\obj\Release\ItIsNotAGame1Play.pdb
+E:\Develop\Project\ItIsNotAGame1\Backend\Play\bin\Release\FluentBehaviourTree.dll

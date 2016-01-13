@@ -73,9 +73,10 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         }
 
         public Entity(Polygon mesh)
-        {
+        {            
             this._Mesh = mesh;
             this._Bound = this._BuildBound(this._Mesh);
+            _CollisionTargets = new IIndividual[0];
         }
 
         private void _BroadcastEquipEvent(Guid obj)
@@ -133,7 +134,18 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         void IVisible.QueryStatus()
         {
-            _InvokeStatusEvent(_IdleStatus);
+            var status = new VisibleStatus()
+            {
+                Status = _IdleStatus,
+                StartPosition = _Mesh.Center,
+                Speed = _Speed,
+                Direction = Direction,
+                Trun = _Trun
+            };
+            
+            this._StatusEvent.Invoke(status);
+            _PrevVisibleStatus = status;
+                       
             _BroadcastEquipEvent();
         }
 
@@ -177,6 +189,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         public Equipment Equipment { get; set; }
 
+        public float Speed { get {return _Speed;} }
+
         event Action IIndividual.BoundsEvent
         {
             add { this._BoundsEvent += value; }
@@ -184,12 +198,10 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         }
 
         void IIndividual.SetPosition(float x, float y)
-        {
-            if (x == 0 && y == 0)
-                return;
+        {            
 
-            var offset = this._Mesh.Center + new Vector2(x, y);
-            this._Mesh.Offset(offset);
+            var offset = new Vector2(x, y) - this._Mesh.Center;
+            this._Mesh.Offset(offset);            
             this._Bound = this._BuildBound(this._Mesh);
             if (this._BoundsEvent != null)
                 this._BoundsEvent.Invoke();
@@ -233,7 +245,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
             this._Mesh.Offset(velocity);
             this._Bound = this._BuildBound(this._Mesh);
-            if (this._BoundsEvent != null)
+            if (this._BoundsEvent != null) 
                 this._BoundsEvent.Invoke();
 
 
@@ -268,26 +280,35 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             Direction %= 360;
         }
 
+        private VisibleStatus _PrevVisibleStatus;
         private void _InvokeStatusEvent(ACTOR_STATUS_TYPE type)
         {
-            if (this._StatusEvent != null)
+            if (_StatusEvent != null)
             {
                 var status = new VisibleStatus()
                 {
                     Status = type,
                     StartPosition = _Mesh.Center,
                     Speed = _Speed,
-                    Direction = this.Direction,
+                    Direction = Direction,
                     Trun = _Trun
                 };
-                this._StatusEvent.Invoke(status);
+                if (status.Direction != _PrevVisibleStatus.Direction ||
+                    status.Speed!= _PrevVisibleStatus.Speed||
+                    status.Trun!= _PrevVisibleStatus.Trun||                    
+                    status.Status != _PrevVisibleStatus.Status
+                    )
+                {
+                    this._StatusEvent.Invoke(status);
+                    _PrevVisibleStatus = status;
+                }
+                
             }
         }
 
         public Vector2 GetVelocity(float delta_time)
         {
             _SetDirection(_Trun * delta_time);
-
             return this._ToVector(this.Direction) * delta_time * this._Speed;
         }
 
@@ -296,8 +317,6 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             var radians = angle * 0.0174532924;
             return new Vector2((float)Math.Cos(radians), (float)-Math.Sin(radians));
         }
-
-
 
         private Rect _BuildVidw()
         {
@@ -358,6 +377,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         public void CastEnd(ACTOR_STATUS_TYPE id)
         {
+
         }
 
         public int HaveDamage()
@@ -398,7 +418,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         public void Talk(string message)
         {
-            _OnTalkMessageEvent(message);
+            if(_OnTalkMessageEvent != null)
+                _OnTalkMessageEvent(message);
         }
 
         public void Make()
@@ -411,6 +432,28 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         public ItemFormula[] GetFormulas()
         {
             return Resource.Instance.Formulas;
+        }
+
+        private IEnumerable<IIndividual> _CollisionTargets;
+        public void SetCollisionTargets(IEnumerable<IIndividual> hitthetargets)
+        {
+            _CollisionTargets = hitthetargets;
+        }
+
+        public void ClearCollisionTargets()
+        {
+            _CollisionTargets = new IIndividual[0];
+        }
+
+        public IEnumerable<IIndividual> GetCollisionTargets()
+        {
+            return _CollisionTargets;
+        }
+
+        public void SetDirection(float dir)
+        {
+            _SetDirection(dir);
+            _InvokeStatusEvent(_IdleStatus);
         }
     }
 }

@@ -18,15 +18,14 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         IInventoryNotifier ,
         IPlayerProperys , 
         IEquipmentNotifier
-    {
-        private readonly GamePlayerRecord _Record;
-        private readonly IGameRecorder _Recoder;
+    {        
         private readonly ISoulBinder _Binder;
 
         private readonly Map _Map;
 
-        private readonly TimeCounter _SaveTimeCounter;
+        
         private readonly TimeCounter _DeltaTimeCounter;
+        private readonly TimeCounter _UpdateTimeCounter;
         private const float _UpdateTime = 1.0f / 30.0f;
 
         private float _UpdateAllItemTime;
@@ -37,7 +36,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         
         private readonly DifferenceNoticer<IIndividual> _DifferenceNoticer;
 
-        float _UpdateTimeCount;
+        
 
         private bool _RequestAllItems;
 
@@ -45,22 +44,25 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private readonly Regulus.Utility.Updater _Updater;
 
-        
+        private readonly Wisdom _Wisdom;
 
-        public GameStage(ISoulBinder binder, GamePlayerRecord record, IGameRecorder recoder, Map map)
+        public GameStage(ISoulBinder binder, Map map, Entity entity)
         {
             _Map = map;
-            _Record = record;
-            _Recoder = recoder;
             _Binder = binder;
-            _SaveTimeCounter = new TimeCounter();
             _DeltaTimeCounter = new TimeCounter();
+            _UpdateTimeCounter = new TimeCounter();
             _Updater = new Updater();
             _DifferenceNoticer = new DifferenceNoticer<IIndividual>();
 
-            _Player = this._CreatePlayer();
+            _Player = entity;
             _Mover = new Mover(this._Player);
-            _ControlStatus = new ControlStatus(binder, _Player, _Mover , _Map);
+            _ControlStatus = new ControlStatus(binder, _Player, _Mover, _Map);
+        }
+        public GameStage(ISoulBinder binder,  Map map , Entity entity , Wisdom wisdom) :this(binder , map , entity)
+        {
+            _Wisdom = wisdom;
+            
 
         }
         void IStage.Leave()
@@ -72,8 +74,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _Binder.Unbind<IInventoryNotifier>(this);
             _Binder.Unbind<IPlayerProperys>(this);
             _Binder.Unbind<IEquipmentNotifier>(this);
-            _Map.Left(_Player);
-            _Save();
+            _Map.Left(_Player);            
         }        
 
         void IStage.Enter()
@@ -87,33 +88,25 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             this._Binder.Bind<IEquipmentNotifier>(this);
 
             _Updater.Add(_ControlStatus);
+
+            if(_Wisdom != null)
+                _Updater.Add(_Wisdom);
         }
 
-        private Entity _CreatePlayer()
-        {
-            var player = EntityProvider.Create(this._Record);
-                        
-            foreach (var item in _Record.Items)                
-            {
-                player.Bag.Add(item);
-            }
-            return player;
-        }
+        
 
         void IStage.Update()
         {
-            _Updater.Working();
-            _UpdateSave();
-            
+            if (_UpdateTimeCounter.Second < _UpdateTime)
+                return;
             var deltaTime = this._GetDeltaTime();
-            if (_TimeUp(deltaTime))
-            {
-                var lastDeltaTime = deltaTime + GameStage._UpdateTime;
-                _Move(lastDeltaTime);
-                _Broadcast(_Map.Find(_Player.GetView()));
-                _Player.Equipment.UpdateEffect(lastDeltaTime);
-            }
-            
+            _Updater.Working();
+
+            var lastDeltaTime = deltaTime ;
+            _Move(lastDeltaTime);
+            _Broadcast(_Map.Find(_Player.GetView()));
+            _Player.Equipment.UpdateEffect(lastDeltaTime);
+
             _ResponseItems(deltaTime);
 
         }
@@ -138,25 +131,18 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                 _UpdateAllItemTime -= deltaTime;
             }
         }
-
-        private bool _TimeUp(float deltaTime)
-        {
-            this._UpdateTimeCount += deltaTime;
-            if(this._UpdateTimeCount >= GameStage._UpdateTime)
-            {
-                this._UpdateTimeCount %= GameStage._UpdateTime;
-                return true;
-            }
-            return false;
-        }
+        
 
         private void _Move(float deltaTime)
         {
+            _Player.ClearCollisionTargets();
             var velocity = this._Player.GetVelocity(deltaTime);
             var orbit = this._Mover.GetOrbit(velocity);
             var entitys = this._Map.Find(orbit);
-            if(this._Mover.Move(velocity, entitys.Where(x => x.Id != this._Player.Id)) == false)
+            var hitthetargets = _Mover.Move(velocity, entitys.Where(x => x.Id != this._Player.Id));
+            if (hitthetargets.Any())
             {
+                _Player.SetCollisionTargets(hitthetargets);
                 this._Player.Stop();
             }
         }
@@ -190,19 +176,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         }
         
 
-        private void _UpdateSave()
-        {
-            if (this._SaveTimeCounter.Second >= 60)
-            {
-                this._Save();
-                this._SaveTimeCounter.Reset();
-            }
-        }
-
-        private void _Save()
-        {
-            this._Recoder.Save(this._Record);
-        }
+        
+        
 
         public event Action DoneEvent;
 

@@ -14,7 +14,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
     {
         
 
-        private Dictionary<string, Realm> _Realms;
+        private readonly Dictionary<string, Realm> _Realms;
 
         public Zone(RealmMaterial[] realm_materials)
         {

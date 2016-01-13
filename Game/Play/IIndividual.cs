@@ -23,5 +23,6 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         Concierge GetConcierge();
 
+        void SetDirection(float dir);
     }
 }

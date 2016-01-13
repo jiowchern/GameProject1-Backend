@@ -82,3 +82,4 @@ E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Release\RegulusRemotingSoul
 E:\Develop\Project\ItIsNotAGame1\Backend\Storage\obj\Release\Storage.csprojResolveAssemblyReference.cache
 E:\Develop\Project\ItIsNotAGame1\Backend\Storage\obj\Release\ItIsNotAGame1Storage.dll
 E:\Develop\Project\ItIsNotAGame1\Backend\Storage\obj\Release\ItIsNotAGame1Storage.pdb
+E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Release\FluentBehaviourTree.dll

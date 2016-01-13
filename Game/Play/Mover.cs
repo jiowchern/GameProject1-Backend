@@ -46,16 +46,23 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             this._Entity.UpdatePosition(velocity);
         }
 
-        public bool Move(Vector2 velocity, IEnumerable<IIndividual> entitys )
+        public IEnumerable<IIndividual> Move(Vector2 velocity, IEnumerable<IIndividual> entitys )
         {
             var polygon = this._GetThroughRange(velocity);
 
-            if (entitys.Any(x => x.EntityType != Data.ENTITY.ACTOR1  && x.EntityType != Data.ENTITY.ENTRANCE && this._Collide(x, polygon )   ))
+            var targets = from x in entitys
+                          where
+                              x.EntityType != Data.ENTITY.ACTOR1 
+
+                              && x.EntityType != Data.ENTITY.ENTRANCE
+                              && x.EntityType != Data.ENTITY.ACTOR2
+                              && this._Collide(x, polygon)
+                          select x;
+            if (targets.Any() == false)
             {
-                return false;
-            }
-            this.Set(velocity);
-            return true;
+                this.Set(velocity);
+            }            
+            return targets;
         }        
 
         private Polygon _GetThroughRange(Vector2 velocity)

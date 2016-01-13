@@ -34,6 +34,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FluentBehaviourTree, Version=0.0.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentBehaviourTree.0.0.4.0\lib\net35\FluentBehaviourTree.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="protobuf-net, Version=2.0.0.668, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\protobuf-net.dll</HintPath>
@@ -53,7 +57,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DummyFrature.cs" />
-    <Compile Include="Play\AboriginalHall.cs" />
+    <Compile Include="Play\Aboriginal.cs" />
+    <Compile Include="Play\Behavior\Idle.cs" />
+    <Compile Include="Play\GpiTransponder.cs" />
+    <Compile Include="Play\Wisdom.cs" />
+    <Compile Include="Play\Race.cs" />
     <Compile Include="Play\ActorSkill.cs" />
     <Compile Include="Play\ActorStatus.cs" />
     <Compile Include="Play\BattleCasterStatus.cs" />
@@ -99,7 +107,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Play\Behavior\" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

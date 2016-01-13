@@ -1,6 +1,8 @@
 ﻿
 using System;
 
+
+
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using NSubstitute;
@@ -360,8 +362,13 @@ namespace Regulus.Project.ItIsNotAGame1.Test
                 map.Left(visable);
             }
 
-            Assert.AreEqual(5, results.Length);    
+            Assert.AreEqual(5, results.Length);
+
         }
+
         
     }
+
+    
 }
+

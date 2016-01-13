@@ -152,10 +152,17 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         }
 
         private void _ToGame(GamePlayerRecord record , Map map)
-        {            
-            var stage = new GameStage(this._Binder, record , this._GameRecorder , map);
+        {
+            var player = EntityProvider.Create(record);
+
+            foreach (var item in record.Items)
+            {
+                player.Bag.Add(item);
+            }
+            
+            var stage = new GameStage(this._Binder, map , player );
             stage.DoneEvent += this._ToVerify;
-            this._Machine.Push(stage);
+            _Machine.Push(stage);
         }
 
         string IVersion.Number {

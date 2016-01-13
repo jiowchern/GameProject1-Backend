@@ -94,6 +94,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             {
                 Vector2 position = concierge.GetPosition();
                 individual.SetPosition(position.X, position.Y);
+                individual.SetDirection(_Random.NextInt(0, 360));
                 return true;
             }
             return false;
