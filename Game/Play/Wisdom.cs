@@ -55,8 +55,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                         .End()
 
                         .Sequence(" ab c ")
-                            .Do("RandomTrun", _RandomTrun)
-                            .Do("RandomTalk", _RabbitCatHappyBirthday)
+                            .Do("RandomTrun", _RandomTrun)                            
                             .Condition("is hurt ", (td) => _Hurt)
                                     .Sequence("Talk")
                                         .Do("", _Talk)
@@ -86,7 +85,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                 var messags = new[]
                 {
                     "\u5154\u8c93\u751f\u65e5\u5feb\u6a02^O^~",
-                    "\u5154\u8c93\u751f\u65e5\u5feb\u6a02>O<~"
+                    "\u5154\u8c93\u751f\u65e5\u5feb\u6a02XD~"
                 };
                 var index = Regulus.Utility.Random.Instance.NextInt(0, 2);
                 var msg  = messags[index];

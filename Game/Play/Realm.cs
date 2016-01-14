@@ -113,7 +113,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                 {
                     ENTITY.ACTOR2
                 };
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 40; i++)
             {
                 this._BuildEnternace(map, types);
             }
