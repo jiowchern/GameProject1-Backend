@@ -4,20 +4,20 @@
 
 namespace Regulus.Project.ItIsNotAGame1.Game
 {
-    public class Verify : Data.IVerify
+	public class Verify : Data.IVerify
 	{
-        public delegate void DoneCallback(Data.Account account);
+		public delegate void DoneCallback(Data.Account account);
 
 		public event DoneCallback OnDoneEvent;
 
-        private readonly Data.IAccountFinder _Storage;
+		private readonly Data.IAccountFinder _Storage;
 
-        public Verify(Data.IAccountFinder storage)
+		public Verify(Data.IAccountFinder storage)
 		{
-            this._Storage = storage;
+			this._Storage = storage;
 		}
 
-        Value<bool> Data.IVerify.Login(string id, string password)
+		Value<bool> Data.IVerify.Login(string id, string password)
 		{
 			var returnValue = new Value<bool>();
 			var val = this._Storage.FindAccountByName(id);
@@ -28,7 +28,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game
 				{
 					if(this.OnDoneEvent != null)
 					{
-					    this.OnDoneEvent(account);
+						this.OnDoneEvent(account);
 					}
 
 					returnValue.SetValue(true);

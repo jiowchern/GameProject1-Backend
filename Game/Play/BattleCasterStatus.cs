@@ -29,7 +29,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         public HashSet<Guid> _Attacked;
 
-        private Regulus.Utility.TimeCounter _CastTimer;
+        private readonly Regulus.Utility.TimeCounter _CastTimer;
 
         private float _CurrentCastTime;
         public BattleCasterStatus(ISoulBinder binder, Entity player, Map map, SkillCaster caster)
@@ -44,22 +44,17 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         void IStage.Enter()
         {
-
+            _Binder.Bind<ICastSkill>(this);
             _Player.CastBegin(_Caster.Data.Id);
             _CastTimer.Reset();
-            if (_Caster.IsBlock())
-            {
-                _Player.SetBlock(true);
-            }
+            
         }
 
         void IStage.Leave()
         {
+            _Binder.Unbind<ICastSkill>(this);
             _Player.CastEnd(_Caster.Data.Id);
-            if (_Caster.IsBlock())
-            {
-                _Player.SetBlock(false);
-            }
+           
         }
         #region UnityDebugCode
         //Unity Debug Code
@@ -107,19 +102,24 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         void IStage.Update()
         {
             var nowTime = _CastTimer.Second;
-            Regulus.CustomType.Polygon poly = _Caster.FindDetermination(_CurrentCastTime, nowTime);
+            var poly = _Caster.FindDetermination(_CurrentCastTime, nowTime);
             _CurrentCastTime = nowTime;
 
             
             bool guardImpact = false;
+            _Player.SetBlock(false);
             if (poly != null)
             {
+                if (_Caster.IsBlock())
+                {
+                    _Player.SetBlock(true);
+                }
+
                 var dir = -_Player.Direction * ((float)Math.PI / 180f);
 
                 var center = _Player.GetPosition();
                 poly.Rotation(dir, new Vector2());
                 poly.Offset(center);
-
 
                 #region UnityDebugCode
 #if UNITY_EDITOR
@@ -182,6 +182,11 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         void ICastSkill.Cast(ACTOR_STATUS_TYPE skill)
         {
 
+            var caster = _Caster.FindNext(skill);
+            if (caster != null)
+            {
+                NextEvent(caster);                
+            }
         }
     }
 }

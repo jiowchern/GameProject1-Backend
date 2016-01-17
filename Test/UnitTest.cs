@@ -140,6 +140,27 @@ namespace Regulus.Project.ItIsNotAGame1.Test
         }
 
         [TestMethod]
+        public void TestSkillDataSer()
+        {
+            
+            var datas = new SkillData[]
+            {
+                new SkillData()
+                {
+                    Roots    = new Translate[]
+                    {
+                        new Translate() { Position = new Vector2(111,222) , Rotation = 123 },
+                        new Translate() { Position = new Vector2(111,222) , Rotation = 123 }
+                    }
+                }   
+            };
+            
+
+            Regulus.Utility.Serialization.Write<SkillData[]>(datas , "123.txt");
+            var result1 = Regulus.Utility.Serialization.WriteXml<SkillData[]>(datas);
+
+        }
+        [TestMethod]
         public void TestInventoryGetSum3()
         {
             var inventory = new Inventory();

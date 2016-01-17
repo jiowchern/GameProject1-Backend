@@ -12,6 +12,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private readonly Dictionary<EQUIP_PART, Item> _Items;
 
+        
+
         public event Action<Item> AddEvent;
         public event Action<Guid> RemoveEvent;
         public Equipment(Entity entity)
@@ -41,6 +43,14 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             }            
         }
 
+
+        public Item? Find(EQUIP_PART part)
+        {
+            if (_Items.ContainsKey(part))
+                return _Items[part];
+
+            return null;
+        }
         public Item[] GetAll()
         {
             return _Items.Values.ToArray();

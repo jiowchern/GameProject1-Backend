@@ -35,7 +35,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                 polygon.Offset(velocity);
 
                 points.AddRange(polygon.Points);
-                this._Rect = points.ToRect();
+                _Rect = points.ToRect();
             }
 
             public Rect Vision { get { return this._Rect; } }
@@ -50,13 +50,16 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         {
             var polygon = this._GetThroughRange(velocity);
 
+            //var polygon = _Individual.Mesh;
+
             var targets = from x in entitys
+                          let result = this._Collide(x, polygon , new Vector2())
                           where
                               x.EntityType != Data.ENTITY.ACTOR1 
-
                               && x.EntityType != Data.ENTITY.ENTRANCE
                               && x.EntityType != Data.ENTITY.ACTOR2
-                              && this._Collide(x, polygon)
+                              && result.Intersect
+                              //&& result.WillIntersect
                           select x;
             if (targets.Any() == false)
             {
@@ -73,14 +76,15 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             List<Vector2> points = new List<Vector2>();
             points.AddRange(this._Individual.Mesh.Points);
             points.AddRange(after.Points);
-            var polygon = new Polygon(points.FindHull().ToArray());            
+            var polygon = new Polygon(
+                points.FindHull().ToArray());            
             return polygon;
         }
 
-        private bool _Collide(IIndividual individual, Polygon polygon)
+        private Regulus.CustomType.Polygon.CollisionResult _Collide(IIndividual individual, Polygon polygon , Vector2 velocity)
         {
-            var result = Polygon.Collision(polygon, individual.Mesh, new Vector2());
-            return result.Intersect;
+            var result = Polygon.Collision(polygon, individual.Mesh, velocity);
+            return result;
         }
     }
 }

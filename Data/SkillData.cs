@@ -13,10 +13,9 @@ namespace Regulus.Project.ItIsNotAGame1.Data
 
         public Vector2[] Rights;
 
-        public Vector2[] Roots;
+        public Translate[] Roots;
 
         public float Total;
-
 
         public float Begin;
 
@@ -28,14 +27,16 @@ namespace Regulus.Project.ItIsNotAGame1.Data
 
         public bool Smash;
 
+        public bool Punch;
+
         public SkillData()
         {
             Lefts = new Vector2[0];
             Rights = new Vector2[0];
             Nexts = new ACTOR_STATUS_TYPE[0];
-            Roots = new Vector2[0];
+            Roots = new Translate[0];
         }
 
-        public bool Punch;
+        
     }
 }

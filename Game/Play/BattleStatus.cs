@@ -13,7 +13,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private readonly Map _Map;
 
-        private ActorSkill _Skill;
+        private readonly ActorSkill _Skill;
 
         public event Action NormalEvent;
 
@@ -23,6 +23,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         public BattleStatus(ISoulBinder binder, Entity player, Map map) 
         {
+            
             _Binder = binder;
             _Player = player;
             _Map = map;
@@ -50,7 +51,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             
         }
 
-        public ACTOR_STATUS_TYPE Id { get {return ACTOR_STATUS_TYPE.BATTLE_AXE_IDLE;} }
+        public ACTOR_STATUS_TYPE Id { get {return _Player.GetIdle(); } }
 
         ACTOR_STATUS_TYPE[] ICastSkill.Skills { get { return _Skill.Skills; } }
     

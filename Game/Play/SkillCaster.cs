@@ -1,4 +1,6 @@
+using System;
 using System.Diagnostics;
+using System.Linq;
 
 using Regulus.CustomType;
 using Regulus.Project.ItIsNotAGame1.Data;
@@ -13,16 +15,14 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private readonly Determination _Determination;
 
-        
+        private float _Interval;
+
         public SkillCaster(SkillData data, Determination determination)
         {
-            
+            _Interval = data.Total / data.Roots.Length;
             Data = data;
             _Determination = determination;
-            
-
-            _Timer = new TimeCounter();
-            
+            _Timer = new TimeCounter();            
         }
 
         public int Damage { get; set; }
@@ -36,6 +36,14 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         {            
             var result =  _Determination.Find(begin, end - begin);            
             return result;
+        }
+
+        public Vector2 GetPosition(float current)
+        {
+            var index = current / Data.Total;
+            var idx = (int)Math.Ceiling(index);
+            var position = Data.Roots[idx];
+            return new Vector2();
         }
 
         public bool IsBlock()
@@ -57,6 +65,16 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         {
             var skill = Resource.Instance.FindSkill(type);
             return new SkillCaster(skill , new Determination(skill));
+        }
+
+        public SkillCaster FindNext(ACTOR_STATUS_TYPE skill)
+        {
+            var skillPrototype = Resource.Instance.FindSkill(skill);
+            if (skillPrototype != null && Data.Nexts.Any(s => s == skill))
+            {
+                return new SkillCaster(skillPrototype, new Determination(skillPrototype));
+            }
+            return null;
         }
     }
 }

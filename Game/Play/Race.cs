@@ -49,8 +49,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         {
             _Aboriginals = new List<Aboriginal>();
             this._Zone = zone;
-            _Updater = new TimesharingUpdater(1.0f / 30.0f);
-            for (int i = 0; i < 800; i++)
+            _Updater = new TimesharingUpdater(1.0f / 60.0f);
+            for (int i = 0; i < 500; i++)
             {
 
                 _Updater.Add(new Aboriginal(_Zone));

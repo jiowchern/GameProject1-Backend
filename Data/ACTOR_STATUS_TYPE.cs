@@ -18,6 +18,19 @@ namespace Regulus.Project.ItIsNotAGame1.Data
         CHEST_CLOSE,
         LONG_IDLE,
 
-        MAKE
+
+
+        MAKE,
+        MELEE_IDLE,
+
+        MELEE_ATTACK1,
+        MELEE_ATTACK2,
+        MELEE_ATTACK3,
+
+        TWO_HAND_SWORD_IDLE,
+        TWO_HAND_SWORD_RUN,
+        TWO_HAND_SWORD_ATTACK1,
+
+        MELEE_ATTACK4,        
     }
 }

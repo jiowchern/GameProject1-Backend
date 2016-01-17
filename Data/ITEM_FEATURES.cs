@@ -10,5 +10,7 @@ namespace Regulus.Project.ItIsNotAGame1.Data
     {
         WEAPON_AXE,
         MATERIAL,
+
+        WEAPON_TWOHANDSWORD
     }
 }
