@@ -8,7 +8,8 @@ namespace Regulus.Project.ItIsNotAGame1
 	{
 		IUser IUserFactoty<IUser>.SpawnUser()
 		{
-			return new User(Agent.Create());
+		    var gpiProvider = new Regulus.Project.ItIsNotAGame1.GPIProvider();
+            return new User(Agent.Create(gpiProvider));
 		}
 
 		ICommandParsable<IUser> IUserFactoty<IUser>.SpawnParser(Command command, Console.IViewer view, IUser user)

@@ -71,6 +71,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _DifferenceNoticer.JoinEvent -= this._BroadcastJoin;
             _DifferenceNoticer.LeftEvent -= this._BroadcastLeft;
 
+            _Binder.Unbind<IDevelopActor>(_Player);
             _Binder.Unbind<IInventoryNotifier>(this);
             _Binder.Unbind<IPlayerProperys>(this);
             _Binder.Unbind<IEquipmentNotifier>(this);
@@ -86,7 +87,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             this._Binder.Bind<IPlayerProperys>(this);
             this._Binder.Bind<IInventoryNotifier>(this);
             this._Binder.Bind<IEquipmentNotifier>(this);
-
+            _Binder.Bind<IDevelopActor>(_Player);
             _Updater.Add(_ControlStatus);
 
             if(_Wisdom != null)

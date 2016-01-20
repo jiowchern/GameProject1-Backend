@@ -33,7 +33,9 @@ namespace Regulus.Project.ItIsNotAGame1
         INotifier<Data.IEmotion> EmotionControllerProvider { get; }
         INotifier<Data.IMakeSkill> MakeControllerProvider { get; }
 
+        INotifier<Data.IDevelopActor> DevelopActorProvider { get; }
 
+        
 
 
     }

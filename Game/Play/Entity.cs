@@ -8,7 +8,7 @@ using Regulus.Extension;
 using Regulus.Project.ItIsNotAGame1.Data;
 namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
-    public class Entity : IIndividual
+    public class Entity : IIndividual, IDevelopActor
     {
         private ENTITY _EntityType;
         private string _Name;
@@ -18,19 +18,31 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private float _Speed;
 
-        private float _View;
+        private IEnumerable<IIndividual> _CollisionTargets;
+
+        private float _BaseView;
+
+        private float _IlluminateView;
+
+        private float _View
+        {
+            get
+            {
+                return _BaseView + _IlluminateView;
+            }
+        }
 
         private float _DetectionRange;
 
         private SkillData[] _Datas;
-       
+
 
         public Inventory Bag { get; private set; }
 
         private Concierge _Concierge;
 
-        public Entity(ENTITY type, string name, Polygon mesh , Concierge concierge)
-            : this(type , name , mesh)
+        public Entity(ENTITY type, string name, Polygon mesh, Concierge concierge)
+            : this(type, name, mesh)
         {
             _Concierge = concierge;
         }
@@ -42,7 +54,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _Datas = Resource.Instance.SkillDatas;
 
             this._Id = Guid.NewGuid();
-            this._View = 60.0f;
+            this._BaseView = 10.0f;
             _DetectionRange = 1.0f;
 
             Bag = new Inventory();
@@ -52,28 +64,13 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
             _Status = ACTOR_STATUS_TYPE.NORMAL_IDLE;
         }
-        public Entity(ENTITY type, string name , Polygon mesh ) : this(mesh )
+        public Entity(ENTITY type, string name, Polygon mesh) : this(type, mesh)
         {
             _Name = name;
-            _EntityType = type;
-            _Datas = Resource.Instance.SkillDatas;
-            
-            this._Id = Guid.NewGuid();
-            this._View = 60.0f;
-            _DetectionRange = 1.0f;
-
-            Bag = new Inventory();
-            Equipment = new Equipment(this);
-            Equipment.AddEvent += _BroadcastEquipEvent;
-            Equipment.RemoveEvent += _BroadcastEquipEvent;
-                        
-            _Status = ACTOR_STATUS_TYPE.NORMAL_IDLE;
-
-            
         }
 
         public Entity(Polygon mesh)
-        {            
+        {
             this._Mesh = mesh;
             this._Bound = this._BuildBound(this._Mesh);
             _CollisionTargets = new IIndividual[0];
@@ -101,18 +98,20 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _BroadcastEquipEvent();
         }
 
-        
+
         ENTITY IVisible.EntityType { get { return _EntityType; } }
 
         Guid IVisible.Id
         {
             get { return this._Id; }
         }
-        
+
         string IVisible.Name
         {
             get { return _Name; }
         }
+
+        float IVisible.View { get {return _View; } }
 
         private event Action<EquipStatus[]> _EquipEvent;
 
@@ -142,10 +141,10 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                 Direction = Direction,
                 Trun = _Trun
             };
-            
+
             this._StatusEvent.Invoke(status);
             _PrevVisibleStatus = status;
-                       
+
             _BroadcastEquipEvent();
         }
 
@@ -168,9 +167,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private Rect _BuildBound(Polygon mesh)
         {
-            var center = mesh.Center;
-            var rect = new Rect(center.X, center.Y, this._View, this._View);
-            return rect.LeftToCenter();
+
+            return mesh.Points.ToRect();
         }
 
         Polygon IIndividual.Mesh
@@ -189,7 +187,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         public Equipment Equipment { get; set; }
 
-        public float Speed { get {return _Speed;} }
+        public float Speed { get { return _Speed; } }
 
         event Action IIndividual.BoundsEvent
         {
@@ -198,10 +196,10 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         }
 
         void IIndividual.SetPosition(float x, float y)
-        {            
+        {
 
             var offset = new Vector2(x, y) - this._Mesh.Center;
-            this._Mesh.Offset(offset);            
+            this._Mesh.Offset(offset);
             this._Bound = this._BuildBound(this._Mesh);
             if (this._BoundsEvent != null)
                 this._BoundsEvent.Invoke();
@@ -211,7 +209,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         {
             _Status = ACTOR_STATUS_TYPE.CHEST_OPEN;
             _InvokeStatusEvent();
-            var itemProivder = new ItemProvider();            
+            var itemProivder = new ItemProvider();
             return itemProivder.FromStolen();
         }
 
@@ -246,7 +244,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
             this._Mesh.Offset(velocity);
             this._Bound = this._BuildBound(this._Mesh);
-            if (this._BoundsEvent != null) 
+            if (this._BoundsEvent != null)
                 this._BoundsEvent.Invoke();
 
 
@@ -295,15 +293,15 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                     Trun = _Trun
                 };
                 if (status.Direction != _PrevVisibleStatus.Direction ||
-                    status.Speed!= _PrevVisibleStatus.Speed||
-                    status.Trun!= _PrevVisibleStatus.Trun||                    
+                    status.Speed != _PrevVisibleStatus.Speed ||
+                    status.Trun != _PrevVisibleStatus.Trun ||
                     status.Status != _PrevVisibleStatus.Status
                     )
                 {
                     this._StatusEvent.Invoke(status);
                     _PrevVisibleStatus = status;
                 }
-                
+
             }
         }
 
@@ -357,15 +355,15 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         {
 
             var item = this.Equipment.Find(EQUIP_PART.RIGHT_HAND);
-            if (item.HasValue)
-            {                
+            if (item.HasValue )
+            {
                 _Status = _GetWeaponIdle(item.Value.GetPrototype().Features);
             }
             else
             {
                 _Status = ACTOR_STATUS_TYPE.MELEE_IDLE;
             }
-            
+
             Stop();
         }
 
@@ -387,16 +385,16 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             var item = this.Equipment.Find(EQUIP_PART.RIGHT_HAND);
             if (item.HasValue)
             {
-                return new ActorSkill(_GetSkills(item.Value.GetPrototype().Features, _Datas));                
+                return new ActorSkill(_GetSkills(item.Value.GetPrototype().Features, _Datas));
             }
             return new ActorSkill(_GetSkills(ITEM_FEATURES.MATERIAL, _Datas));
         }
 
         private SkillData[] _GetSkills(ITEM_FEATURES features, SkillData[] datas)
         {
-            var baseSkills = new []
+            var baseSkills = new[]
             {
-                ACTOR_STATUS_TYPE.MELEE_ATTACK1,                
+                ACTOR_STATUS_TYPE.MELEE_ATTACK1,
             };
             if (features == ITEM_FEATURES.WEAPON_AXE)
             {
@@ -411,10 +409,10 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             {
                 baseSkills = new[]
                 {
-                    ACTOR_STATUS_TYPE.TWO_HAND_SWORD_ATTACK1                    
+                    ACTOR_STATUS_TYPE.TWO_HAND_SWORD_ATTACK1
                 };
             }
-            
+
 
             return (from d in datas where baseSkills.Any(bs => bs == d.Id) select d).ToArray();
         }
@@ -451,7 +449,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _Trun = 0.0f;
             _Status = ACTOR_STATUS_TYPE.DAMAGE1;
             _InvokeStatusEvent();
-            
+
         }
 
         public SkillCaster GetDamagrCaster()
@@ -478,7 +476,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         public void Talk(string message)
         {
-            if(_OnTalkMessageEvent != null)
+            if (_OnTalkMessageEvent != null)
                 _OnTalkMessageEvent(message);
         }
 
@@ -494,7 +492,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             return Resource.Instance.Formulas;
         }
 
-        private IEnumerable<IIndividual> _CollisionTargets;
+
         public void SetCollisionTargets(IEnumerable<IIndividual> hitthetargets)
         {
             _CollisionTargets = hitthetargets;
@@ -519,6 +517,16 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         public ACTOR_STATUS_TYPE GetIdle()
         {
             return _Status;
+        }
+
+        public void SetEquipView(float view)
+        {
+            _IlluminateView = view;
+        }
+
+        void IDevelopActor.SetBaseView(float range)
+        {
+            _BaseView = range;
         }
     }
 }

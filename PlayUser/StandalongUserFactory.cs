@@ -27,7 +27,7 @@ namespace Regulus.Project.ItIsNotAGame1
 
 		IUser IUserFactoty<IUser>.SpawnUser()
 		{
-			var agent = new Agent();
+			var agent = new Agent(new GPIProvider());
 			agent.ConnectedEvent += () => { this._Standalone.AssignBinder(agent); };
 
 			return new User(agent);

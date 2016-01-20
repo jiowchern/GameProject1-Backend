@@ -5,13 +5,9 @@ using System.Text;
 
 namespace Regulus.Project.ItIsNotAGame1.Data
 {
-    [Serializable]
-    public enum ITEM_FEATURES
+    public interface IDevelopActor
     {
-        WEAPON_AXE,
-        MATERIAL,
 
-        WEAPON_TWOHANDSWORD,
-        ILLUMINATION,
+        void SetBaseView(float range);
     }
 }

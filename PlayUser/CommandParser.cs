@@ -39,8 +39,9 @@ namespace Regulus.Project.ItIsNotAGame1
 
 		    this._CreateControll(factory);
 
-        }
+            this._CreateDevelopActor(factory);
 
+        }
 	    
 
 	    private void _DestroySystem()
@@ -95,7 +96,13 @@ namespace Regulus.Project.ItIsNotAGame1
 				gpi => { return new CommandParamBuilder().BuildRemoting<string, int, bool>(gpi.Connect, this._ConnectResult); });
 		}
 
-		private void _VerifyResult(bool result)
+        private void _CreateDevelopActor(IGPIBinderFactory factory)
+        {
+            var binder = factory.Create(this._User.DevelopActorProvider);
+            binder.Bind<float>( (gpi , view ) => gpi.SetBaseView(view) );
+        }
+
+        private void _VerifyResult(bool result)
 		{
 		    this._View.WriteLine(string.Format("Verify result {0}", result));
 		}

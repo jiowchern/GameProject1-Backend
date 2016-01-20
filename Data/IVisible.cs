@@ -11,6 +11,8 @@ namespace Regulus.Project.ItIsNotAGame1.Data
 
         string Name { get; }
 
+        float View { get; }
+
         event Action<EquipStatus[]> EquipEvent;
 
         //狀態 , 起始位置 , 速度 ,方向, 位移

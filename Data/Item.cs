@@ -19,7 +19,10 @@ namespace Regulus.Project.ItIsNotAGame1.Data
 
         [ProtoBuf.ProtoMember(5)]
         public int Count { get; set; }
-        
+
+        [ProtoBuf.ProtoMember(6)]
+        public float Life { get; set; }
+
 
         public Item Clone()
         {
@@ -58,6 +61,15 @@ namespace Regulus.Project.ItIsNotAGame1.Data
             if (i != null)
                 return i.EquipPart  ;
             return EQUIP_PART.NONE;
+        }
+
+        public bool UpdateLife(float last_delta_time)
+        {
+            if (Life > 0)
+            {
+                Life -= last_delta_time;
+            }
+            return Life > 0;
         }
     }
 }

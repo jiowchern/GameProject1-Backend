@@ -12,5 +12,7 @@
     public enum EFFECT_TYPE
     {
         ATTACK_ADD,
+        ILLUMINATE_ADD,
+        LIFE,
     }
 }

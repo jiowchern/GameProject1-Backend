@@ -21,7 +21,7 @@ namespace Regulus.Project.ItIsNotAGame1
 
 		public User(IAgent agent)
 		{
-		    this._Agent = agent;
+            this._Agent = agent;
 		    
 		    this._Updater = new Updater();
 		    this._User = new Remoting.User(this._Agent);
@@ -101,6 +101,6 @@ namespace Regulus.Project.ItIsNotAGame1
         INotifier<IEmotion> IUser.EmotionControllerProvider { get { return this._Agent.QueryNotifier<IEmotion>(); } }
         INotifier<IMakeSkill> IUser.MakeControllerProvider { get { return this._Agent.QueryNotifier<IMakeSkill>(); } }
 
-
+	    INotifier<IDevelopActor> IUser.DevelopActorProvider { get { return this._Agent.QueryNotifier<IDevelopActor>(); } }
     }
 }

@@ -10,6 +10,12 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:Regulus.Remoting.Ghost.Native.Agent.Create(Regulus.Remoting.IGhostProvider)">
+            <summary>
+                建立代理器
+            </summary>
+            <returns></returns>
+        </member>
         <member name="P:Regulus.Remoting.Ghost.Native.Agent.RequestPackages">
             <summary>
                 請求的封包

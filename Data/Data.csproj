@@ -69,6 +69,7 @@
     <Compile Include="IAccountStatus.cs" />
     <Compile Include="IBattleSkill.cs" />
     <Compile Include="ICastSkill.cs" />
+    <Compile Include="IDevelopActor.cs" />
     <Compile Include="IEmotion.cs" />
     <Compile Include="IEquipment.cs" />
     <Compile Include="IMakeSkill.cs" />
@@ -98,6 +99,14 @@
     <Compile Include="VisibleStatus.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy ..\..\..\Library\GhostProviderGenerator.exe
+copy ..\..\..\Library\buildgpi.ini
+GhostProviderGenerator.exe buildgpi.ini
+
+del GhostProviderGenerator.exe
+del buildgpi.ini</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
