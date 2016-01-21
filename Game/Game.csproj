@@ -62,10 +62,8 @@
     <Compile Include="Play\GpiTransponder.cs" />
     <Compile Include="Play\Wisdom.cs" />
     <Compile Include="Play\Race.cs" />
-    <Compile Include="Play\ActorSkill.cs" />
     <Compile Include="Play\ActorStatus.cs" />
     <Compile Include="Play\BattleCasterStatus.cs" />
-    <Compile Include="Play\BattleStatus.cs" />
     <Compile Include="Play\Cell.cs" />
     <Compile Include="Play\Center.cs" />
     <Compile Include="Play\ControlStatus.cs" />

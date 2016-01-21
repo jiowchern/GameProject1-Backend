@@ -14,7 +14,7 @@ using Vector2 = Regulus.CustomType.Vector2;
 
 namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
-    internal class BattleCasterStatus : IStage, ICastSkill
+    internal class BattleCasterStatus : IStage, ICastSkill, IBattleSkill
     {
         private readonly ISoulBinder _Binder;
 
@@ -25,13 +25,19 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         private readonly SkillCaster _Caster;
 
         public event Action<SkillCaster> NextEvent;
-        public event Action DoneEvent;
+        public event Action DisarmEvent;
+        public event Action BattleIdleEvent;
 
-        public HashSet<Guid> _Attacked;
+        private readonly HashSet<Guid> _Attacked;
 
         private readonly Regulus.Utility.TimeCounter _CastTimer;
 
         private float _CurrentCastTime;
+
+        private readonly MoveController _MoveController;
+
+        private Vector2 _DatumPosition;
+
         public BattleCasterStatus(ISoulBinder binder, Entity player, Map map, SkillCaster caster)
         {
             _CastTimer = new TimeCounter();
@@ -40,21 +46,47 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _Player = player;
             _Map = map;
             _Caster = caster;
+            _MoveController = new MoveController(player);
         }
 
         void IStage.Enter()
         {
             _Binder.Bind<ICastSkill>(this);
+            _Player.SetSkillVelocity(_Caster.Data.Direction , _Caster.Data.Speed );
             _Player.CastBegin(_Caster.Data.Id);
-            _CastTimer.Reset();
+
             
+
+
+            if (_Caster.IsControll())
+            {
+                _Binder.Bind<IMoveController>(_MoveController);
+            }
+
+            if (_Caster.CanDisarm())
+            {
+                _Binder.Bind<IBattleSkill>(this);
+            }
+
+            _CastTimer.Reset();
+
+            _DatumPosition = _Player.GetPosition();
         }
 
         void IStage.Leave()
         {
+            _Player.SetSkillVelocity(0,0);
+            if (_Caster.CanDisarm())
+            {
+                _Binder.Unbind<IBattleSkill>(this);
+            }
+            if (_Caster.IsControll())
+            {
+                _Binder.Unbind<IMoveController>(_MoveController);
+            }
             _Binder.Unbind<ICastSkill>(this);
             _Player.CastEnd(_Caster.Data.Id);
-           
+
         }
         #region UnityDebugCode
         //Unity Debug Code
@@ -105,7 +137,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             var poly = _Caster.FindDetermination(_CurrentCastTime, nowTime);
             _CurrentCastTime = nowTime;
 
-            
+
             bool guardImpact = false;
             _Player.SetBlock(false);
             if (poly != null)
@@ -116,14 +148,17 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                 }
 
                 var dir = -_Player.Direction * ((float)Math.PI / 180f);
-
-                var center = _Player.GetPosition();
+                var center = _DatumPosition;
+                if (_Caster.IsControll() )
+                {
+                    center = _Player.GetPosition();
+                }
+                
                 poly.Rotation(dir, new Vector2());
                 poly.Offset(center);
 
                 #region UnityDebugCode
-#if UNITY_EDITOR
-                UnityEngine.Debug.Log("_Player.Direction : " + _Player.Direction);
+#if UNITY_EDITOR                
                 _DrawAll( (from p in _Caster.Data.Lefts select Regulus.CustomType.Polygon.RotatePoint(p, new Vector2(), dir)).ToArray()
                     , (from p in _Caster.Data.Rights select Regulus.CustomType.Polygon.RotatePoint(p, new Vector2(), dir)).ToArray()
                     , new UnityEngine.Vector3(center.X , 0.5f , center.Y) , UnityEngine.Color.blue);
@@ -160,7 +195,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             if (guardImpact)
                 NextEvent(SkillCaster.Build(ACTOR_STATUS_TYPE.GUARD_IMPACT));
             else if (_Caster.IsDone(_CurrentCastTime))
-                DoneEvent();
+                BattleIdleEvent();
         }
 
         private void _AttachDamage(IIndividual target, bool smash)
@@ -185,8 +220,13 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             var caster = _Caster.FindNext(skill);
             if (caster != null)
             {
-                NextEvent(caster);                
+                NextEvent(caster);
             }
+        }
+
+        void IBattleSkill.Disarm()
+        {
+            DisarmEvent();
         }
     }
 }

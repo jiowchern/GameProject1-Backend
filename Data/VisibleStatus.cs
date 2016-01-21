@@ -15,5 +15,8 @@ namespace Regulus.Project.ItIsNotAGame1.Data
         public float Direction { get; set; }
         [ProtoBuf.ProtoMember(5)]
         public float Trun { get; set; }
+
+        [ProtoBuf.ProtoMember(6)]
+        public Vector2 SkillOffect { get; set; }
     }
 }

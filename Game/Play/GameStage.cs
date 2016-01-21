@@ -14,16 +14,16 @@ using Regulus.Utility;
 
 namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
-    internal class GameStage : IStage , IQuitable, 
-        IInventoryNotifier ,
-        IPlayerProperys , 
+    internal class GameStage : IStage, IQuitable,
+        IInventoryNotifier,
+        IPlayerProperys,
         IEquipmentNotifier
-    {        
+    {
         private readonly ISoulBinder _Binder;
 
         private readonly Map _Map;
 
-        
+
         private readonly TimeCounter _DeltaTimeCounter;
         private readonly TimeCounter _UpdateTimeCounter;
         private const float _UpdateTime = 1.0f / 30.0f;
@@ -33,10 +33,10 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         private readonly Entity _Player;
 
         private readonly Mover _Mover;
-        
+
         private readonly DifferenceNoticer<IIndividual> _DifferenceNoticer;
 
-        
+
 
         private bool _RequestAllItems;
 
@@ -59,10 +59,10 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _Mover = new Mover(this._Player);
             _ControlStatus = new ControlStatus(binder, _Player, _Mover, _Map);
         }
-        public GameStage(ISoulBinder binder,  Map map , Entity entity , Wisdom wisdom) :this(binder , map , entity)
+        public GameStage(ISoulBinder binder, Map map, Entity entity, Wisdom wisdom) : this(binder, map, entity)
         {
             _Wisdom = wisdom;
-            
+
 
         }
         void IStage.Leave()
@@ -75,26 +75,26 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _Binder.Unbind<IInventoryNotifier>(this);
             _Binder.Unbind<IPlayerProperys>(this);
             _Binder.Unbind<IEquipmentNotifier>(this);
-            _Map.Left(_Player);            
-        }        
+            _Map.Left(_Player);
+        }
 
         void IStage.Enter()
         {
             this._DifferenceNoticer.JoinEvent += this._BroadcastJoin;
             this._DifferenceNoticer.LeftEvent += this._BroadcastLeft;
 
-            this._Map.JoinChallenger(this._Player);            
+            this._Map.JoinChallenger(this._Player);
             this._Binder.Bind<IPlayerProperys>(this);
             this._Binder.Bind<IInventoryNotifier>(this);
             this._Binder.Bind<IEquipmentNotifier>(this);
             _Binder.Bind<IDevelopActor>(_Player);
             _Updater.Add(_ControlStatus);
 
-            if(_Wisdom != null)
+            if (_Wisdom != null)
                 _Updater.Add(_Wisdom);
         }
 
-        
+
 
         void IStage.Update()
         {
@@ -103,7 +103,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             var deltaTime = this._GetDeltaTime();
             _Updater.Working();
 
-            var lastDeltaTime = deltaTime ;
+            var lastDeltaTime = deltaTime;
             _Move(lastDeltaTime);
             _Broadcast(_Map.Find(_Player.GetView()));
             _Player.Equipment.UpdateEffect(lastDeltaTime);
@@ -111,9 +111,9 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _ResponseItems(deltaTime);
 
         }
-        
 
-        
+
+
 
         private void _ResponseItems(float deltaTime)
         {
@@ -132,11 +132,12 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                 _UpdateAllItemTime -= deltaTime;
             }
         }
-        
+
 
         private void _Move(float deltaTime)
         {
             _Player.ClearCollisionTargets();
+            _Player.TrunDirection(deltaTime);
             var velocity = this._Player.GetVelocity(deltaTime);
             var orbit = this._Mover.GetOrbit(velocity);
             var entitys = this._Map.Find(orbit);
@@ -144,7 +145,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             if (hitthetargets.Any())
             {
                 _Player.SetCollisionTargets(hitthetargets);
-                this._Player.Stop();
+                this._Player.ClearOffset();
             }
         }
 
@@ -175,16 +176,16 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             this._DeltaTimeCounter.Reset();
             return second;
         }
-        
 
-        
-        
+
+
+
 
         public event Action DoneEvent;
 
         Guid IPlayerProperys.Id { get { return this._Player.Id; } }
 
-       
+
 
         public void Quit()
         {
@@ -206,7 +207,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         void IEquipmentNotifier.Unequip(Guid id)
         {
             var item = _Player.Equipment.Unequip(id);
-            if(item.IsValid())
+            if (item.IsValid())
             {
                 _Player.Bag.Add(item);
             }
@@ -225,11 +226,11 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         void IInventoryNotifier.Equip(Guid id)
         {
             var item = _Player.Bag.Find(id);
-            if(item.IsValid() && item.IsEquipable())
+            if (item.IsValid() && item.IsEquipable())
             {
-                
+
                 var equipItem = _Player.Equipment.Unequip(item.GetEquipPart());
-                if(equipItem.IsValid())
+                if (equipItem.IsValid())
                 {
                     _Player.Bag.Add(equipItem);
                 }
@@ -252,14 +253,14 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             remove { _Player.Bag.AddEvent -= value; }
         }
 
-        
+
         event Action<Guid> IEquipmentNotifier.RemoveEvent
         {
             add { _Player.Equipment.RemoveEvent += value; }
             remove { _Player.Equipment.RemoveEvent -= value; }
         }
 
-        
+
         event Action<Item> IEquipmentNotifier.AddEvent
         {
             add { _Player.Equipment.AddEvent += value; }
@@ -272,6 +273,6 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             remove { _Player.Bag.RemoveEvent -= value; }
         }
 
-        
+
     }
 }

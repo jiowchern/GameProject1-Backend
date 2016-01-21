@@ -14,7 +14,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         public event Action<Guid> ExploreEvent;
 
-        public event Action BattleEvent;
+        public event Action<SkillCaster> BattleEvent;
         public event Action MakeEvent;
 
         private readonly MoveController _MoveController;
@@ -59,7 +59,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         public void Battle()
         {
-            BattleEvent();
+            BattleEvent(_Player.GetBattleCaster());
         }
 
         void INormalSkill.Make()

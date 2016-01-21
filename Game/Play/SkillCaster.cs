@@ -15,11 +15,10 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private readonly Determination _Determination;
 
-        private float _Interval;
+        
 
         public SkillCaster(SkillData data, Determination determination)
-        {
-            _Interval = data.Total / data.Roots.Length;
+        {        
             Data = data;
             _Determination = determination;
             _Timer = new TimeCounter();            
@@ -61,6 +60,11 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             return Data.Punch;
         }
 
+        public bool IsControll()
+        {
+            return Data.Controll;
+        }
+
         public static SkillCaster Build(ACTOR_STATUS_TYPE type)
         {
             var skill = Resource.Instance.FindSkill(type);
@@ -75,6 +79,11 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                 return new SkillCaster(skillPrototype, new Determination(skillPrototype));
             }
             return null;
+        }
+
+        public bool CanDisarm()
+        {
+            return Data.Disarm;
         }
     }
 }

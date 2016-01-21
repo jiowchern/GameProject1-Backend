@@ -29,6 +29,14 @@ namespace Regulus.Project.ItIsNotAGame1.Data
 
         public bool Punch;
 
+        public bool Controll;
+
+        public bool Disarm;
+
+        public float Direction;
+
+        public float Speed;
+
         public SkillData()
         {
             Lefts = new Vector2[0];

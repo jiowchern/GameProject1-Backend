@@ -34,14 +34,14 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         void IBootable.Launch()
         {
             _Binder.Bind<IEmotion>(this);
-            ToDone();
+            _ToDone();
         }
 
-        private void ToDone()
+        private void _ToDone()
         {            
             var status = new NormalStatus(_Binder, _Player);
             status.ExploreEvent += _ToExplore;
-            status.BattleEvent += _ToBattle;
+            status.BattleEvent += _ToCast;
             status.MakeEvent += _ToMake;
             _SetStatus(status);
         }
@@ -49,23 +49,18 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         private void _ToMake()
         {
             var status = new MakeStatus(_Binder, _Player);
-            status.DoneEvent += ToDone;
+            status.DoneEvent += _ToDone;
             _SetStatus(status);
         }
 
-        private void _ToBattle()
-        {
-            var status = new BattleStatus(_Binder, _Player, _Map);
-            status.NormalEvent += ToDone;
-            status.CasterEvent += _ToCast;
-            _SetStatus(status);
-        }
+       
 
         private void _ToCast(SkillCaster caster)
         {
             var status = new BattleCasterStatus(_Binder, _Player, _Map , caster);
             status.NextEvent += _ToCast;
-            status.DoneEvent += _ToBattle;
+            status.BattleIdleEvent += _ToBattle;
+            status.DisarmEvent += _ToDone;
             _SetStatus(status);
         }
 
@@ -77,7 +72,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         private void _ToExplore(Guid obj)
         {
             var status = new ExploreStatus(_Binder, _Player , _Map , obj);
-            status.DoneEvent += ToDone;
+            status.DoneEvent += _ToDone;
             _SetStatus(status);
         }
 
@@ -109,8 +104,16 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             var skill = Resource.Instance.FindSkill(ACTOR_STATUS_TYPE.KNOCKOUT1);
             var caster = new SkillCaster(skill, new Determination(skill));
             var stage = new BattleCasterStatus(_Binder, _Player, _Map, caster);
-            stage.DoneEvent += _ToBattle;
+            stage.BattleIdleEvent += _ToBattle;
             _SetStatus(stage);
+        }
+
+        private void _ToBattle()
+        {
+            var status = new BattleCasterStatus(_Binder, _Player, _Map, _Player.GetBattleCaster());
+            status.NextEvent += _ToCast;
+            status.DisarmEvent += _ToDone;
+            _SetStatus(status);
         }
 
         private void _ToDamage()
@@ -118,7 +121,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             var skill = Resource.Instance.FindSkill(ACTOR_STATUS_TYPE.DAMAGE1);
             var caster = new SkillCaster(skill , new Determination(skill));
             var stage = new BattleCasterStatus(_Binder , _Player , _Map , caster);
-            stage.DoneEvent += _ToBattle;
+            stage.BattleIdleEvent += _ToBattle;
             _SetStatus(stage);
         }
 

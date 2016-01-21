@@ -41,10 +41,14 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private Concierge _Concierge;
 
+        private VisibleStatus _PrevVisibleStatus;
+
         public Entity(ENTITY type, string name, Polygon mesh, Concierge concierge)
             : this(type, name, mesh)
         {
             _Concierge = concierge;
+
+
         }
 
         public Entity(ENTITY type, Polygon mesh) : this(mesh)
@@ -74,6 +78,12 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             this._Mesh = mesh;
             this._Bound = this._BuildBound(this._Mesh);
             _CollisionTargets = new IIndividual[0];
+
+
+            _PrevVisibleStatus = new VisibleStatus();
+            _PrevVisibleStatus.StartPosition = new Vector2();
+            _PrevVisibleStatus.SkillOffect = new Vector2();
+            _SkillOffsetVector = new Vector2();
         }
 
         private void _BroadcastEquipEvent(Guid obj)
@@ -95,6 +105,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private void _BroadcastEquipEvent(Item obj)
         {
+
             _BroadcastEquipEvent();
         }
 
@@ -111,7 +122,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             get { return _Name; }
         }
 
-        float IVisible.View { get {return _View; } }
+        float IVisible.View { get { return _View; } }
 
         private event Action<EquipStatus[]> _EquipEvent;
 
@@ -139,7 +150,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                 StartPosition = _Mesh.Center,
                 Speed = _Speed,
                 Direction = Direction,
-                Trun = _Trun
+                Trun = _Trun,
+                SkillOffect = _SkillOffsetVector
             };
 
             this._StatusEvent.Invoke(status);
@@ -229,6 +241,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private int _DamageCount;
 
+        private Vector2 _SkillOffsetVector;
+
         void IIndividual.AttachDamage(bool smash)
         {
             if (smash)
@@ -279,7 +293,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             Direction %= 360;
         }
 
-        private VisibleStatus _PrevVisibleStatus;
+
         private void _InvokeStatusEvent()
         {
             if (_StatusEvent != null)
@@ -290,12 +304,14 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                     StartPosition = _Mesh.Center,
                     Speed = _Speed,
                     Direction = Direction,
-                    Trun = _Trun
+                    Trun = _Trun,
+                    SkillOffect = _SkillOffsetVector
                 };
                 if (status.Direction != _PrevVisibleStatus.Direction ||
                     status.Speed != _PrevVisibleStatus.Speed ||
                     status.Trun != _PrevVisibleStatus.Trun ||
-                    status.Status != _PrevVisibleStatus.Status
+                    status.Status != _PrevVisibleStatus.Status ||
+                    status.SkillOffect != _PrevVisibleStatus.SkillOffect
                     )
                 {
                     this._StatusEvent.Invoke(status);
@@ -307,9 +323,19 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         public Vector2 GetVelocity(float delta_time)
         {
-            _SetDirection(_Trun * delta_time);
-            return this._ToVector(this.Direction) * delta_time * this._Speed;
+            var skill = _SkillOffsetVector * delta_time;
+            return this._ToVector(this.Direction) * delta_time * this._Speed + skill;
         }
+
+        public void TrunDirection(float delta_time)
+        {
+            _SetDirection(_Trun * delta_time);
+        }
+
+
+
+
+
 
         private Vector2 _ToVector(float angle)
         {
@@ -350,23 +376,6 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _Status = ACTOR_STATUS_TYPE.NORMAL_EXPLORE;
             _InvokeStatusEvent();
         }
-
-        public void Battle()
-        {
-
-            var item = this.Equipment.Find(EQUIP_PART.RIGHT_HAND);
-            if (item.HasValue )
-            {
-                _Status = _GetWeaponIdle(item.Value.GetPrototype().Features);
-            }
-            else
-            {
-                _Status = ACTOR_STATUS_TYPE.MELEE_IDLE;
-            }
-
-            Stop();
-        }
-
         private ACTOR_STATUS_TYPE _GetWeaponIdle(ITEM_FEATURES features)
         {
             switch (features)
@@ -376,46 +385,12 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                 case ITEM_FEATURES.WEAPON_TWOHANDSWORD:
                     return ACTOR_STATUS_TYPE.TWO_HAND_SWORD_IDLE;
                 default:
-                    return ACTOR_STATUS_TYPE.BATTLE_AXE_IDLE;
+                    return ACTOR_STATUS_TYPE.MELEE_IDLE;
             }
         }
 
-        public ActorSkill FindSkill()
-        {
-            var item = this.Equipment.Find(EQUIP_PART.RIGHT_HAND);
-            if (item.HasValue)
-            {
-                return new ActorSkill(_GetSkills(item.Value.GetPrototype().Features, _Datas));
-            }
-            return new ActorSkill(_GetSkills(ITEM_FEATURES.MATERIAL, _Datas));
-        }
-
-        private SkillData[] _GetSkills(ITEM_FEATURES features, SkillData[] datas)
-        {
-            var baseSkills = new[]
-            {
-                ACTOR_STATUS_TYPE.MELEE_ATTACK1,
-            };
-            if (features == ITEM_FEATURES.WEAPON_AXE)
-            {
-                baseSkills = new[]
-                {
-                    ACTOR_STATUS_TYPE.BATTLE_AXE_ATTACK1,
-                    ACTOR_STATUS_TYPE.BATTLE_AXE_ATTACK2,
-                    ACTOR_STATUS_TYPE.BATTLE_AXE_BLOCK
-                };
-            }
-            if (features == ITEM_FEATURES.WEAPON_TWOHANDSWORD)
-            {
-                baseSkills = new[]
-                {
-                    ACTOR_STATUS_TYPE.TWO_HAND_SWORD_ATTACK1
-                };
-            }
 
 
-            return (from d in datas where baseSkills.Any(bs => bs == d.Id) select d).ToArray();
-        }
 
         public void CastBegin(ACTOR_STATUS_TYPE id)
         {
@@ -527,6 +502,33 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         void IDevelopActor.SetBaseView(float range)
         {
             _BaseView = range;
+        }
+
+        public SkillCaster GetBattleCaster()
+        {
+
+            ACTOR_STATUS_TYPE status = ACTOR_STATUS_TYPE.MELEE_IDLE;
+            var item = this.Equipment.Find(EQUIP_PART.RIGHT_HAND);
+            if (item.HasValue)
+            {
+                status = _GetWeaponIdle(item.Value.GetPrototype().Features);
+            }
+
+            var data = _Datas.First((s) => s.Id == status);
+            return new SkillCaster(data, new Determination(data.Lefts, data.Rights, data.Total, data.Begin, data.End));
+        }
+
+        public void SetSkillVelocity(float direction, float speed)
+        {
+            var dir = ((Direction + direction) + 360.0f) % 360.0f;
+            _SkillOffsetVector = _ToVector(dir) * speed;
+        }
+
+        public void ClearOffset()
+        {
+            this._Speed = 0.0f;
+            _SkillOffsetVector = new Vector2();
+            _InvokeStatusEvent();
         }
     }
 }
