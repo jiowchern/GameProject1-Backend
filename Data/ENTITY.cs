@@ -17,5 +17,8 @@ namespace Regulus.Project.ItIsNotAGame1.Data
         WALL_WESTERN_AISLE,
         WALL_NORTH_AISLE,
         ENTRANCE,
+        ACTOR3,
+        ACTOR4,
+        ACTOR5,
     }
 }

@@ -23,19 +23,8 @@ namespace Regulus.Project.ItIsNotAGame1.Data
 
         public ACTOR_STATUS_TYPE[] Nexts;
 
-        public bool Block;
-
-        public bool Smash;
-
-        public bool Punch;
-
-        public bool Controll;
-
-        public bool Disarm;
-
-        public float Direction;
-
-        public float Speed;
+        public Effect[] Effects;
+        
 
         public SkillData()
         {
@@ -43,6 +32,7 @@ namespace Regulus.Project.ItIsNotAGame1.Data
             Rights = new Vector2[0];
             Nexts = new ACTOR_STATUS_TYPE[0];
             Roots = new Translate[0];
+            Effects = new Effect[0];
         }
 
         

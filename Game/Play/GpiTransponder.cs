@@ -6,7 +6,7 @@ using Regulus.Remoting;
 
 namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
-    internal class GpiTransponder : ISoulBinder
+    public class GpiTransponder : ISoulBinder
     {
 
         
@@ -77,7 +77,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         void Remove(object soul);
     }
-    internal class TGpiProvider<T> : IGpiProvider 
+    public class TGpiProvider<T> : IGpiProvider 
     {
         private List<T> _Gpis;
 

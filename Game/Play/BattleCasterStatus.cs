@@ -52,16 +52,17 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         void IStage.Enter()
         {
             _Binder.Bind<ICastSkill>(this);
-            _Player.SetSkillVelocity(_Caster.Data.Direction , _Caster.Data.Speed );
+            
+            _Player.SetSkillVelocity(_Caster.GetShiftDirection()  , _Caster.GetShiftSpeed() );
             _Player.CastBegin(_Caster.Data.Id);
 
-            
+            _MoveController.Backward = _Caster.GetBackward();
+            _MoveController.Forward = _Caster.GetForward();
+            _MoveController.RunForward = _Caster.GetRunForward();
+            _MoveController.TurnLeft = _Caster.GetTurnLeft();
+            _MoveController.TurnRight = _Caster.GetTurnRight();
 
-
-            if (_Caster.IsControll())
-            {
-                _Binder.Bind<IMoveController>(_MoveController);
-            }
+            _Binder.Bind<IMoveController>(_MoveController);            
 
             if (_Caster.CanDisarm())
             {
@@ -80,10 +81,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             {
                 _Binder.Unbind<IBattleSkill>(this);
             }
-            if (_Caster.IsControll())
-            {
-                _Binder.Unbind<IMoveController>(_MoveController);
-            }
+            _Binder.Unbind<IMoveController>(_MoveController);
+
             _Binder.Unbind<ICastSkill>(this);
             _Player.CastEnd(_Caster.Data.Id);
 

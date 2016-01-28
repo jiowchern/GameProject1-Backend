@@ -9,5 +9,6 @@ namespace Regulus.Project.ItIsNotAGame1.Data
     {
 
         void SetBaseView(float range);
+        void SetSpeed(float speed);
     }
 }

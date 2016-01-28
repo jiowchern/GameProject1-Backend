@@ -1,5 +1,8 @@
-﻿namespace Regulus.Project.ItIsNotAGame1.Data
+﻿using System;
+
+namespace Regulus.Project.ItIsNotAGame1.Data
 {
+    [Serializable]
     [ProtoBuf.ProtoContract]
     public struct Effect
     {
@@ -11,8 +14,19 @@
 
     public enum EFFECT_TYPE
     {
-        ATTACK_ADD,
-        ILLUMINATE_ADD,
-        LIFE,
+        ATTACK_ADD, 
+        ILLUMINATE_ADD, 
+        LIFE, 
+        BLOCK, 
+        SMASH, 
+        PUNCH,
+        SHIFT_DIRECTION, 
+        SHIFT_SPEED, 
+        MOVE_FORWARD,
+        MOVE_BACKWARD,
+        MOVE_TURNLEFT,
+        MOVE_TURNRIGHT,
+        MOVE_RUNFORWARD,
+        DISARM,
     }
 }

@@ -59,8 +59,9 @@
     <Compile Include="DummyFrature.cs" />
     <Compile Include="Play\Aboriginal.cs" />
     <Compile Include="Play\Behavior\Idle.cs" />
+    <Compile Include="Play\GoblinWisdom.cs" />
     <Compile Include="Play\GpiTransponder.cs" />
-    <Compile Include="Play\Wisdom.cs" />
+    <Compile Include="Play\UnityChanWisdom.cs" />
     <Compile Include="Play\Race.cs" />
     <Compile Include="Play\ActorStatus.cs" />
     <Compile Include="Play\BattleCasterStatus.cs" />
@@ -97,6 +98,7 @@
     <Compile Include="Storage\User.cs" />
     <Compile Include="Verify.cs" />
     <Compile Include="VerifyStage.cs" />
+    <Compile Include="Wisdom.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Data\Data.csproj">

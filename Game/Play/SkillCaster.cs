@@ -45,25 +45,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             return new Vector2();
         }
 
-        public bool IsBlock()
-        {
-            return Data.Block;
-        }
-
-        public bool IsSmash()
-        {
-            return Data.Smash;
-        }
-
-        public bool IsPunch()
-        {
-            return Data.Punch;
-        }
-
-        public bool IsControll()
-        {
-            return Data.Controll;
-        }
+        
 
         public static SkillCaster Build(ACTOR_STATUS_TYPE type)
         {
@@ -83,7 +65,68 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         public bool CanDisarm()
         {
-            return Data.Disarm;
+            return (from e in Data.Effects where e.Type == EFFECT_TYPE.DISARM select e.Value).Any();
+        }
+
+        public float GetShiftDirection()
+        {
+            return (from e in Data.Effects where e.Type == EFFECT_TYPE.SHIFT_DIRECTION select e.Value).Sum();
+        }
+
+        public float GetShiftSpeed()
+        {
+            return (from e in Data.Effects where e.Type == EFFECT_TYPE.SHIFT_SPEED select e.Value).Sum();
+        }
+
+        public float GetBackward()
+        {
+            return (from e in Data.Effects where e.Type == EFFECT_TYPE.MOVE_BACKWARD select e.Value).Sum();
+        }
+
+        public float GetForward()
+        {
+            return (from e in Data.Effects where e.Type == EFFECT_TYPE.MOVE_FORWARD select e.Value).Sum();
+        }
+
+        public float GetRunForward()
+        {
+            return (from e in Data.Effects where e.Type == EFFECT_TYPE.MOVE_RUNFORWARD select e.Value).Sum();
+        }
+        public float GetTurnLeft()
+        {
+            return (from e in Data.Effects where e.Type == EFFECT_TYPE.MOVE_TURNLEFT select e.Value).Sum();
+        }
+
+        public float GetTurnRight()
+        {
+            return (from e in Data.Effects where e.Type == EFFECT_TYPE.MOVE_TURNRIGHT select e.Value).Sum();
+        }
+
+        public bool IsBlock()
+        {
+            return (from e in Data.Effects where e.Type == EFFECT_TYPE.BLOCK select e.Value).Any();
+        }
+
+        public bool IsControll()
+        {
+            return (from e in Data.Effects
+                    where 
+                    e.Type == EFFECT_TYPE.MOVE_TURNRIGHT ||
+                    e.Type == EFFECT_TYPE.MOVE_BACKWARD ||
+                    e.Type == EFFECT_TYPE.MOVE_RUNFORWARD ||
+                    e.Type == EFFECT_TYPE.MOVE_TURNLEFT ||
+                    e.Type == EFFECT_TYPE.MOVE_FORWARD 
+                    select e.Value).Sum() > 0.0f;
+        }
+
+        public bool IsSmash()
+        {
+            return (from e in Data.Effects where e.Type == EFFECT_TYPE.SMASH select e.Value).Any();
+        }
+
+        public bool IsPunch()
+        {
+            return (from e in Data.Effects where e.Type == EFFECT_TYPE.PUNCH select e.Value).Any();
         }
     }
 }

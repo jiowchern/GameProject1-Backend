@@ -5,22 +5,31 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
     internal class MoveController : IMoveController
     {
         private readonly Entity _Player;
-        
 
+        public float Backward;
+        public float Forward;
+        public float RunForward;
+        public float TurnLeft;
+        public float TurnRight;
         public MoveController(Entity player)
         {
             _Player = player;
-            
+            Backward = -1;
+            Forward = 1;
+            RunForward = 3;
+
+            TurnLeft = 300.0f;
+            TurnRight = 300.0f;
         }
 
         void IMoveController.Forward()
         {
-            _Player.Move(0, false);
+            _Player.Move(0, Forward);
         }
 
         void IMoveController.Backward()
         {
-            _Player.Move(180, false);
+            _Player.Back(Backward);
         }
 
         void IMoveController.StopMove()
@@ -30,12 +39,12 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         void IMoveController.TrunLeft()
         {
-            _Player.Trun(-300);
+            _Player.Trun(-TurnLeft);
         }
 
         void IMoveController.TrunRight()
         {
-            _Player.Trun(300);
+            _Player.Trun(TurnRight);
         }
 
         void IMoveController.StopTrun()
@@ -45,7 +54,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         void IMoveController.RunForward()
         {
-            _Player.Move(0, true);
+            _Player.Move(0, RunForward);
         }
     }
 }

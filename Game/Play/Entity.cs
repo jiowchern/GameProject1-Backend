@@ -84,6 +84,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _PrevVisibleStatus.StartPosition = new Vector2();
             _PrevVisibleStatus.SkillOffect = new Vector2();
             _SkillOffsetVector = new Vector2();
+
+            _BaseSpeed = 1.0f;
         }
 
         private void _BroadcastEquipEvent(Guid obj)
@@ -243,6 +245,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private Vector2 _SkillOffsetVector;
 
+        private float _BaseSpeed;
+
         void IIndividual.AttachDamage(bool smash)
         {
             if (smash)
@@ -267,35 +271,49 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         public void Stop()
         {
             this._Speed = 0.0f;
-            this._SetMove(0);
-        }
-        internal void Trun(int trun)
-        {
-            this._Trun = trun;
             _InvokeStatusEvent();
         }
-        public void Move(float angle, bool run)
+        internal void Trun(float trun)
         {
-            this._Speed = 1.0f + (run ? 3.0f : 0.0f);
-            this._SetMove(angle);
+            if (trun != _Trun)
+            {
+                this._Trun = trun;
+                _InvokeStatusEvent();
+            }
+
         }
 
-        private void _SetMove(float angle)
-        {
-            _SetDirection(angle);
-            _InvokeStatusEvent();
+        public void Back(float speed)
+        {            
+            if (speed != _Speed)
+            {
+                this._Speed = speed * _BaseSpeed;
+                _InvokeStatusEvent();
+            }
         }
 
-        private void _SetDirection(float angle)
+        public void Move(float angle, float speed)
+        {            
+            if (speed != _Speed)
+            {
+                this._Speed = speed * _BaseSpeed;
+                _AddDirection(angle);
+                _InvokeStatusEvent();
+            }
+        }
+
+        private void _AddDirection(float angle)
         {
             Direction = (this.Direction + angle) % 360;
-            Direction += 360;
-            Direction %= 360;
+            Direction += 360; 
+            Direction %= 360; 
         }
-
 
         private void _InvokeStatusEvent()
         {
+#if UNITY_EDITOR
+            UnityEngine.Debug.Log("_InvokeStatusEvent speed " + _Speed);
+#endif
             if (_StatusEvent != null)
             {
                 var status = new VisibleStatus()
@@ -307,16 +325,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                     Trun = _Trun,
                     SkillOffect = _SkillOffsetVector
                 };
-                if (status.Direction != _PrevVisibleStatus.Direction ||
-                    status.Speed != _PrevVisibleStatus.Speed ||
-                    status.Trun != _PrevVisibleStatus.Trun ||
-                    status.Status != _PrevVisibleStatus.Status ||
-                    status.SkillOffect != _PrevVisibleStatus.SkillOffect
-                    )
-                {
-                    this._StatusEvent.Invoke(status);
-                    _PrevVisibleStatus = status;
-                }
+                this._StatusEvent.Invoke(status);
+                _PrevVisibleStatus = status;
 
             }
         }
@@ -329,13 +339,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         public void TrunDirection(float delta_time)
         {
-            _SetDirection(_Trun * delta_time);
+            _AddDirection(_Trun * delta_time);
         }
-
-
-
-
-
 
         private Vector2 _ToVector(float angle)
         {
@@ -445,7 +450,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         public void SetRotation(float next_float)
         {
-            _SetDirection(next_float);
+            _AddDirection(next_float);
             _Mesh.RotationByDegree(next_float);
         }
 
@@ -485,7 +490,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         public void SetDirection(float dir)
         {
-            _SetDirection(dir);
+            _AddDirection(dir);
             _InvokeStatusEvent();
         }
 
@@ -502,6 +507,11 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         void IDevelopActor.SetBaseView(float range)
         {
             _BaseView = range;
+        }
+
+        void IDevelopActor.SetSpeed(float speed)
+        {
+            _BaseSpeed = speed;
         }
 
         public SkillCaster GetBattleCaster()
@@ -530,5 +540,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _SkillOffsetVector = new Vector2();
             _InvokeStatusEvent();
         }
+
+
     }
 }

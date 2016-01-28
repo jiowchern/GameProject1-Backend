@@ -2,6 +2,7 @@
 using System.Linq;
 
 using Regulus.Framework;
+using Regulus.Project.ItIsNotAGame1.Data;
 using Regulus.Utility;
 
 namespace Regulus.Project.ItIsNotAGame1.Game.Play
@@ -50,13 +51,36 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _Aboriginals = new List<Aboriginal>();
             this._Zone = zone;
             _Updater = new TimesharingUpdater(1.0f / 60.0f);
-            for (int i = 0; i < 500; i++)
-            {
 
-                _Updater.Add(new Aboriginal(_Zone));
+            for (int i = 0; i < 50; i++)
+            {
+                var entiry = EntityProvider.Create(ENTITY.ACTOR2);
+                var wisdom = new UnityChanWisdom(entiry);
+                _Updater.Add(new Aboriginal(_Zone , entiry , wisdom));
             }
-            
-            
+
+            for (int i = 0; i < 50; i++)
+            {
+                var entiry = EntityProvider.Create(ENTITY.ACTOR3);
+                var wisdom = new GoblinWisdom(entiry);
+                _Updater.Add(new Aboriginal(_Zone, entiry, wisdom));
+            }
+
+            for (int i = 0; i < 50; i++)
+            {
+                var entiry = EntityProvider.Create(ENTITY.ACTOR4);
+                var wisdom = new GoblinWisdom(entiry);
+                _Updater.Add(new Aboriginal(_Zone, entiry, wisdom));
+            }
+
+            for (int i = 0; i < 50; i++)
+            {
+                var entiry = EntityProvider.Create(ENTITY.ACTOR5);
+                var wisdom = new GoblinWisdom(entiry);
+                _Updater.Add(new Aboriginal(_Zone, entiry, wisdom));
+            }
+
+
         }
 
         void IBootable.Launch()

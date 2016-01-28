@@ -12,15 +12,10 @@ using Regulus.Project.ItIsNotAGame1.Data;
 namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
 
-    public class Wisdom : IUpdatable
+    public class UnityChanWisdom : Wisdom
     {
         private readonly Entity _Entity;
-
-        private readonly GpiTransponder _Transponder;
-
-        private Regulus.Utility.TimeCounter _DeltaTimeCounter;
-        private Regulus.Utility.TimeCounter _UpdateTimeCounter;
-        IBehaviourTreeNode _Tree;
+        
 
         private IVisible _Visible;
 
@@ -32,47 +27,11 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private IEmotion _Emotion;
 
-        public Wisdom(Entity entity)
-        {
+        public UnityChanWisdom(Entity entity) 
+        {            
             _Entity = entity;
-            _Visible = entity;
-            _DeltaTimeCounter = new TimeCounter();
-            _UpdateTimeCounter = new TimeCounter();
-            _Transponder = new GpiTransponder();
-            var builder = new BehaviourTreeBuilder();
-
-            _Tree = builder.Selector("root")                        
-                        .Sequence("Idle Walk")
-                            .Condition("speed == 0", (td) => _Entity.Speed == 0.0f)
-                                .Sequence("")                                    
-                                    .Condition("speed == 0", (td) => _Random() > 0.5f)
-                                        .Do("Run", _Run)
-                                    .Condition("speed == 0", (td) => _Random() > 0.5f)
-                                        .Do("Move", _Move)
-                                    .Condition("speed == 0", (td) => _Random() > 0.5f)
-                                        .Do("", _Disarm )
-                                .End()                            
-                        .End()
-
-                        .Sequence(" ab c ")
-                            .Do("RandomTrun", _RandomTrun)                            
-                            .Condition("is hurt ", (td) => _Hurt)
-                                    .Sequence("Talk")
-                                        .Do("", _Talk)
-                                        .Do("clear Hurt",
-                                            (td) =>
-                                            {
-                                                _Hurt = false;
-                                                return BehaviourTreeStatus.Success;
-                                            })
-                                    .End()
-                        .End()
-
-                        .Sequence("Battle To Normal")
-                            .Condition("if in battle", (td) => _IsInBattle())
-                                .Do("Run", _Run)
-                        .End()
-                    .End().Build();
+            _Visible = entity;             
+                        
         }
 
         private float _RabbitCatHappyBirthdayTime;
@@ -195,36 +154,79 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             return BehaviourTreeStatus.Success;
         }
 
-        public ISoulBinder GetSoulBinder()
+        
+        protected override IBehaviourTreeNode _Launch()
         {
-            return _Transponder;
-        }
-        void IBootable.Shutdown()
-        {
-            _Transponder.Query<IEmotion>().Unsupply -= _ClearEmotion;
-            _Transponder.Query<IEmotion>().Supply -= _GetEmotion;
 
-            _Transponder.Query<IMoveController>().Unsupply -= _ClearMoveController;
-            _Transponder.Query<IMoveController>().Supply -= _GetMoveController;
+            var transponder = Transponder;
 
-            _Transponder.Query<IBattleSkill>().Supply -= _GetBattle;
-            _Transponder.Query<IBattleSkill>().Unsupply -= _ClearBattle;
-        }
+            transponder.Query<IEmotion>().Unsupply += _ClearEmotion;
+            transponder.Query<IEmotion>().Supply += _GetEmotion;
+            transponder.Query<IMoveController>().Unsupply += _ClearMoveController;
+            transponder.Query<IMoveController>().Supply += _GetMoveController;
+            transponder.Query<IBattleSkill>().Supply += _GetBattle;
+            transponder.Query<IBattleSkill>().Unsupply += _ClearBattle;
 
 
-        void IBootable.Launch()
-        {
-            _Transponder.Query<IEmotion>().Unsupply += _ClearEmotion;
-            _Transponder.Query<IEmotion>().Supply += _GetEmotion;
-            _Transponder.Query<IMoveController>().Unsupply += _ClearMoveController;
-            _Transponder.Query<IMoveController>().Supply += _GetMoveController;
-            _Transponder.Query<IBattleSkill>().Supply += _GetBattle;
-            _Transponder.Query<IBattleSkill>().Unsupply += _ClearBattle;
-            _DeltaTimeCounter.Reset();
-
-            
             _Visible.StatusEvent += _GetStatus;
+
+            var builder = new BehaviourTreeBuilder();
+
+            return builder.Selector("root")
+                        .Sequence("Idle Walk")
+                            .Condition("speed == 0", (td) => _Entity.Speed == 0.0f)
+                                .Sequence("")
+                                    .Condition("speed == 0", (td) => _Random() > 0.5f)
+                                        .Do("Run", _Run)
+                                    .Condition("speed == 0", (td) => _Random() > 0.5f)
+                                        .Do("Move", _Move)
+                                    .Condition("speed == 0", (td) => _Random() > 0.5f)
+                                        .Do("", _Disarm)
+                                .End()
+                        .End()
+
+                        .Sequence(" ab c ")
+                            .Do("RandomTrun", _RandomTrun)
+                            .Condition("is hurt ", (td) => _Hurt)
+                                    .Sequence("Talk")
+                                        .Do("", _Talk)
+                                        .Do("clear Hurt",
+                                            (td) =>
+                                            {
+                                                _Hurt = false;
+                                                return BehaviourTreeStatus.Success;
+                                            })
+                                    .End()
+                        .End()
+
+                        .Sequence("Battle To Normal")
+                            .Condition("if in battle", (td) => _IsInBattle())
+                                .Do("Run", _Run)
+                        .End()
+                    .End().Build();
+
+
         }
+
+        protected override void _Update(float delta)
+        {
+            
+        }
+
+        protected override void _Shutdown()
+        {
+            var transponder = Transponder;
+            transponder.Query<IEmotion>().Unsupply -= _ClearEmotion;
+            transponder.Query<IEmotion>().Supply -= _GetEmotion;
+
+            transponder.Query<IMoveController>().Unsupply -= _ClearMoveController;
+            transponder.Query<IMoveController>().Supply -= _GetMoveController;
+
+            transponder.Query<IBattleSkill>().Supply -= _GetBattle;
+            transponder.Query<IBattleSkill>().Unsupply -= _ClearBattle;
+        }
+
+        
 
         private void _ClearEmotion(IEmotion obj)
         {
@@ -261,16 +263,6 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _MoveController = obj;
         }
 
-        bool IUpdatable.Update()
-        {
-            if (_UpdateTimeCounter.Second > 0.1f)
-            {
-                _Tree.Tick(new TimeData(_DeltaTimeCounter.Second));
-                _DeltaTimeCounter.Reset();
-                _UpdateTimeCounter.Reset();
-            }
-            
-            return true;
-        }
+        
     }
 }

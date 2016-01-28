@@ -11,15 +11,19 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
     {
         private readonly Zone _Zone;
 
-      
+        private readonly Entity _Actor;
+
         private readonly Regulus.Utility.StageMachine _Machine;
 
         private readonly Regulus.Utility.Updater _Updater;
-        public Aboriginal(Zone zone)
+
+        private Wisdom _Wisdom;
+        public Aboriginal(Zone zone , Entity actor ,  Wisdom wisdom)
         {
-            
+            _Wisdom = wisdom;
             _Updater = new Updater();
             _Zone = zone;
+            _Actor = actor;
             _Machine = new StageMachine();
         }
 
@@ -32,9 +36,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private void _ToGame(Map map)
         {
-            var actor = EntityProvider.Create(ENTITY.ACTOR2);
-            var wisdom = new Wisdom(actor);
-            var stage = new GameStage(wisdom.GetSoulBinder() ,  map , actor , wisdom);
+            
+            var stage = new GameStage(_Wisdom.GetSoulBinder() ,  map , _Actor, _Wisdom);
             //stage.DoneEvent += _Idle ;
             _Machine.Push(stage);
 

@@ -111,7 +111,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         {
             var types = new[]
                 {
-                    ENTITY.ACTOR2
+                    ENTITY.ACTOR2 , ENTITY.ACTOR3 , ENTITY.ACTOR4, ENTITY.ACTOR5
                 };
             for (int i = 0; i < 40; i++)
             {
@@ -124,7 +124,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         {
             var types = new[]
                 {
-                    ENTITY.ACTOR1 , ENTITY.ACTOR2 , ENTITY.DEBIRS
+                    ENTITY.ACTOR1 , ENTITY.ACTOR2 , ENTITY.DEBIRS, ENTITY.ACTOR3 , ENTITY.ACTOR4, ENTITY.ACTOR5
                 };
             this._BuildEnternace(map, types);
         }
