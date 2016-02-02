@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 
 using Regulus.Remoting;
@@ -81,6 +82,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
     {
         private List<T> _Gpis;
 
+
+        
         private event Action<T> _Supply;
         public event Action<T> Supply
         {
@@ -123,5 +126,11 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                 Unsupply((T)soul);
             }
         }
+
+        public T FirstOrDefault()
+        {
+            return _Gpis.FirstOrDefault();
+        }
     }
 }
+

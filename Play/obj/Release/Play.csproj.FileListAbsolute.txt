@@ -60,7 +60,6 @@ E:\Develop\Project\ItIsNotAGame1\Backend\Play\bin\Release\ItIsNotAGame1Data.dll
 E:\Develop\Project\ItIsNotAGame1\Backend\Play\bin\Release\ItIsNotAGame1Game.dll
 E:\Develop\Project\ItIsNotAGame1\Backend\Play\bin\Release\ItIsNotAGame1StorageUser.dll
 E:\Develop\Project\ItIsNotAGame1\Backend\Play\bin\Release\protobuf-net.dll
-E:\Develop\Project\ItIsNotAGame1\Backend\Play\bin\Release\RegulusLibrary.dll
 E:\Develop\Project\ItIsNotAGame1\Backend\Play\bin\Release\RegulusRemoting.dll
 E:\Develop\Project\ItIsNotAGame1\Backend\Play\bin\Release\RegulusRemotingSoulNative.dll
 E:\Develop\Project\ItIsNotAGame1\Backend\Play\bin\Release\RegulusRemotingStandalone.dll
@@ -70,8 +69,6 @@ E:\Develop\Project\ItIsNotAGame1\Backend\Play\bin\Release\ItIsNotAGame1Game.pdb
 E:\Develop\Project\ItIsNotAGame1\Backend\Play\bin\Release\ItIsNotAGame1StorageUser.pdb
 E:\Develop\Project\ItIsNotAGame1\Backend\Play\bin\Release\protobuf-net.pdb
 E:\Develop\Project\ItIsNotAGame1\Backend\Play\bin\Release\protobuf-net.xml
-E:\Develop\Project\ItIsNotAGame1\Backend\Play\bin\Release\RegulusLibrary.pdb
-E:\Develop\Project\ItIsNotAGame1\Backend\Play\bin\Release\RegulusLibrary.xml
 E:\Develop\Project\ItIsNotAGame1\Backend\Play\bin\Release\RegulusRemoting.pdb
 E:\Develop\Project\ItIsNotAGame1\Backend\Play\bin\Release\RegulusRemoting.xml
 E:\Develop\Project\ItIsNotAGame1\Backend\Play\bin\Release\RegulusRemotingSoulNative.pdb
@@ -82,4 +79,8 @@ E:\Develop\Project\ItIsNotAGame1\Backend\Play\bin\Release\RegulusRemotingGhostNa
 E:\Develop\Project\ItIsNotAGame1\Backend\Play\obj\Release\Play.csprojResolveAssemblyReference.cache
 E:\Develop\Project\ItIsNotAGame1\Backend\Play\obj\Release\ItIsNotAGame1Play.dll
 E:\Develop\Project\ItIsNotAGame1\Backend\Play\obj\Release\ItIsNotAGame1Play.pdb
-E:\Develop\Project\ItIsNotAGame1\Backend\Play\bin\Release\FluentBehaviourTree.dll
+E:\Develop\Project\ItIsNotAGame1\Backend\Play\bin\Release\RegulusLibrary.dll
+E:\Develop\Project\ItIsNotAGame1\Backend\Play\bin\Release\RegulusLibrary.pdb
+E:\Develop\Project\ItIsNotAGame1\Backend\Play\bin\Release\RegulusLibrary.xml
+E:\Develop\Project\ItIsNotAGame1\Backend\Play\bin\Release\RegulusBehaviourTree.dll
+E:\Develop\Project\ItIsNotAGame1\Backend\Play\bin\Release\RegulusBehaviourTree.pdb

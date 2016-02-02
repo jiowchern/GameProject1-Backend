@@ -28,8 +28,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         }
 
         void IBootable.Launch()
-        {
-            
+        {            
             Map map = this._Zone.FindMap("test");
             _ToGame(map);
         }
@@ -37,7 +36,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         private void _ToGame(Map map)
         {
             
-            var stage = new GameStage(_Wisdom.GetSoulBinder() ,  map , _Actor, _Wisdom);
+            var stage = new GameStage(_Wisdom.GetSoulBinder() ,  map , _Actor , _Wisdom);
             //stage.DoneEvent += _Idle ;
             _Machine.Push(stage);
 

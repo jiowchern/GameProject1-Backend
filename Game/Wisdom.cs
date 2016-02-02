@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using FluentBehaviourTree;
-
 using Regulus.Framework;
 using Regulus.Project.ItIsNotAGame1.Game.Play;
 using Regulus.Remoting;
@@ -20,7 +18,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game
 
         public GpiTransponder Transponder {  get { return _Transponder; } }
 
-        IBehaviourTreeNode _Tree;
+        Regulus.BehaviourTree.ITicker _Tree;
 
         private readonly Regulus.Utility.TimeCounter _DeltaTimeCounter;
 
@@ -37,7 +35,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game
             return _Transponder;
         }
 
-        protected abstract IBehaviourTreeNode _Launch();
+        protected abstract Regulus.BehaviourTree.ITicker _Launch();
         protected abstract void _Update(float delta);
         protected abstract void _Shutdown();
         void IBootable.Launch()
@@ -55,9 +53,11 @@ namespace Regulus.Project.ItIsNotAGame1.Game
         bool IUpdatable.Update()
         {
             var second = _DeltaTimeCounter.Second;
-            if (second > 0.1f)
+            
+
+            if (second > 0.03f)
             {                
-                _Tree.Tick(new TimeData(second));
+                _Tree.Tick(second);
                 _Update(second);
                 _DeltaTimeCounter.Reset();                
             }

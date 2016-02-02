@@ -34,13 +34,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FluentBehaviourTree, Version=0.0.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FluentBehaviourTree.0.0.4.0\lib\net35\FluentBehaviourTree.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="protobuf-net, Version=2.0.0.668, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\protobuf-net.dll</HintPath>
+    </Reference>
+    <Reference Include="RegulusBehaviourTree">
+      <HintPath>..\Library\RegulusBehaviourTree.dll</HintPath>
     </Reference>
     <Reference Include="RegulusLibrary, Version=0.1.0.1, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -58,10 +57,10 @@
   <ItemGroup>
     <Compile Include="DummyFrature.cs" />
     <Compile Include="Play\Aboriginal.cs" />
-    <Compile Include="Play\Behavior\Idle.cs" />
+    <Compile Include="Play\BehaviourTreeBuilder.cs" />
     <Compile Include="Play\GoblinWisdom.cs" />
     <Compile Include="Play\GpiTransponder.cs" />
-    <Compile Include="Play\UnityChanWisdom.cs" />
+    <Compile Include="Play\ObstacleDetector.cs" />
     <Compile Include="Play\Race.cs" />
     <Compile Include="Play\ActorStatus.cs" />
     <Compile Include="Play\BattleCasterStatus.cs" />
@@ -89,6 +88,7 @@
     <Compile Include="Play\NormalStatus.cs" />
     <Compile Include="Play\Realm.cs" />
     <Compile Include="Play\SkillCaster.cs" />
+    <Compile Include="Play\TurnHandler.cs" />
     <Compile Include="Play\WallKind.cs" />
     <Compile Include="Play\Zone.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

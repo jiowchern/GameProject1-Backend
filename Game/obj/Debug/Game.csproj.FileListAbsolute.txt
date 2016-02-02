@@ -51,4 +51,5 @@ E:\Develop\Project\ItIsNotAGame1\Backend\Game\bin\Debug\RegulusRemoting.xml
 E:\Develop\Project\ItIsNotAGame1\Backend\Game\obj\Debug\Game.csprojResolveAssemblyReference.cache
 E:\Develop\Project\ItIsNotAGame1\Backend\Game\obj\Debug\ItIsNotAGame1Game.dll
 E:\Develop\Project\ItIsNotAGame1\Backend\Game\obj\Debug\ItIsNotAGame1Game.pdb
-E:\Develop\Project\ItIsNotAGame1\Backend\Game\bin\Debug\FluentBehaviourTree.dll
+E:\Develop\Project\ItIsNotAGame1\Backend\Game\bin\Debug\RegulusBehaviourTree.dll
+E:\Develop\Project\ItIsNotAGame1\Backend\Game\bin\Debug\RegulusBehaviourTree.pdb

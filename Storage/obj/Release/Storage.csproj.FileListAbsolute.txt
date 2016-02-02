@@ -64,7 +64,6 @@ E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Release\MongoDB.Driver.dll
 E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Release\MySql.Data.dll
 E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Release\protobuf-net.dll
 E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Release\RegulusDatabase.dll
-E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Release\RegulusLibrary.dll
 E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Release\RegulusRemoting.dll
 E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Release\RegulusRemotingSoulNative.dll
 E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Release\ItIsNotAGame1Data.pdb
@@ -73,8 +72,6 @@ E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Release\MongoDB.Bson.xml
 E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Release\MongoDB.Driver.xml
 E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Release\protobuf-net.pdb
 E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Release\protobuf-net.xml
-E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Release\RegulusLibrary.pdb
-E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Release\RegulusLibrary.xml
 E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Release\RegulusRemoting.pdb
 E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Release\RegulusRemoting.xml
 E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Release\RegulusRemotingSoulNative.pdb
@@ -82,4 +79,8 @@ E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Release\RegulusRemotingSoul
 E:\Develop\Project\ItIsNotAGame1\Backend\Storage\obj\Release\Storage.csprojResolveAssemblyReference.cache
 E:\Develop\Project\ItIsNotAGame1\Backend\Storage\obj\Release\ItIsNotAGame1Storage.dll
 E:\Develop\Project\ItIsNotAGame1\Backend\Storage\obj\Release\ItIsNotAGame1Storage.pdb
-E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Release\FluentBehaviourTree.dll
+E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Release\RegulusLibrary.dll
+E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Release\RegulusLibrary.pdb
+E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Release\RegulusLibrary.xml
+E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Release\RegulusBehaviourTree.dll
+E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Release\RegulusBehaviourTree.pdb

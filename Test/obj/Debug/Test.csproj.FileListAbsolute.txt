@@ -86,4 +86,5 @@ E:\Develop\Project\ItIsNotAGame1\Backend\Test\bin\Debug\zh-Hant\Microsoft.Visual
 E:\Develop\Project\ItIsNotAGame1\Backend\Test\obj\Debug\Test.csprojResolveAssemblyReference.cache
 E:\Develop\Project\ItIsNotAGame1\Backend\Test\obj\Debug\ItIsNotAGame1Test.dll
 E:\Develop\Project\ItIsNotAGame1\Backend\Test\obj\Debug\ItIsNotAGame1Test.pdb
-E:\Develop\Project\ItIsNotAGame1\Backend\Test\bin\Debug\FluentBehaviourTree.dll
+E:\Develop\Project\ItIsNotAGame1\Backend\Test\bin\Debug\RegulusBehaviourTree.dll
+E:\Develop\Project\ItIsNotAGame1\Backend\Test\bin\Debug\RegulusBehaviourTree.pdb

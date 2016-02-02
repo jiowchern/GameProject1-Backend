@@ -32,6 +32,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             }
         }
 
+        public float ScanLength { get { return _View / 2; } }
+
         private float _DetectionRange;
 
         private SkillData[] _Datas;
@@ -41,7 +43,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private Concierge _Concierge;
 
-        private VisibleStatus _PrevVisibleStatus;
+        
 
         public Entity(ENTITY type, string name, Polygon mesh, Concierge concierge)
             : this(type, name, mesh)
@@ -80,9 +82,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _CollisionTargets = new IIndividual[0];
 
 
-            _PrevVisibleStatus = new VisibleStatus();
-            _PrevVisibleStatus.StartPosition = new Vector2();
-            _PrevVisibleStatus.SkillOffect = new Vector2();
+        
             _SkillOffsetVector = new Vector2();
 
             _BaseSpeed = 1.0f;
@@ -156,8 +156,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                 SkillOffect = _SkillOffsetVector
             };
 
-            this._StatusEvent.Invoke(status);
-            _PrevVisibleStatus = status;
+            this._StatusEvent.Invoke(status);        
 
             _BroadcastEquipEvent();
         }
@@ -311,9 +310,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private void _InvokeStatusEvent()
         {
-#if UNITY_EDITOR
-            UnityEngine.Debug.Log("_InvokeStatusEvent speed " + _Speed);
-#endif
+
             if (_StatusEvent != null)
             {
                 var status = new VisibleStatus()
@@ -325,10 +322,13 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                     Trun = _Trun,
                     SkillOffect = _SkillOffsetVector
                 };
-                this._StatusEvent.Invoke(status);
-                _PrevVisibleStatus = status;
+                this._StatusEvent.Invoke(status);                
 
             }
+        }
+        public Vector2 GetDirectionVector()
+        {
+            return this._ToVector(this.Direction);
         }
 
         public Vector2 GetVelocity(float delta_time)
@@ -540,7 +540,6 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _SkillOffsetVector = new Vector2();
             _InvokeStatusEvent();
         }
-
-
+        
     }
 }
