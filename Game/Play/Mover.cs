@@ -58,6 +58,9 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                               x.EntityType != Data.ENTITY.ACTOR1
                               && x.EntityType != Data.ENTITY.ENTRANCE
                               && x.EntityType != Data.ENTITY.ACTOR2
+                              && x.EntityType != Data.ENTITY.ACTOR3
+                              && x.EntityType != Data.ENTITY.ACTOR4
+                              && x.EntityType != Data.ENTITY.ACTOR5
                               && x.EntityType != Data.ENTITY.DEBIRS
                               && result.Intersect
                           //&& result.WillIntersect

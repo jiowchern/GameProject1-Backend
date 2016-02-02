@@ -73,7 +73,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                                     // 停止移動
                                     .Action(_StopMove)
                                     // 檢查周遭障礙物
-                                    .Action(new ObstacleDetector(_DecisionTime , _Entiry , this , viewLength, 180 , true) )                                    
+                                    .Action(new ObstacleDetector(_DecisionTime , _Entiry , this , viewLength, 180 , false) )                                    
                                     // 旋轉至出口
                                     .Action(new TurnHandler(this) )
                                 .End()
