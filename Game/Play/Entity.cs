@@ -9,6 +9,7 @@ using Regulus.Project.ItIsNotAGame1.Data;
 namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
     public class Entity : IIndividual, IDevelopActor
+        , IPlayerProperys
     {
         private ENTITY _EntityType;
         private string _Name;
@@ -117,6 +118,22 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         Guid IVisible.Id
         {
             get { return this._Id; }
+        }
+
+
+
+        public float Strength(float val)
+        {
+            
+            _Strength += val;
+            if (_Strength > 3.0f)
+                _Strength = 3.0f;
+
+            return _Strength;
+        }
+
+        float IPlayerProperys.Strength {
+            get { return _Strength; }
         }
 
         string IVisible.Name
@@ -245,6 +262,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         private Vector2 _SkillOffsetVector;
 
         private float _BaseSpeed;
+
+        private float _Strength;
 
         void IIndividual.AttachDamage(bool smash)
         {
@@ -540,6 +559,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _SkillOffsetVector = new Vector2();
             _InvokeStatusEvent();
         }
+
         
     }
 }

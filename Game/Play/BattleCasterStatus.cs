@@ -38,6 +38,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private Vector2 _DatumPosition;
 
+        private bool _Overdraft;
+
         public BattleCasterStatus(ISoulBinder binder, Entity player, Map map, SkillCaster caster)
         {
             _CastTimer = new TimeCounter();
@@ -72,6 +74,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _CastTimer.Reset();
 
             _DatumPosition = _Player.GetPosition();
+            var strength = _Player.Strength(-_Caster.Data.StrengthCost);
+            _Overdraft = strength < 0.0f;
         }
 
         void IStage.Leave()
@@ -194,7 +198,18 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             if (guardImpact)
                 NextEvent(SkillCaster.Build(ACTOR_STATUS_TYPE.GUARD_IMPACT));
             else if (_Caster.IsDone(_CurrentCastTime))
-                BattleIdleEvent();
+            {
+                
+                if (_Overdraft)
+                {
+                    NextEvent(SkillCaster.Build(ACTOR_STATUS_TYPE.TIRED));
+                }
+                else
+                {
+                    BattleIdleEvent();
+                }
+            }
+                
         }
 
         private void _AttachDamage(IIndividual target, bool smash)

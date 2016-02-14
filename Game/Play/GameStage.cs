@@ -16,7 +16,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
     internal class GameStage : IStage, IQuitable,
         IInventoryNotifier,
-        IPlayerProperys,
+        
         IEquipmentNotifier
     {
         private readonly ISoulBinder _Binder;
@@ -73,7 +73,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
             _Binder.Unbind<IDevelopActor>(_Player);
             _Binder.Unbind<IInventoryNotifier>(this);
-            _Binder.Unbind<IPlayerProperys>(this);
+            _Binder.Unbind<IPlayerProperys>(_Player);
             _Binder.Unbind<IEquipmentNotifier>(this);
             _Map.Left(_Player);
         }
@@ -84,7 +84,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             this._DifferenceNoticer.LeftEvent += this._BroadcastLeft;
 
             this._Map.JoinChallenger(this._Player);
-            this._Binder.Bind<IPlayerProperys>(this);
+            this._Binder.Bind<IPlayerProperys>(_Player);
             this._Binder.Bind<IInventoryNotifier>(this);
             this._Binder.Bind<IEquipmentNotifier>(this);
             _Binder.Bind<IDevelopActor>(_Player);
@@ -109,6 +109,9 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _Player.Equipment.UpdateEffect(lastDeltaTime);
 
             _ResponseItems(deltaTime);
+
+
+            _Player.Strength(deltaTime);
 
         }
 
@@ -182,8 +185,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
 
         public event Action DoneEvent;
-
-        Guid IPlayerProperys.Id { get { return this._Player.Id; } }
+        
 
 
 

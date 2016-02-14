@@ -38,3 +38,4 @@ D:\Develop\ItIsNotAGame1\Backend\Data\obj\Release\Data.csprojResolveAssemblyRefe
 E:\Develop\Project\ItIsNotAGame1\Backend\Data\bin\Release\RegulusLibrary.dll
 E:\Develop\Project\ItIsNotAGame1\Backend\Data\bin\Release\RegulusLibrary.pdb
 E:\Develop\Project\ItIsNotAGame1\Backend\Data\bin\Release\RegulusLibrary.xml
+E:\Develop\Project\ItIsNotAGame1\Backend\Data\obj\Release\Data.csprojResolveAssemblyReference.cache

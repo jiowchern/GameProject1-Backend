@@ -31,6 +31,8 @@ namespace Regulus.Project.ItIsNotAGame1.Data
         TWO_HAND_SWORD_RUN,
         TWO_HAND_SWORD_ATTACK1,
 
-        MELEE_ATTACK4,        
+        MELEE_ATTACK4,     
+        
+        TIRED   
     }
 }

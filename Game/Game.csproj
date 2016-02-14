@@ -57,6 +57,7 @@
   <ItemGroup>
     <Compile Include="DummyFrature.cs" />
     <Compile Include="Play\Aboriginal.cs" />
+    <Compile Include="Play\ActorMemory.cs" />
     <Compile Include="Play\BehaviourTreeBuilder.cs" />
     <Compile Include="Play\GoblinWisdom.cs" />
     <Compile Include="Play\GpiTransponder.cs" />

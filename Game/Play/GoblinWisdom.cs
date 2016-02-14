@@ -20,28 +20,36 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
     {
         private readonly Entity _Entiry;
 
+        private readonly List<IVisible> _Vision;
 
-        private List<Hit> _WallTargets;
 
-        private List<IVisible> _Vision;
+        private ActorMemory _ActorMemory;
+        
+        
         private IMoveController _MoveController;
 
         private float _ScanCycle;
 
-        private float _DecisionTime;
-        
-
-
+        private readonly float _DecisionTime;
 
         private float _WallDistance;
 
         private float _ExitScanTimer;
 
+        private IEmotion _Emotion;
+
+        private INormalSkill _NormalSkill;
+
+        private ICastSkill _CastSkill;
+
+        private IBattleSkill _BattleSkill;
+
         public GoblinWisdom(Entity entiry)
-        {            
+        {
+            _ActorMemory = new ActorMemory();
+
             _DecisionTime = 0.5f;
-            
-            _WallTargets = new List<Hit>();
+                        
             _Vision = new List<IVisible>();
                         
             _Entiry = entiry;
@@ -53,41 +61,56 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _WallDistance = rect.Width > rect.Height
                 ? rect.Width
                 : rect.Height;
-            
+            _WallDistance *= 2;
         }
 
         public float TurnDirection { get; set; }
 
         protected override Regulus.BehaviourTree.ITicker _Launch()
         {
+            IVisible actor = null;
+            IVisible enemy = null;
+
             var viewLength = (_Entiry as IVisible).View;
             _Bind();
             var builder = new Regulus.BehaviourTree.Builder();
             var node = builder
-                            .Selector()                                
-                                // 近距離障礙物躲避策略
-                                .Sequence()           
-                                
-                                    // 是否碰到障礙物
-                                    .Action((delta) => _DetectObstacle(delta , _WallDistance  , _GetOffsetDirection(270)) )
-                                    // 停止移動
-                                    .Action(_StopMove)
-                                    // 檢查周遭障礙物
-                                    .Action(new ObstacleDetector(_DecisionTime , _Entiry , this , viewLength, 180 , false) )                                    
-                                    // 旋轉至出口
-                                    .Action(new TurnHandler(this) )
+                            .Selector()        
+                                .Sequence()
+                                    .Action((delta) => _DetectActor(viewLength, _GetOffsetDirection(120) , ref actor))
+                                    .Action((delta) => _NotSeen(actor))
+                                    .Action((delta) => _Remember(actor))
+                                    .Action((delta) => _Talk("!"))
                                 .End()
+
+                                /*.Sequence()
+                                    .Action( _HaveEnemy )
+                                    .Action( _InNormal )
+                                    .Action( _ToBattle )
+                                .End()*/
+
+                                .Sequence()
+                                    .Action( _NotEnemy ) 
+                                    .Action( _InBattle ) 
+                                    .Action( _ToNormal ) 
+                                .End()
+
+                                /*.Sequence()
+                                    .Action((delta) => _BeInjured(ref enemy) )
+                                    .Action((delta) => _Remember(enemy , 1))
+                                .End()*/
+
                                 // 遠距離尋路策略
                                 .Sequence()
 
                                     // 是否碰到障礙物
-                                    .Action((delta) => _DetectObstacle(delta, viewLength / 2 , 0))
+                                    .Action((delta) => _DetectObstacle(delta, viewLength / 2 , _GetOffsetDirection(12.31f * 2)))
                                     // 停止移動
                                     .Action(_StopMove)
                                     // 檢查周遭障礙物
-                                    .Action(new ObstacleDetector(_DecisionTime, _Entiry, this, viewLength , 180 , false))
+                                    .Action(()=>new ObstacleDetector(_DecisionTime, _Entiry, this, viewLength , 180 , false))
                                     // 旋轉至出口
-                                    .Action(new TurnHandler(this))
+                                    .Action(()=>new TurnHandler(this ))                                                                        
                                 .End()
 
                                 // 前進
@@ -98,6 +121,66 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                         .Build();
             return node;
         }
+
+        private TICKRESULT _ToNormal(float arg)
+        {
+            if (_BattleSkill != null)
+            {
+                _BattleSkill.Disarm();
+                return TICKRESULT.SUCCESS;
+            }
+                
+            return TICKRESULT.FAILURE;
+        }
+
+        private TICKRESULT _InBattle(float arg)
+        {
+            if (_CastSkill != null)
+            {
+                return TICKRESULT.SUCCESS;
+            }
+            return TICKRESULT.FAILURE;
+        }
+
+
+        private TICKRESULT _NotEnemy(float arg)
+        {
+            var actor = _ActorMemory.FindEnemy(_Vision);
+            if(actor == null)
+                return TICKRESULT.SUCCESS;
+            return TICKRESULT.FAILURE;
+        }
+
+        private TICKRESULT _Talk(string message)
+        {
+            if (_Emotion != null)
+            {
+                _Emotion.Talk(message);
+                return TICKRESULT.SUCCESS;
+            }
+            return TICKRESULT.FAILURE;
+        }
+
+        private TICKRESULT _Remember(IVisible actor)
+        {
+            _ActorMemory.Add(actor.Id);
+            
+            return TICKRESULT.SUCCESS;
+        }
+
+        private TICKRESULT _NotSeen(IVisible actor)
+        {
+
+            
+            if (_ActorMemory.Have(actor.Id))
+            {
+                return TICKRESULT.FAILURE;
+                
+            }
+            return TICKRESULT.SUCCESS;
+        }
+
+        
 
         private TICKRESULT _StopMove(float delta)
         {
@@ -110,6 +193,19 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             
             return TICKRESULT.FAILURE;
         }
+        private TICKRESULT _DetectActor(float distance, float angle, ref IVisible actor)
+        {
+            var target = _Detect(angle + _Entiry.Direction, distance);
+            if (target.Visible != null && _IsActor(target.Visible.EntityType) )
+            {
+                actor = target.Visible;
+                return TICKRESULT.SUCCESS;
+            }
+
+            return TICKRESULT.FAILURE;
+        }
+
+        
 
         private TICKRESULT _DetectObstacle(float delta, float distance , float angle)
         {
@@ -136,36 +232,85 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                 
         }
 
-
-
         
 
-        
-
-
-
-        
-
-        private Vector2 _CalcultedTurnForce(Hit tagret)
-        {
-            var pos = _Entiry.GetPosition();
-            var vectorB = tagret.HitPoint - pos;
-            return vectorB;
-        }
-
+       
         private void _Bind()
         {
+            Transponder.Query<IEmotion>().Supply += _SetEmotion;
+            Transponder.Query<IEmotion>().Unsupply += _ClearEmotion;
             Transponder.Query<IVisible>().Supply += _SetIndividual;
             Transponder.Query<IVisible>().Unsupply += _ClearIndividual;
             Transponder.Query<IMoveController>().Supply += _SetMoveController;
             Transponder.Query<IMoveController>().Unsupply += _ClearMoveController;
+
+            Transponder.Query<INormalSkill>().Supply += _SetNormalSkill;
+            Transponder.Query<INormalSkill>().Unsupply += _ClearNormalSkill;
+
+            Transponder.Query<ICastSkill>().Supply += _SetCastSkill;
+            Transponder.Query<ICastSkill>().Unsupply += _ClearCastSkill;
+
+            Transponder.Query<IBattleSkill>().Supply += _SetBattleSkill;
+            Transponder.Query<IBattleSkill>().Unsupply += _ClearBattleSkill;
+
         }
+
         private void _Unbind()
         {
+            Transponder.Query<IEmotion>().Supply -= _SetEmotion;
+            Transponder.Query<IEmotion>().Unsupply -= _ClearEmotion;
             Transponder.Query<IMoveController>().Supply -= _SetMoveController;
             Transponder.Query<IMoveController>().Unsupply -= _ClearMoveController;
             Transponder.Query<IVisible>().Supply -= _SetIndividual;
             Transponder.Query<IVisible>().Unsupply -= _ClearIndividual;
+
+            Transponder.Query<INormalSkill>().Supply -= _SetNormalSkill;
+            Transponder.Query<INormalSkill>().Unsupply -= _ClearNormalSkill;
+
+            Transponder.Query<ICastSkill>().Supply -= _SetCastSkill;
+            Transponder.Query<ICastSkill>().Unsupply -= _ClearCastSkill;
+
+            Transponder.Query<IBattleSkill>().Supply -= _SetBattleSkill;
+            Transponder.Query<IBattleSkill>().Unsupply -= _ClearBattleSkill;
+        }
+
+        private void _ClearBattleSkill(IBattleSkill obj)
+        {
+            _BattleSkill = null;
+        }
+
+        private void _SetBattleSkill(IBattleSkill obj)
+        {
+            _BattleSkill = obj;
+        }
+
+        private void _ClearCastSkill(ICastSkill obj)
+        {
+            _CastSkill = null;
+        }
+
+        private void _SetCastSkill(ICastSkill obj)
+        {
+            _CastSkill = obj;
+        }
+
+        private void _ClearNormalSkill(INormalSkill obj)
+        {
+            _NormalSkill = null;
+        }
+
+        private void _SetNormalSkill(INormalSkill obj)
+        {
+            _NormalSkill = obj;
+        }
+
+        private void _ClearEmotion(IEmotion obj)
+        {
+            _Emotion = null;
+        }
+        private void _SetEmotion(IEmotion obj)
+        {
+            _Emotion = obj;
         }
 
         private void _ClearIndividual(IVisible obj)
@@ -247,6 +392,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _ScanCycle += delta;
             _ScanCycle %= _DecisionTime;
 
+            _ActorMemory.Forget(delta);
         }
 
 
@@ -311,6 +457,14 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             return t >= 0.0f && s >= 0.0f && s <= 1.0f;
         }
 
+        private bool _IsActor(ENTITY entity_type)
+        {
+            return entity_type == ENTITY.ACTOR1 ||
+                   entity_type == ENTITY.ACTOR2 ||
+                   entity_type == ENTITY.ACTOR3 ||
+                   entity_type == ENTITY.ACTOR4 ||
+                   entity_type == ENTITY.ACTOR5;
+        }
 
         public bool IsWall(ENTITY entity_type)
         {
@@ -355,6 +509,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         public float Distance
         { get; set; }
+        
     }
 
 

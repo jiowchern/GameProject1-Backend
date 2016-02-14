@@ -24,6 +24,8 @@ namespace Regulus.Project.ItIsNotAGame1.Data
         public ACTOR_STATUS_TYPE[] Nexts;
 
         public Effect[] Effects;
+
+        public float StrengthCost ;
         
 
         public SkillData()

@@ -8,5 +8,7 @@ namespace Regulus.Project.ItIsNotAGame1.Data
     public interface IPlayerProperys
     {
         Guid Id { get; }
+
+        float Strength { get; }
     }
 }
