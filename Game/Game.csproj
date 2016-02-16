@@ -61,6 +61,7 @@
     <Compile Include="Play\BehaviourTreeBuilder.cs" />
     <Compile Include="Play\GoblinWisdom.cs" />
     <Compile Include="Play\GpiTransponder.cs" />
+    <Compile Include="Play\HitForce.cs" />
     <Compile Include="Play\ObstacleDetector.cs" />
     <Compile Include="Play\Race.cs" />
     <Compile Include="Play\ActorStatus.cs" />

@@ -53,14 +53,11 @@ namespace Regulus.Project.ItIsNotAGame1.Game
         bool IUpdatable.Update()
         {
             var second = _DeltaTimeCounter.Second;
-            
 
-            if (second > 0.03f)
-            {                
-                _Tree.Tick(second);
-                _Update(second);
-                _DeltaTimeCounter.Reset();                
-            }
+
+            _Tree.Tick(second);
+            _Update(second);
+            _DeltaTimeCounter.Reset();
 
             return true;
         }

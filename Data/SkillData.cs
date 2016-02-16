@@ -25,8 +25,7 @@ namespace Regulus.Project.ItIsNotAGame1.Data
 
         public Effect[] Effects;
 
-        public float StrengthCost ;
-        
+        public float StrengthCost ;                
 
         public SkillData()
         {

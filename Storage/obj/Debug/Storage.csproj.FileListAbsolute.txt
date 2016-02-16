@@ -72,6 +72,7 @@ E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Debug\RegulusDatabase.dll
 E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Debug\RegulusLibrary.dll
 E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Debug\RegulusRemoting.dll
 E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Debug\RegulusRemotingSoulNative.dll
+E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Debug\RegulusBehaviourTree.dll
 E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Debug\ItIsNotAGame1Data.pdb
 E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Debug\ItIsNotAGame1Game.pdb
 E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Debug\MongoDB.Bson.xml
@@ -84,8 +85,7 @@ E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Debug\RegulusRemoting.pdb
 E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Debug\RegulusRemoting.xml
 E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Debug\RegulusRemotingSoulNative.pdb
 E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Debug\RegulusRemotingSoulNative.xml
+E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Debug\RegulusBehaviourTree.pdb
 E:\Develop\Project\ItIsNotAGame1\Backend\Storage\obj\Debug\Storage.csprojResolveAssemblyReference.cache
 E:\Develop\Project\ItIsNotAGame1\Backend\Storage\obj\Debug\ItIsNotAGame1Storage.dll
 E:\Develop\Project\ItIsNotAGame1\Backend\Storage\obj\Debug\ItIsNotAGame1Storage.pdb
-E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Debug\RegulusBehaviourTree.dll
-E:\Develop\Project\ItIsNotAGame1\Backend\Storage\bin\Debug\RegulusBehaviourTree.pdb

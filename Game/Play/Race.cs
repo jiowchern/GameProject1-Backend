@@ -85,7 +85,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                 var wisdom = new GoblinWisdom(entiry);
                 _Updater.Add(new Aboriginal(_Zone, entiry, wisdom));
             }
-
+            
 
         }
 

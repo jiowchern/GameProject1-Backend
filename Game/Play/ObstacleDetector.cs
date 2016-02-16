@@ -10,69 +10,83 @@ using Vector2 = Regulus.CustomType.Vector2;
 
 namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
-    internal class ObstacleDetector : IAction
+    internal class ObstacleDetector 
     {
-        private readonly float _DecisionTime;
+        
 
         private float _TimeCounter;
 
-        private readonly Entity _Entiry;
+        public event Action<float> OutputEvent;
+        
+        
 
-        private readonly GoblinWisdom _GoblinWisdom;
+        
 
-        private readonly float _Distance;
+        private readonly List<Exit> _Nears;
 
-        private readonly float _ScanAngle;
-
-        private readonly bool _MaxAngle;
-
-        private List<Exit> _Nears;
-
-        private int _Done;
-        public ObstacleDetector(float decision_time, Entity entiry, GoblinWisdom goblin_wisdom , float distance , float scan_angle , bool max_angle)
+        
+        public ObstacleDetector( )
         {
-            _Nears = new List<Exit>();
-            _DecisionTime = decision_time;
-            _Entiry = entiry;
-            _GoblinWisdom = goblin_wisdom;
-            _Distance = distance;
-            _ScanAngle = scan_angle;
-            _MaxAngle = max_angle;
+            _Nears = new List<Exit>();            
         }
 
-        TICKRESULT ITicker.Tick(float delta)
+        
+
+#if UNITY_EDITOR
+
+        private void _UnityDrawLine(float hitAngle, Vector2 pos , UnityEngine.Color color , float distance , float decision_time)
         {
+            var trunForce = Vector2.AngleToVector(hitAngle);
+            var forcePos = pos + trunForce * (distance);
+            UnityEngine.Debug.DrawLine(
+                new UnityEngine.Vector3(pos.X, 0, pos.Y),
+                new UnityEngine.Vector3(forcePos.X, 0, forcePos.Y),
+                color,
+                decision_time);
+        }
+#endif
+        
 
+        public TICKRESULT Detect(float delta, float decision_time, Entity entiry, GoblinWisdom goblin_wisdom, float view_distance, int scan_angle)
+        {
+            var decisionTime = decision_time;
+            var _Entiry = entiry;
+            if (_Entiry == null)
+            {
+                throw new ArgumentNullException("_Entiry");
+            }
+            var goblinWisdom = goblin_wisdom;
+            var distance = view_distance;
+            var scanAngle = scan_angle;
 
-            
-                
-            
             var pos = _Entiry.GetPosition();
             _TimeCounter += delta;
-            if (_TimeCounter < _DecisionTime)
+            if (_TimeCounter < decisionTime)
             {
-                var view = (float)_Distance ;
-                var x = Math.PI * _TimeCounter / _DecisionTime;
+                var view = (float)distance;
+                var x = Math.PI * _TimeCounter / decisionTime;
                 var y = (float)Math.Sin(x);
-                var a = _ScanAngle * y - (_ScanAngle / 2);
-                
+                var a = scanAngle * y - (scanAngle / 2);
 
-                var target = _GoblinWisdom.Detect(a + _Entiry.Direction, view);
 
-                if (target.Visible == null || (target.Visible != null && _GoblinWisdom.IsWall(target.Visible.EntityType)))
+                var target = goblinWisdom.Detect(a + _Entiry.Direction, view);
+
+                if (target.Visible == null || (target.Visible != null && goblinWisdom.IsWall(target.Visible.EntityType)))
                 {
 
 
-                    var distance = target.HitPoint.DistanceTo(pos) ;
-                    distance =(float) Math.Floor(distance);
+                    var hitDistnace = target.HitPoint.DistanceTo(pos);
+                    hitDistnace = (float)Math.Floor(hitDistnace);
                     var vector = target.HitPoint - pos;
                     var hitAngle = Vector2.VectorToAngle(vector.GetNormalized());
                     hitAngle += 360;
                     hitAngle %= 360;
+                    //Unity Debug Code
+#if UNITY_EDITOR
+                    _UnityDrawLine(hitAngle, pos, UnityEngine.Color.red , view_distance , decisionTime);
+#endif
 
-                    //_UnityDrawLine(hitAngle, pos , Color.red);
-
-                    _Nears.Add(new Exit() { Distance = distance, Direction = hitAngle });
+                    _Nears.Add(new Exit() { Distance = hitDistnace, Direction = hitAngle });
 
                 }
 
@@ -81,57 +95,26 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             }
 
 
-            var sortedDirections = (_MaxAngle)?
-                                    from e in _Nears
+            var sortedDirections = from e in _Nears
                                    let diff = Math.Abs(e.Direction - _Entiry.Direction)
                                    where diff > 0.0f
-                                   orderby diff descending
-                                    select e 
-                                   :
-                                   from e in _Nears
-                                   let diff = Math.Abs(e.Direction - _Entiry.Direction)
-                                   where diff > 0.0f
-                                   orderby diff 
-                                   select e ;
+                                   orderby diff
+                                   select e;
             var soteds = from e in sortedDirections orderby e.Distance descending select e;
-            var first = soteds.FirstOrDefault();            
+            var first = soteds.FirstOrDefault();
 
-            _GoblinWisdom.TurnDirection = first.Direction - _Entiry.Direction;
-
-
-
-            //var pos = _Entiry.GetPosition();            
-            /*var trunForce = Vector2.AngleToVector(first.Direction);
-            var forcePos = pos + trunForce * (_Distance );
-            UnityEngine.Debug.DrawLine(new UnityEngine.Vector3(pos.X, 0, pos.Y), new UnityEngine.Vector3(forcePos.X, 0, forcePos.Y), UnityEngine.Color.yellow, _DecisionTime);
-            _Done ++;
-            UnityEngine.Debug.Log("ObstacleDetector Tick " + _Done );*/
-            return TICKRESULT.SUCCESS;
-        }
-
-
-        /*private void _UnityDrawLine(float hitAngle, Vector2 pos , UnityEngine.Color color)
-        {
-            var trunForce = Vector2.AngleToVector(hitAngle);
-            var forcePos = pos + trunForce * (_Distance );
-            UnityEngine.Debug.DrawLine(
-                new UnityEngine.Vector3(pos.X, 0, pos.Y),
-                new UnityEngine.Vector3(forcePos.X, 0, forcePos.Y),
-                color,
-                _DecisionTime);
-        }*/
-
-        void IAction.Start()
-        {
-            _Done = 0;
+            OutputEvent(first.Direction - _Entiry.Direction);            
             _Nears.Clear();
             _TimeCounter = 0.0f;
-            
-        }
 
-        void IAction.End()
-        {
-            
+#if UNITY_EDITOR
+            var trunForce = Vector2.AngleToVector(first.Direction);
+            var forcePos = pos + trunForce * (distance);
+            UnityEngine.Debug.DrawLine(new UnityEngine.Vector3(pos.X, 0, pos.Y), new UnityEngine.Vector3(forcePos.X, 0, forcePos.Y), UnityEngine.Color.yellow, decisionTime);
+            //UnityEngine.Debug.Log("TurnDirection = " + _GoblinWisdom.TurnDirection);
+
+#endif
+            return TICKRESULT.SUCCESS;
         }
     }
 }

@@ -105,6 +105,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             var caster = new SkillCaster(skill, new Determination(skill));
             var stage = new BattleCasterStatus(_Binder, _Player, _Map, caster);
             stage.BattleIdleEvent += _ToBattle;
+            stage.NextEvent += _ToCast;
             _SetStatus(stage);
         }
 
@@ -122,6 +123,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             var caster = new SkillCaster(skill , new Determination(skill));
             var stage = new BattleCasterStatus(_Binder , _Player , _Map , caster);
             stage.BattleIdleEvent += _ToBattle;
+            stage.NextEvent += _ToCast;
             _SetStatus(stage);
         }
 

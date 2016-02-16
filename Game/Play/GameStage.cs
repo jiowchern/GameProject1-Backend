@@ -139,12 +139,13 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private void _Move(float deltaTime)
         {
-            _Player.ClearCollisionTargets();
+            
             _Player.TrunDirection(deltaTime);
             var velocity = this._Player.GetVelocity(deltaTime);
             var orbit = this._Mover.GetOrbit(velocity);
             var entitys = this._Map.Find(orbit);
             var hitthetargets = _Mover.Move(velocity, entitys.Where(x => x.Id != this._Player.Id));
+            
             if (hitthetargets.Any())
             {
                 _Player.SetCollisionTargets(hitthetargets);

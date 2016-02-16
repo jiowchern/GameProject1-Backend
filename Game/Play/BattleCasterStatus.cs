@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 
 using Regulus.CustomType;
 using Regulus.Extension;
@@ -216,7 +217,11 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         {
             if (_Attacked.Contains(target.Id) == false)
             {
-                target.AttachDamage(smash);
+                var hitForce = new HitForce();
+                hitForce.Damage = smash
+                    ? 3.0f
+                    : 1f;
+                target.AttachDamage(_Player.Id , hitForce);
                 _Attacked.Add(target.Id);
             }
         }
@@ -230,7 +235,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         void ICastSkill.Cast(ACTOR_STATUS_TYPE skill)
         {
-
+            if (_Overdraft)
+                return;
             var caster = _Caster.FindNext(skill);
             if (caster != null)
             {

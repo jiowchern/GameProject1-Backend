@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 
+using Regulus.Collection;
 using Regulus.CustomType;
 using Regulus.Extension;
 using Regulus.Project.ItIsNotAGame1.Data;
@@ -19,7 +20,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private float _Speed;
 
-        private IEnumerable<IIndividual> _CollisionTargets;
+        private Regulus.Collection.DifferenceNoticer<IIndividual> _CollideTargets;
+        public Regulus.Collection.DifferenceNoticer<IIndividual> CollideTargets { get { return _CollideTargets; } }
 
         private float _BaseView;
 
@@ -80,10 +82,10 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         {
             this._Mesh = mesh;
             this._Bound = this._BuildBound(this._Mesh);
-            _CollisionTargets = new IIndividual[0];
+            _CollideTargets = new DifferenceNoticer<IIndividual>();
 
 
-        
+
             _SkillOffsetVector = new Vector2();
 
             _BaseSpeed = 1.0f;
@@ -257,20 +259,28 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private bool _Block;
 
-        private int _DamageCount;
+        private float _DamageCount;
 
         private Vector2 _SkillOffsetVector;
+        
+
+        
+
+
 
         private float _BaseSpeed;
 
         private float _Strength;
 
-        void IIndividual.AttachDamage(bool smash)
+        public event Action<Guid , float> InjuredEvent;
+
+        void IIndividual.AttachDamage(Guid target , HitForce force)
         {
-            if (smash)
-                _DamageCount += 3;
-            else
-                _DamageCount++;
+            var damage = force.Damage;
+            _DamageCount += damage;
+            
+            if (InjuredEvent != null)
+                InjuredEvent(target , damage);
         }
 
         public void UpdatePosition(Vector2 velocity)
@@ -351,9 +361,10 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         }
 
         public Vector2 GetVelocity(float delta_time)
-        {
+        {            
+                        
             var skill = _SkillOffsetVector * delta_time;
-            return this._ToVector(this.Direction) * delta_time * this._Speed + skill;
+            return this._ToVector(this.Direction) * delta_time * this._Speed + skill ;
         }
 
         public void TrunDirection(float delta_time)
@@ -435,7 +446,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         }
 
-        public int HaveDamage()
+        public float HaveDamage()
         {
             var values = _DamageCount;
             _DamageCount = 0;
@@ -494,17 +505,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         public void SetCollisionTargets(IEnumerable<IIndividual> hitthetargets)
         {
-            _CollisionTargets = hitthetargets;
-        }
-
-        public void ClearCollisionTargets()
-        {
-            _CollisionTargets = new IIndividual[0];
-        }
-
-        public IEnumerable<IIndividual> GetCollisionTargets()
-        {
-            return _CollisionTargets;
+            _CollideTargets.Set(hitthetargets);
         }
 
         public void SetDirection(float dir)
@@ -556,10 +557,23 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         public void ClearOffset()
         {
             this._Speed = 0.0f;
-            _SkillOffsetVector = new Vector2();
+            _SkillOffsetVector = new Vector2();            
             _InvokeStatusEvent();
         }
 
-        
+        public float GetStrength()
+        {
+            return Strength(0);
+        }
+
+        public IVisible GetVisible()
+        {
+            return this;
+        }
+
+        public ACTOR_STATUS_TYPE GetStatus()
+        {
+            return _Status;
+        }
     }
 }

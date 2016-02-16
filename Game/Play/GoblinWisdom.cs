@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Runtime.Remoting.Messaging;
 
 using Regulus.BehaviourTree;
@@ -31,10 +32,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         private float _ScanCycle;
 
         private readonly float _DecisionTime;
-
-        private float _WallDistance;
-
-        private float _ExitScanTimer;
+        
+        
 
         private IEmotion _Emotion;
 
@@ -44,82 +43,280 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private IBattleSkill _BattleSkill;
 
+        private bool _IsCollide;
+
         public GoblinWisdom(Entity entiry)
         {
-            _ActorMemory = new ActorMemory();
+            _ActorMemory = new ActorMemory(entiry.GetVisible().EntityType);
 
             _DecisionTime = 0.5f;
                         
             _Vision = new List<IVisible>();
                         
             _Entiry = entiry;
-            var viewBound = _Entiry.GetView();
-            var left = new Vector2(viewBound.X, viewBound.Y);
-            var angle = Vector2.VectorToAngle((_Entiry.GetPosition() - left).GetNormalized());
 
-            var rect = Resource.Instance.FindEntity((_Entiry as IVisible).EntityType).Mesh.Points.ToRect();
-            _WallDistance = rect.Width > rect.Height
-                ? rect.Width
-                : rect.Height;
-            _WallDistance *= 2;
+            
+            //asin(2 / sqrt(2 ^ 2 + 10 ^ 2))
         }
-
-        public float TurnDirection { get; set; }
+        
 
         protected override Regulus.BehaviourTree.ITicker _Launch()
         {
-            IVisible actor = null;
-            IVisible enemy = null;
+            _Entiry.InjuredEvent += _OnInjured;
+            _Entiry.CollideTargets.JoinEvent += _HaveCollide;
+
+
+            Guid actor = Guid.Empty ;
+            Guid enemy = Guid.Empty ;
 
             var viewLength = (_Entiry as IVisible).View;
             _Bind();
-            var builder = new Regulus.BehaviourTree.Builder();
+            var builder = new Regulus.BehaviourTree.Builder();            
             var node = builder
                             .Selector()        
                                 .Sequence()
-                                    .Action((delta) => _DetectActor(viewLength, _GetOffsetDirection(120) , ref actor))
+                                    .Action((delta) => _DetectActor(viewLength, _GetOffsetDirection(120) , out actor))
                                     .Action((delta) => _NotSeen(actor))
                                     .Action((delta) => _Remember(actor))
                                     .Action((delta) => _Talk("!"))
                                 .End()
 
-                                /*.Sequence()
-                                    .Action( _HaveEnemy )
-                                    .Action( _InNormal )
-                                    .Action( _ToBattle )
-                                .End()*/
+                                .Sub(_CollisionWayfindingStrategy())
 
+                                .Sub(_AttackStrategy())
+
+                                .Sub(_DistanceWayfindingStrategy())
+
+                                
+
+
+
+                                // 如果沒有敵人則切回一般狀態
                                 .Sequence()
-                                    .Action( _NotEnemy ) 
-                                    .Action( _InBattle ) 
-                                    .Action( _ToNormal ) 
+                                    .Action(_NotEnemy)
+                                    .Action(_InBattle)
+                                    .Action(_ToNormal)
                                 .End()
 
-                                /*.Sequence()
-                                    .Action((delta) => _BeInjured(ref enemy) )
-                                    .Action((delta) => _Remember(enemy , 1))
-                                .End()*/
 
-                                // 遠距離尋路策略
-                                .Sequence()
-
-                                    // 是否碰到障礙物
-                                    .Action((delta) => _DetectObstacle(delta, viewLength / 2 , _GetOffsetDirection(12.31f * 2)))
-                                    // 停止移動
-                                    .Action(_StopMove)
-                                    // 檢查周遭障礙物
-                                    .Action(()=>new ObstacleDetector(_DecisionTime, _Entiry, this, viewLength , 180 , false))
-                                    // 旋轉至出口
-                                    .Action(()=>new TurnHandler(this ))                                                                        
-                                .End()
-
-                                // 前進
+                                // 沒事就前進
                                 .Sequence()
                                     .Action(_MoveForward)
                                 .End()
                             .End()
                         .Build();
             return node;
+        }
+
+        private ITicker _CollisionWayfindingStrategy()
+        {
+            var th = new TurnHandler(this);
+            
+            var builder = new Regulus.BehaviourTree.Builder();
+            return builder
+                    .Sequence()
+                        .Action(
+                            (delta) =>
+                            {
+                                var result = _CheckCollide();
+                                th.Input(Regulus.Utility.Random.Instance.NextFloat(-180 , 180));
+                                return result;
+                            } ) 
+                        .Action((delta) => th.Run(delta))
+                        .Action(_MoveForward)
+                    .End()   
+                .Build();
+        }
+
+        private TICKRESULT _CheckCollide()
+        {
+            if (_IsCollide)
+            {
+                _IsCollide = false;
+                return TICKRESULT.SUCCESS;
+            }                
+            return TICKRESULT.FAILURE;
+        }
+
+        private ITicker _DistanceWayfindingStrategy()
+        {
+            var builder = new Regulus.BehaviourTree.Builder();
+            var viewLength = _Entiry.GetVisible().View;
+
+            var th = new TurnHandler(this);
+            var od = new ObstacleDetector();
+            od.OutputEvent += th.Input;
+            return builder
+                .Sequence()
+                    // 是否碰到障礙物
+                    .Action((delta) => _DetectObstacle(delta, viewLength / 2, _GetOffsetDirection(10.31f * 2)))
+
+                    // 停止移動
+                    .Action(_StopMove)
+
+                    // 檢查周遭障礙物
+                    .Action((delta) => od.Detect(delta , _DecisionTime, _Entiry, this, viewLength, 180) )
+
+                    // 旋轉至出口
+                    .Action((delta) => th.Run(delta) )
+                .End().Build();
+        }
+    
+
+        private ITicker _ChangeToBattle()
+        {
+            var builder = new Regulus.BehaviourTree.Builder();
+            return builder.Sequence()
+                   .Action(_InNormal)
+                   .Action(_ToBattle)
+                   .End().Build();
+        }
+
+        private ITicker _AttackStrategy()
+        {
+            Guid enemy = Guid.Empty;
+
+            var skill = ACTOR_STATUS_TYPE.NORMAL_IDLE;
+            float distance = 0;
+            float angle = 0.0f;
+            var th = new TurnHandler(this);
+            var builder = new Regulus.BehaviourTree.Builder();
+
+            return builder
+                .Sequence()
+                    .Action((delta) => _FindEnemy(out enemy))
+
+                    .Selector()
+                        .Sub(_ChangeToBattle())
+                        .Sequence()
+                            .Action((delta) => _FindSkill(ref skill, ref distance))                            
+                            .Action(
+                                (delta) =>
+                                {
+                                    var result = _GetTargetAngle(delta, enemy, ref angle);
+                                    th.Input(angle);
+                                    return result;
+                                })                        
+                            .Action((delta) => th.Run(delta))
+                            .Action(_MoveForward)
+                            .Action((delta) => _CheckDistance(enemy, distance))
+                            .Action((delta) => _UseSkill(skill))
+                            .Action(() => new WaitSecond(0.1f) )
+                        .End()
+
+                    .End()
+
+                    
+                .End()
+                .Build();
+
+        }
+
+        private TICKRESULT _UseSkill(ACTOR_STATUS_TYPE skill)
+        {
+            if (_CastSkill != null)
+            {
+                _CastSkill.Cast(skill);
+                return TICKRESULT.SUCCESS;
+            }
+            return TICKRESULT.FAILURE;
+        }
+
+        private TICKRESULT _CheckDistance(Guid enemy, float distance)
+        {
+            var target = _Find(enemy);
+
+            if(target == null)
+                return TICKRESULT.FAILURE;
+            if(target.Position.DistanceTo(_Entiry.GetPosition()) <= distance )
+                return TICKRESULT.SUCCESS;
+
+            return TICKRESULT.FAILURE;
+        }
+
+        private TICKRESULT _GetTargetAngle(float delta, Guid id , ref float angle)
+        {
+            var target = _Find(id);
+            if (target == null)
+            {
+                return TICKRESULT.FAILURE;
+            }
+            var position = _Entiry.GetPosition();
+            var diff = target.Position - position;
+            var a = Vector2.VectorToAngle(diff.GetNormalized());
+            a += 360;
+            a %= 360;
+
+            angle = a - _Entiry.Direction;
+
+#if UNITY_EDITOR
+            var distance = target.Position.DistanceTo(position);
+            var trunForce = Vector2.AngleToVector(a);
+            var forcePos = position + trunForce * (distance);
+            UnityEngine.Debug.DrawLine(new UnityEngine.Vector3(position.X, 0, position.Y), new UnityEngine.Vector3(forcePos.X, 0, forcePos.Y), UnityEngine.Color.green , _DecisionTime);
+            //UnityEngine.Debug.Log("TurnDirection = " + _GoblinWisdom.TurnDirection);
+
+#endif
+            return TICKRESULT.SUCCESS;
+        }
+
+        private IVisible _Find(Guid id)
+        {
+            return (from v in _Vision where v.Id == id select v).FirstOrDefault();
+        }
+
+        private TICKRESULT _FindSkill(ref ACTOR_STATUS_TYPE skill, ref float distance)
+        {
+            var strength = _Entiry.GetStrength();
+            if (_CastSkill == null || strength < 0)
+                return TICKRESULT.FAILURE;
+
+            var len = _CastSkill.Skills.Length;
+            if(len == 0)
+                return TICKRESULT.FAILURE;
+            var index = Regulus.Utility.Random.Instance.NextInt(0, len);
+
+            skill = _CastSkill.Skills[index];
+
+            distance = 2;
+
+            return TICKRESULT.SUCCESS;
+        }
+
+        private TICKRESULT _ToBattle(float arg)
+        {
+            if (_NormalSkill != null)
+            {
+                _NormalSkill.Battle();
+                return TICKRESULT.SUCCESS;
+            }
+
+            return TICKRESULT.FAILURE;
+        }
+
+        private TICKRESULT _InNormal(float arg)
+        {
+            if(_NormalSkill != null)
+                return TICKRESULT.SUCCESS;
+            return TICKRESULT.FAILURE;            
+        }
+
+        private void _OnInjured(Guid target, float damage)
+        {
+            _ActorMemory.Hate(target , damage);
+        }
+
+        private TICKRESULT _FindEnemy(out Guid enemy)
+        {
+            enemy = Guid.Empty;
+            var result = _ActorMemory.FindEnemy(_Vision);
+            if (result != null)
+            {                
+                enemy = result.Id;
+                return TICKRESULT.SUCCESS;
+            }
+                
+            return TICKRESULT.FAILURE;
         }
 
         private TICKRESULT _ToNormal(float arg)
@@ -161,18 +358,18 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             return TICKRESULT.FAILURE;
         }
 
-        private TICKRESULT _Remember(IVisible actor)
+        private TICKRESULT _Remember(Guid id)
         {
-            _ActorMemory.Add(actor.Id);
+            _ActorMemory.Add(id);
             
             return TICKRESULT.SUCCESS;
         }
 
-        private TICKRESULT _NotSeen(IVisible actor)
+        private TICKRESULT _NotSeen(Guid actor)
         {
 
             
-            if (_ActorMemory.Have(actor.Id))
+            if (_ActorMemory.Have(actor))
             {
                 return TICKRESULT.FAILURE;
                 
@@ -193,15 +390,16 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             
             return TICKRESULT.FAILURE;
         }
-        private TICKRESULT _DetectActor(float distance, float angle, ref IVisible actor)
+        private TICKRESULT _DetectActor(float distance, float angle, out Guid actor)
         {
+            
             var target = _Detect(angle + _Entiry.Direction, distance);
             if (target.Visible != null && _IsActor(target.Visible.EntityType) )
             {
-                actor = target.Visible;
+                actor = target.Visible.Id;
                 return TICKRESULT.SUCCESS;
             }
-
+            actor = Guid.Empty;
             return TICKRESULT.FAILURE;
         }
 
@@ -349,8 +547,10 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             scan_angle %= 360f;
             var pos = _Entiry.GetPosition();
             var view = Vector2.AngleToVector(scan_angle);
-
-            // UnityEngine.Debug.DrawRay(new UnityEngine.Vector3(pos.X, 0, pos.Y), new UnityEngine.Vector3(view.X, 0, view.Y), UnityEngine.Color.blue, 0.5f);
+            //Unity Debug Code
+#if UNITY_EDITOR
+            UnityEngine.Debug.DrawRay(new UnityEngine.Vector3(pos.X, 0, pos.Y), new UnityEngine.Vector3(view.X, 0, view.Y), UnityEngine.Color.blue, 0.5f);
+#endif
 
             var hit = new Hit();
             hit.HitPoint = pos + view * max_distance;
@@ -398,9 +598,16 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         protected override void _Shutdown()
         {
+            _Entiry.CollideTargets.JoinEvent -= _HaveCollide;
+
+            _Entiry.InjuredEvent -= _OnInjured;
             _Unbind();
         }
 
+        private void _HaveCollide(IEnumerable<IIndividual> instances)
+        {
+            _IsCollide = true;
+        }
 
         public static bool RayPolygonIntersect(Vector2 ro, Vector2 rd, Vector2[] polygon, out float t, out Vector2 point, out Vector2 normal)
         {
@@ -500,6 +707,49 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         {
             if (_MoveController != null)
                 _MoveController.StopTrun();
+        }
+
+        public float GetTrunSpeed()
+        {
+            if (_MoveController != null)
+            {
+                var status = _Entiry.GetStatus();
+                var skill = Resource.Instance.FindSkill(status);
+                var caster = new SkillCaster(skill, new Determination(skill));
+
+                return caster.GetTurnRight();
+            }
+
+            return 0;
+        }
+    }
+
+    internal class WaitSecond : IAction
+    {
+        private readonly float _Second;
+
+        private float _Count;
+        public WaitSecond(float second)
+        {
+            _Second = second;            
+        }
+
+        TICKRESULT ITicker.Tick(float delta)
+        {
+            _Count += delta;
+            if (_Count > _Second)
+                return TICKRESULT.SUCCESS;
+
+            return TICKRESULT.RUNNING;
+        }
+
+        void IAction.Start()
+        {
+            _Count = 0.0f;
+        }
+
+        void IAction.End()
+        {            
         }
     }
 
