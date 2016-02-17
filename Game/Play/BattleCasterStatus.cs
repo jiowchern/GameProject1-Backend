@@ -41,6 +41,9 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private bool _Overdraft;
 
+        private SkillCaster _NextCaster;
+        
+
         public BattleCasterStatus(ISoulBinder binder, Entity player, Map map, SkillCaster caster)
         {
             _CastTimer = new TimeCounter();
@@ -77,6 +80,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _DatumPosition = _Player.GetPosition();
             var strength = _Player.Strength(-_Caster.Data.StrengthCost);
             _Overdraft = strength < 0.0f;
+
+            
         }
 
         void IStage.Leave()
@@ -181,11 +186,13 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                     {
                         if (_Caster.IsSmash())
                         {
-                            _AttachDamage(individual, true);
+                            
+                            _AttachDamage(individual, true);                            
                         }
                         else if (individual.IsBlock() == false && _Caster.IsPunch())
                         {
-                            _AttachDamage(individual, false);
+                            
+                            _AttachDamage(individual, false);                            
                         }
                         else if (individual.IsBlock() && _Caster.IsPunch())
                         {
@@ -210,6 +217,10 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                     BattleIdleEvent();
                 }
             }
+            else if (_Caster.CanNext(_CurrentCastTime) && _NextCaster != null)
+            {
+                NextEvent(_NextCaster);
+            }
                 
         }
 
@@ -217,6 +228,9 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         {
             if (_Attacked.Contains(target.Id) == false)
             {
+                if(_Caster.HasHit() && _HitNextsEvent !=null)
+                    _HitNextsEvent(_Caster.Data.HitNexts);
+
                 var hitForce = new HitForce();
                 hitForce.Damage = smash
                     ? 3.0f
@@ -237,11 +251,18 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         {
             if (_Overdraft)
                 return;
-            var caster = _Caster.FindNext(skill);
-            if (caster != null)
-            {
-                NextEvent(caster);
-            }
+            
+
+            _NextCaster = _Caster.FindNext(skill);
+            
+        }
+
+        private event Action<ACTOR_STATUS_TYPE[]> _HitNextsEvent;
+
+        event Action<ACTOR_STATUS_TYPE[]> ICastSkill.HitNextsEvent
+        {
+            add { this._HitNextsEvent += value; }
+            remove { this._HitNextsEvent -= value; }
         }
 
         void IBattleSkill.Disarm()

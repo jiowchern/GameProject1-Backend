@@ -15,13 +15,17 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private readonly Determination _Determination;
 
-        
+        private readonly float _NextBegin;
+
+        private bool _IsHit;
 
         public SkillCaster(SkillData data, Determination determination)
         {        
             Data = data;
             _Determination = determination;
-            _Timer = new TimeCounter();            
+            _Timer = new TimeCounter();
+
+            _NextBegin = (Data.Begin + Data.End) / 2;
         }
 
         public int Damage { get; set; }
@@ -29,6 +33,11 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         public bool IsDone(float second)
         {
             return _Timer.Second >= Data.Total;
+        }
+
+        public bool CanNext(float current_cast_time)
+        {
+            return _Timer.Second >= _NextBegin ;
         }
 
         public Polygon FindDetermination(float begin , float end)
@@ -56,10 +65,14 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         public SkillCaster FindNext(ACTOR_STATUS_TYPE skill)
         {
             var skillPrototype = Resource.Instance.FindSkill(skill);
-            if (skillPrototype != null && Data.Nexts.Any(s => s == skill))
+            if (skillPrototype != null  )
             {
-                return new SkillCaster(skillPrototype, new Determination(skillPrototype));
-            }
+                if(Data.Nexts.Any(s => s == skill))
+                    return new SkillCaster(skillPrototype, new Determination(skillPrototype));
+
+                if (_IsHit && Data.HitNexts.Any(s => s == skill))
+                    return new SkillCaster(skillPrototype, new Determination(skillPrototype));
+            }            
             return null;
         }
 
@@ -127,6 +140,13 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         public bool IsPunch()
         {
             return (from e in Data.Effects where e.Type == EFFECT_TYPE.PUNCH select e.Value).Any();
+        }
+
+        public bool HasHit()
+        {
+            var first = _IsHit;
+            _IsHit = true;
+            return first == false;
         }
     }
 }

@@ -23,9 +23,12 @@ namespace Regulus.Project.ItIsNotAGame1.Data
 
         public ACTOR_STATUS_TYPE[] Nexts;
 
+        public ACTOR_STATUS_TYPE[] HitNexts;
+
         public Effect[] Effects;
 
-        public float StrengthCost ;                
+        public float StrengthCost ;
+        
 
         public SkillData()
         {
@@ -34,6 +37,7 @@ namespace Regulus.Project.ItIsNotAGame1.Data
             Nexts = new ACTOR_STATUS_TYPE[0];
             Roots = new Translate[0];
             Effects = new Effect[0];
+            HitNexts = new ACTOR_STATUS_TYPE[0];
         }
 
         
