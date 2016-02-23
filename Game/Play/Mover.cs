@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Regulus.Extension;
 using Regulus.CustomType;
+using Regulus.Project.ItIsNotAGame1.Data;
 
 namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
@@ -54,15 +55,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
             var targets = from x in entitys
                           let result = this._Collide(x, polygon, new Vector2())
-                          where
-                              x.EntityType != Data.ENTITY.ACTOR1
-                              && x.EntityType != Data.ENTITY.ENTRANCE
-                              && x.EntityType != Data.ENTITY.ACTOR2
-                              && x.EntityType != Data.ENTITY.ACTOR3
-                              && x.EntityType != Data.ENTITY.ACTOR4
-                              && x.EntityType != Data.ENTITY.ACTOR5
-                              && x.EntityType != Data.ENTITY.DEBIRS
-                              && result.Intersect
+                          where EntityData.IsWall(x.EntityType) && result.Intersect
                           //&& result.WillIntersect
                           select x;
             if (targets.Any() == false)
