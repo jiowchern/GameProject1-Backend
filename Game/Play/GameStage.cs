@@ -16,7 +16,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
     internal class GameStage : IStage, IQuitable,
         IInventoryNotifier,
-        
+        IEmotion,
         IEquipmentNotifier
     {
         private readonly ISoulBinder _Binder;
@@ -39,10 +39,11 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
 
         private bool _RequestAllItems;
-
-        private readonly ControlStatus _ControlStatus;
+        
 
         private readonly Regulus.Utility.Updater _Updater;
+
+        private readonly Regulus.Utility.StageMachine _Machine;
 
         private readonly Wisdom _Wisdom;
 
@@ -53,11 +54,11 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _DeltaTimeCounter = new TimeCounter();
             _UpdateTimeCounter = new TimeCounter();
             _Updater = new Updater();
+            _Machine = new StageMachine();
             _DifferenceNoticer = new DifferenceNoticer<IIndividual>();
 
             _Player = entity;
-            _Mover = new Mover(this._Player);
-            _ControlStatus = new ControlStatus(binder, _Player, _Mover, _Map);
+            _Mover = new Mover(this._Player);            
         }
         public GameStage(ISoulBinder binder, Map map, Entity entity, Wisdom wisdom) : this(binder, map, entity)
         {
@@ -67,10 +68,12 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         }
         void IStage.Leave()
         {
+            _Machine.Termination();
             _Updater.Shutdown();
             _DifferenceNoticer.JoinEvent -= this._BroadcastJoin;
             _DifferenceNoticer.LeftEvent -= this._BroadcastLeft;
 
+            _Binder.Unbind<IEmotion>(this);
             _Binder.Unbind<IDevelopActor>(_Player);
             _Binder.Unbind<IInventoryNotifier>(this);
             _Binder.Unbind<IPlayerProperys>(_Player);
@@ -88,19 +91,21 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             this._Binder.Bind<IInventoryNotifier>(this);
             this._Binder.Bind<IEquipmentNotifier>(this);
             _Binder.Bind<IDevelopActor>(_Player);
-            _Updater.Add(_ControlStatus);
+            _Binder.Bind<IEmotion>(this);
+            _ToSurvival();
 
             if (_Wisdom != null)
                 _Updater.Add(_Wisdom);
         }
 
-
+        
 
         void IStage.Update()
         {
             if (_UpdateTimeCounter.Second < _UpdateTime)
                 return;
             var deltaTime = this._GetDeltaTime();
+            _Machine.Update();
             _Updater.Working();
 
             var lastDeltaTime = deltaTime;
@@ -109,9 +114,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _Player.Equipment.UpdateEffect(lastDeltaTime);
 
             _ResponseItems(deltaTime);
-
-
-            _Player.Strength(deltaTime);
+            
 
         }
 
@@ -277,5 +280,23 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         }
 
 
+        private void _ToSurvival()
+        {
+            var status = new ControlStatus(_Binder, _Player, _Mover, _Map);
+            status.StunEvent += _ToStun;
+            _Machine.Push(status);
+        }
+
+        private void _ToStun()
+        {
+            var status = new StunStatus(_Binder, _Player);
+            status.SurvivalEvent += _ToSurvival;
+            _Machine.Push(status);
+        }
+
+        void IEmotion.Talk(string message)
+        {
+            _Player.Talk(message);
+        }
     }
 }

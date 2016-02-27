@@ -90,7 +90,9 @@
     <Compile Include="Play\NormalStatus.cs" />
     <Compile Include="Play\Realm.cs" />
     <Compile Include="Play\SkillCaster.cs" />
+    <Compile Include="Play\StunStatus.cs" />
     <Compile Include="Play\TurnHandler.cs" />
+    <Compile Include="Play\WaitSecondStrategy.cs" />
     <Compile Include="Play\WallKind.cs" />
     <Compile Include="Play\Zone.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

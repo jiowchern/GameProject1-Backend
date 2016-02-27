@@ -20,6 +20,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
             private float _Imperil;
 
+            private bool _Looted;
 
             public Actor(Guid id)
             {
@@ -44,15 +45,27 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                 _Durability += 10.0f;
                 _Imperil += damage;
             }
+
+            public void Loot()
+            {
+                _Looted = true;
+            }
+
+            public bool IsLooted()
+            {
+                    return _Looted;
+            }
         }
 
-        private readonly Dictionary<Guid, Actor> _Actors;
+        private readonly Dictionary<Guid, Actor> _Actors;        
+
 
         private Dictionary<ENTITY, ENTITY[]> _Enemys;
         public ActorMemory(ENTITY entity_type)
         {
             _EntityType = entity_type;
             _Actors = new Dictionary<Guid, Actor>();
+            
 
             _Enemys = new Dictionary<ENTITY, ENTITY[]>
             {
@@ -107,15 +120,26 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             
         }
 
-        
+        public IVisible FindLootTarget(List<IVisible> vision)
+        {
+            return (from visible in vision
+                    let notLoot = (from actor in _Actors.Values
+                                   where actor.Id == visible.Id && actor.IsLooted() == false                                   
+                                   select true).FirstOrDefault()
+                    let imperil = (from actor in _Actors.Values
+                                   where actor.Imperil > 0 && actor.Id == visible.Id
+                                   select actor.Imperil).Sum()
+                    where notLoot && (imperil >0 ||_IsEnemy(visible.EntityType)) && visible.Status == ACTOR_STATUS_TYPE.STUN                    
+                    select visible).FirstOrDefault();
+        }
 
         public IVisible FindEnemy(List<IVisible> vision)
         {
             return (from visible in vision
                     let imperil = (   from actor in _Actors.Values
-                                    where actor.Imperil > 0 && actor.Id == visible.Id
-                                    select actor.Imperil).Sum()
-                    where imperil > 0 || _IsEnemy(visible.EntityType)
+                                    where actor.Imperil > 0 && actor.Id == visible.Id 
+                                      select actor.Imperil).Sum()
+                    where (imperil > 0 || _IsEnemy(visible.EntityType) ) && visible.Status != ACTOR_STATUS_TYPE.STUN
                     orderby imperil descending 
                     select visible).FirstOrDefault();
 
@@ -131,13 +155,25 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             return false;
         }
 
-        public void Hate(Guid target, float damage)
+        public bool Hate(Guid target, float damage)
         {
 
             Actor actor;
             if (_Actors.TryGetValue(target , out actor))
             {
                 actor.Hate(damage);
+                return true;
+            }
+            
+            return false;
+        }
+
+        public void Loot(Guid target)
+        {
+            Actor actor;
+            if (_Actors.TryGetValue(target, out actor))
+            {
+                actor.Loot();
             }
         }
     }

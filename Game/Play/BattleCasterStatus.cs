@@ -28,6 +28,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         public event Action<SkillCaster> NextEvent;
         public event Action DisarmEvent;
         public event Action BattleIdleEvent;
+        
 
         private readonly HashSet<Guid> _Attacked;
 
@@ -201,10 +202,11 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                     }
                 }
             }
-
-
+            
             if (guardImpact)
+            {
                 NextEvent(SkillCaster.Build(ACTOR_STATUS_TYPE.GUARD_IMPACT));
+            }                
             else if (_Caster.IsDone(_CurrentCastTime))
             {
                 
@@ -228,7 +230,9 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         {
             if (_Attacked.Contains(target.Id) == false)
             {
-                if(_Caster.HasHit() && _HitNextsEvent !=null)
+                _Attacked.Add(target.Id);
+
+                if (_Caster.HasHit() && _HitNextsEvent !=null)
                     _HitNextsEvent(_Caster.Data.HitNexts);
 
                 var hitForce = new HitForce();
@@ -236,7 +240,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                     ? 3.0f
                     : 1f;
                 target.AttachDamage(_Player.Id , hitForce);
-                _Attacked.Add(target.Id);
+                
             }
         }
 

@@ -12,20 +12,32 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
     public class Entity : IIndividual, IDevelopActor
         , IPlayerProperys
     {
-        private ENTITY _EntityType;
-        private string _Name;
+        private readonly ENTITY _EntityType;
+        private readonly string _Name;
         Rect _Bound;
         private readonly Polygon _Mesh;
         private readonly Guid _Id;
 
         private float _Speed;
 
-        private Regulus.Collection.DifferenceNoticer<IIndividual> _CollideTargets;
+        private readonly Regulus.Collection.DifferenceNoticer<IIndividual> _CollideTargets;
         public Regulus.Collection.DifferenceNoticer<IIndividual> CollideTargets { get { return _CollideTargets; } }
 
         private float _BaseView;
 
         private float _IlluminateView;
+
+        private bool _Block;
+
+        private float _DamageCount;
+
+        private Vector2 _SkillOffsetVector;
+
+        private float _BaseSpeed;
+
+        private float _Strength;
+
+        public event Action<Guid, float> InjuredEvent;
 
         private float _View
         {
@@ -84,11 +96,10 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             this._Bound = this._BuildBound(this._Mesh);
             _CollideTargets = new DifferenceNoticer<IIndividual>();
 
-
-
             _SkillOffsetVector = new Vector2();
 
             _BaseSpeed = 1.0f;
+            _MaxHealth = 10f;
         }
 
         private void _BroadcastEquipEvent(Guid obj)
@@ -134,9 +145,21 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             return _Strength;
         }
 
+        public float Health(float val)
+        {
+
+            _Health += val;
+            if (_Health > _MaxHealth)
+                _Health = _MaxHealth;
+
+            return _Health;
+        }
+
         float IPlayerProperys.Strength {
             get { return _Strength; }
         }
+
+        float IPlayerProperys.Health { get { return _Health; } }
 
         string IVisible.Name
         {
@@ -144,6 +167,11 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         }
 
         float IVisible.View { get { return _View; } }
+
+        ACTOR_STATUS_TYPE IVisible.Status {
+            get { return _Status;}
+        }
+
 
         private event Action<EquipStatus[]> _EquipEvent;
 
@@ -213,6 +241,10 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private ACTOR_STATUS_TYPE _Status;
 
+        private float _Health;
+
+        private float _MaxHealth;
+
         public Guid Id { get { return this._Id; } }
 
         public float Direction { get; private set; }
@@ -239,8 +271,12 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         Item[] IIndividual.Stolen()
         {
-            _Status = ACTOR_STATUS_TYPE.CHEST_OPEN;
-            _InvokeStatusEvent();
+            if (_EntityType == ENTITY.DEBIRS)
+            {
+                _Status = ACTOR_STATUS_TYPE.CHEST_OPEN;
+                _InvokeStatusEvent();
+            }
+            
             var itemProivder = new ItemProvider();
             return itemProivder.FromStolen();
         }
@@ -257,22 +293,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             return _Concierge;
         }
 
-        private bool _Block;
-
-        private float _DamageCount;
-
-        private Vector2 _SkillOffsetVector;
         
-
-        
-
-
-
-        private float _BaseSpeed;
-
-        private float _Strength;
-
-        public event Action<Guid , float> InjuredEvent;
 
         void IIndividual.AttachDamage(Guid target , HitForce force)
         {
@@ -574,6 +595,32 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         public ACTOR_STATUS_TYPE GetStatus()
         {
             return _Status;
+        }
+
+        public void Stun()
+        {
+            _Speed = 0.0f;
+            _Trun = 0.0f;
+            _Status = ACTOR_STATUS_TYPE.STUN;
+            _InvokeStatusEvent();
+        }
+
+        public void ResetProperty()
+        {
+            _Health = _MaxHealth;
+            _Strength = 3f;
+            _DamageCount = 0f;
+        }
+
+        public void RecoveryStrength(float delta_time)
+        {
+            Strength(delta_time);
+        }
+
+        public void RecoveryHealth(float delta_time)
+        {
+            if (_Status == ACTOR_STATUS_TYPE.NORMAL_IDLE)
+                Health(delta_time);            
         }
     }
 }

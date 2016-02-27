@@ -33,6 +33,7 @@ namespace Regulus.Project.ItIsNotAGame1.Data
 
         MELEE_ATTACK4,     
         
-        TIRED   
+        TIRED   ,
+        STUN
     }
 }

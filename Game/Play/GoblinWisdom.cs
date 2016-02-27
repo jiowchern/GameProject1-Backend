@@ -47,6 +47,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private bool _IsCollide;
 
+        private bool _Investigate;
+
         public GoblinWisdom(Entity entiry)
         {
             _UsableSkills = new List<ACTOR_STATUS_TYPE>();
@@ -85,23 +87,23 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                                 .End()
 
                                 .Sub(_CollisionWayfindingStrategy())
-
+                                
                                 .Sub(_AttackStrategy())
+
+                                .Sub(_InvestigateStrategy())
 
                                 .Sub(_DistanceWayfindingStrategy())
 
-                                
-
-
-
                                 // 如果沒有敵人則切回一般狀態
                                 .Sequence()
-                                    .Action(_NotEnemy)
+                                    .Action(_NotEnemy)                                    
                                     .Action(_InBattle)
-                                    .Action(_ToNormal)
+                                    .Action(_ToNormal)                                    
                                 .End()
+                                
 
-
+                                .Sub(_LootStrategy())
+                                
                                 // 沒事就前進
                                 .Sequence()
                                     .Action(_MoveForward)
@@ -109,6 +111,119 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                             .End()
                         .Build();
             return node;
+        }
+
+        private ITicker _InvestigateStrategy()
+        {
+            var th = new TurnHandler(this);
+            var builder = new Regulus.BehaviourTree.Builder();
+            var node = builder
+                    .Sequence()
+                        .Action(_NotEnemy)
+                        .Action(_NeedInvestigate )      
+                                                
+                        .Action(
+                            (delta) =>
+                            {
+                                var angel = Regulus.Utility.Random.Instance.NextFloat(135, 225);
+                                th.Input(angel);
+                                return TICKRESULT.SUCCESS;
+                            })
+                        .Action((delta) =>
+                        {
+                            if (GetTrunSpeed() > 0)
+                            {                                
+                                return th.Run(delta);
+                            }
+                            return TICKRESULT.FAILURE;
+                        })
+                        .Action(_DoneInvestigate)
+                    .End()
+                .Build();
+            return node;
+        }
+
+        private TICKRESULT _DoneInvestigate(float arg)
+        {
+            _Investigate = false;
+            return TICKRESULT.SUCCESS;
+        }
+
+        private TICKRESULT _NeedInvestigate(float arg)
+        {            
+            if (_Investigate)
+            {
+                return TICKRESULT.SUCCESS;
+            }
+
+            return TICKRESULT.FAILURE;
+
+        }
+
+        private ITicker _LootStrategy()
+        {
+            float angle = 0.0f;
+            var th = new TurnHandler(this);
+            Guid target = Guid.Empty;
+            var builder = new Regulus.BehaviourTree.Builder();
+            var distance = 1f;
+            var node = builder
+                    .Sequence()
+                        .Action((delta) => _FindLootTarget(out target) )
+                        .Sequence()
+                                .Action(
+                                    (delta) =>
+                                    {
+                                        var result = _GetTargetAngle(target, ref angle);
+                                        th.Input(angle);
+                                        return result;
+                                    })
+                                .Action((delta) => th.Run(delta))
+
+                                .Selector()
+                                    .Not()
+                                        .Sequence()
+                                            .Action((delta) => _Not(_CheckDistance(target, distance)))
+                                            .Action(_MoveForward)
+                                        .End()
+                                    .End()
+
+                                    .Sequence()
+                                        .Action((delta) => _CheckDistance(target, distance))
+                                    .End()
+                                .End()
+                                .Action(_StopMove)
+                                .Action((delta) => _GetTargetAngle(target, ref angle))
+                                .Action((delta) => _CheckAngle(angle))
+                            .End()
+                        .Action((delta) => _Loot(target))
+                    .End()
+                .Build();
+            return node;
+        }
+
+        private TICKRESULT _Loot(Guid target)
+        {
+            if (_NormalSkill != null)
+            {
+                _NormalSkill.Explore(target);
+                _ActorMemory.Loot(target);
+                return TICKRESULT.SUCCESS;
+            }
+            return TICKRESULT.FAILURE;
+        }
+
+        private TICKRESULT _FindLootTarget(out Guid target_id)
+        {
+            var target = _ActorMemory.FindLootTarget(_Vision);
+            if (target != null)
+            {
+                target_id = target.Id;
+                return TICKRESULT.SUCCESS;
+            }
+                
+            target_id = Guid.Empty;
+            return TICKRESULT.FAILURE;
         }
 
         private ITicker _CollisionWayfindingStrategy()
@@ -122,7 +237,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                             (delta) =>
                             {
                                 var result = _CheckCollide();
-                                th.Input(Regulus.Utility.Random.Instance.NextFloat(-180 , 180));
+                                th.Input(Regulus.Utility.Random.Instance.NextFloat(1, 360));
                                 return result;
                             } ) 
                         .Action((delta) => th.Run(delta))
@@ -155,7 +270,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                     .Action((delta) => _DetectObstacle(delta, viewLength / 2, _GetOffsetDirection(10.31f * 2)))
 
                     // 停止移動
-                    .Action(_StopMove)
+                    //.Action(_StopMove)
 
                     // 檢查周遭障礙物
                     .Action((delta) => od.Detect(delta , _DecisionTime, _Entiry, this, viewLength, 180) )
@@ -178,7 +293,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         private ITicker _AttackStrategy()
         {
             Guid enemy = Guid.Empty;
-
+            
             var skill = ACTOR_STATUS_TYPE.NORMAL_IDLE;
             float distance = 0;
             float angle = 0.0f;
@@ -192,20 +307,35 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                     .Selector()
                         .Sub(_ChangeToBattle())
                         .Sequence()
-                            
-                            .Action(
-                                (delta) =>
-                                {
-                                    var result = _GetTargetAngle(delta, enemy, ref angle);
-                                    th.Input(angle);
-                                    return result;
-                                })                        
-                            .Action((delta) => th.Run(delta))
-                            .Action(_MoveForward)
                             .Action((delta) => _FindSkill(ref skill, ref distance))
-                            .Action((delta) => _CheckDistance(enemy, distance))                            
+                            .Sequence()
+                                .Action(
+                                    (delta) =>
+                                    {
+                                        var result = _GetTargetAngle(enemy, ref angle);
+                                        th.Input(angle);
+                                        return result;
+                                    })
+                                .Action((delta) => th.Run(delta))
+
+                                .Selector()
+                                    .Not()
+                                        .Sequence()
+                                            .Action((delta) => _Not(_CheckDistance(enemy, distance)))
+                                            .Action(_MoveForward)
+                                        .End()
+                                    .End()
+
+                                    .Sequence()
+                                        .Action((delta) => _CheckDistance(enemy, distance))
+                                    .End()
+                                .End()
+                                //.Action(_StopMove)
+                                .Action((delta) => _GetTargetAngle(enemy, ref angle))
+                                .Action((delta) => _CheckAngle(angle))
+                            .End()
                             .Action((delta) => _UseSkill(skill))
-                            .Action(() => new WaitSecond(0.1f) )
+                            .Action(() => new WaitSecondStrategy(0.1f) )
                         .End()
 
                     .End()
@@ -214,6 +344,30 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                 .End()
                 .Build();
 
+        }
+
+        
+
+       
+
+        
+
+        private TICKRESULT _Not(TICKRESULT check)
+        {
+            if(check == TICKRESULT.FAILURE)
+                return TICKRESULT.SUCCESS;
+            if (check == TICKRESULT.SUCCESS)
+                return TICKRESULT.FAILURE;
+            return TICKRESULT.RUNNING;            
+        }
+
+        private TICKRESULT _CheckAngle(float angle)
+        {
+            if (Math.Abs(angle ) < 45)
+            {
+                return TICKRESULT.SUCCESS;
+            }
+            return TICKRESULT.FAILURE;
         }
 
         private TICKRESULT _UseSkill(ACTOR_STATUS_TYPE skill)
@@ -238,7 +392,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             return TICKRESULT.FAILURE;
         }
 
-        private TICKRESULT _GetTargetAngle(float delta, Guid id , ref float angle)
+        private TICKRESULT _GetTargetAngle(Guid id , ref float angle)
         {
             var target = _Find(id);
             if (target == null)
@@ -306,7 +460,10 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private void _OnInjured(Guid target, float damage)
         {
-            _ActorMemory.Hate(target , damage);
+            if (_ActorMemory.Hate(target, damage) == false)
+            {
+                _Investigate = true;
+            }
         }
 
         private TICKRESULT _FindEnemy(out Guid enemy)
@@ -734,35 +891,6 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             }
 
             return 0;
-        }
-    }
-
-    internal class WaitSecond : IAction
-    {
-        private readonly float _Second;
-
-        private float _Count;
-        public WaitSecond(float second)
-        {
-            _Second = second;            
-        }
-
-        TICKRESULT ITicker.Tick(float delta)
-        {
-            _Count += delta;
-            if (_Count > _Second)
-                return TICKRESULT.SUCCESS;
-
-            return TICKRESULT.RUNNING;
-        }
-
-        void IAction.Start()
-        {
-            _Count = 0.0f;
-        }
-
-        void IAction.End()
-        {            
         }
     }
 

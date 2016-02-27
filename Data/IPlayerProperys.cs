@@ -10,5 +10,7 @@ namespace Regulus.Project.ItIsNotAGame1.Data
         Guid Id { get; }
 
         float Strength { get; }
+
+        float Health { get; }
     }
 }

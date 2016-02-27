@@ -13,6 +13,8 @@ namespace Regulus.Project.ItIsNotAGame1.Data
 
         float View { get; }
 
+        ACTOR_STATUS_TYPE Status { get; }
+
         event Action<EquipStatus[]> EquipEvent;
 
         //狀態 , 起始位置 , 速度 ,方向, 位移

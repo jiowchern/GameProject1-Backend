@@ -15,17 +15,18 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private float _Delta;
 
-        private readonly IEnumerator<TICKRESULT> _Iterator;
+        private IEnumerator<TICKRESULT> _Iterator;
 
         public TurnHandler(GoblinWisdom goblin_wisdom )
         {
             _GoblinWisdom = goblin_wisdom;
-            _Iterator = _Run().GetEnumerator();
+            
         }
 
         public void Input(float angle)
         {
             _Angle = angle;
+            _Iterator = _Run().GetEnumerator();
         }
 
         TICKRESULT _Tick(float delta)
@@ -47,7 +48,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
             var turnSpeed = _GoblinWisdom.GetTrunSpeed();
             if (turnSpeed <= 0)
-                return;
+                return ;
             var angle = _Angle;
 
             angle %= 360;
@@ -70,6 +71,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             // UnityEngine.Debug.Log("TurnTimeCounter = " + _TimeCounter);
             //UnityEngine.Debug.Log("Turn angle = " + angle);
 #endif
+
+            
         }
 
         void _End()
@@ -90,9 +93,11 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         {
             while (true)
             {
+                
+
                 _Start();
 
-                TICKRESULT result ;
+                TICKRESULT result;
                 do
                 {
                     result = _Tick(_Delta);

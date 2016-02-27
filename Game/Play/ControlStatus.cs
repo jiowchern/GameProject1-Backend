@@ -8,34 +8,30 @@ using Regulus.Utility;
 
 namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
-    internal class ControlStatus : Regulus.Utility.IUpdatable , IEmotion
+    internal class ControlStatus : Regulus.Utility.IStage
     {
         private readonly ISoulBinder _Binder;
 
-        private readonly Entity _Player;
-
-        private readonly Mover _Mover;
+        private readonly Entity _Player;        
 
         private readonly Map _Map;
 
         private readonly StageMachine _Status;
 
-        
+        public event Action StunEvent;
+
+        private Regulus.Utility.TimeCounter _TimeCounter;
+
 
         public ControlStatus(ISoulBinder binder, Entity player, Mover mover , Map map)
         {
             _Binder = binder;
-            _Player = player;
-            _Mover = mover;
+            _Player = player;            
             _Map = map;
             _Status = new StageMachine();
+            _TimeCounter = new TimeCounter();
         }
-
-        void IBootable.Launch()
-        {
-            _Binder.Bind<IEmotion>(this);
-            _ToDone();
-        }
+        
 
         private void _ToDone()
         {            
@@ -76,28 +72,48 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _SetStatus(status);
         }
 
-        void IBootable.Shutdown()
+        
+        void IStage.Enter()
+        {
+            _Player.ResetProperty();
+            _ToDone();
+        }
+
+        void IStage.Leave()
         {
             _Status.Termination();
-            _Binder.Unbind<IEmotion>(this);
+           
         }
 
-        bool IUpdatable.Update()
+        void IStage.Update()
         {
             _Status.Update();
-            this._ProcessDamage();
-            return true;
+
+            var damage = _Player.HaveDamage();
+            _ProcessDamage(damage);
+
+            var deltaTime = _TimeCounter.Second;
+            _TimeCounter.Reset();
+            _Player.RecoveryStrength(deltaTime);
+            _Player.RecoveryHealth(deltaTime);
+
         }
 
-        private void _ProcessDamage()
-        {
-            var casters = _Player.HaveDamage();
+        
 
-            if (casters > 2)
+        private void _ProcessDamage(float damage)
+        {
+            var hp = _Player.Health(-damage);
+            if (hp < 0)
+            {
+                StunEvent();
+            }
+            else if (damage > 2)
                 _ToKnockout();
-            else if (casters > 0)
+            else if (damage > 0)
                 _ToDamage();
         }
+        
 
         private void _ToKnockout()
         {
@@ -106,6 +122,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             var stage = new BattleCasterStatus(_Binder, _Player, _Map, caster);
             stage.BattleIdleEvent += _ToBattle;
             stage.NextEvent += _ToCast;
+            
             _SetStatus(stage);
         }
 
@@ -118,18 +135,15 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         }
 
         private void _ToDamage()
-        {
+        {            
+
             var skill = Resource.Instance.FindSkill(ACTOR_STATUS_TYPE.DAMAGE1);
             var caster = new SkillCaster(skill , new Determination(skill));
             var stage = new BattleCasterStatus(_Binder , _Player , _Map , caster);
             stage.BattleIdleEvent += _ToBattle;
-            stage.NextEvent += _ToCast;
+            stage.NextEvent += _ToCast;            
             _SetStatus(stage);
         }
-
-        void IEmotion.Talk(string message)
-        {
-            _Player.Talk(message);
-        }
+        
     }
 }
