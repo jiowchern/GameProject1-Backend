@@ -75,7 +75,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _Datas = Resource.Instance.SkillDatas;
 
             this._Id = Guid.NewGuid();
-            this._BaseView = 10.0f;
+            this._BaseView = 15.0f; 
             _DetectionRange = 1.0f;
 
             Bag = new Inventory();
@@ -116,7 +116,10 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                                   Part = item.GetEquipPart()
                               };
 
-            this._EquipEvent(equipStatus.ToArray());
+            if (_EquipEvent != null)
+            {
+                _EquipEvent(equipStatus.ToArray());
+            }
         }
 
         private void _BroadcastEquipEvent(Item obj)
@@ -515,6 +518,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         {
             _Speed = 0.0f;
             _Trun = 0.0f;
+            _Status = ACTOR_STATUS_TYPE.MAKE;
             _InvokeStatusEvent();
         }
 
@@ -621,6 +625,11 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         {
             if (_Status == ACTOR_STATUS_TYPE.NORMAL_IDLE)
                 Health(delta_time);            
+        }
+
+        public float GetViewLength()
+        {
+            return _View;
         }
     }
 }

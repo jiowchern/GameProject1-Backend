@@ -127,8 +127,14 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             {
                 if (_RequestAllItems)
                 {
-                    _FlushEvent(_Player.Equipment.GetAll());
-                    _AllItemEvent.Invoke(_Player.Bag.GetAll());
+                    if (_FlushEvent != null)
+                    {
+                        _FlushEvent(_Player.Equipment.GetAll());
+                    }
+                    if (_AllItemEvent != null)
+                    {
+                        _AllItemEvent.Invoke(_Player.Bag.GetAll());
+                    }
                     _UpdateAllItemTime = 10f;
                     _RequestAllItems = false;
                 }

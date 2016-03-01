@@ -62,6 +62,7 @@
     <Compile Include="Play\GoblinWisdom.cs" />
     <Compile Include="Play\GpiTransponder.cs" />
     <Compile Include="Play\HitForce.cs" />
+    <Compile Include="Play\InventoryProxy.cs" />
     <Compile Include="Play\ObstacleDetector.cs" />
     <Compile Include="Play\Race.cs" />
     <Compile Include="Play\ActorStatus.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="Play\Realm.cs" />
     <Compile Include="Play\SkillCaster.cs" />
     <Compile Include="Play\StunStatus.cs" />
+    <Compile Include="Play\TimeTriggerStrategy.cs" />
     <Compile Include="Play\TurnHandler.cs" />
     <Compile Include="Play\WaitSecondStrategy.cs" />
     <Compile Include="Play\WallKind.cs" />

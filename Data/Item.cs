@@ -71,5 +71,10 @@ namespace Regulus.Project.ItIsNotAGame1.Data
             }
             return Life > 0;
         }
+
+        public bool IsLife()
+        {
+            return Life > 0;
+        }
     }
 }
