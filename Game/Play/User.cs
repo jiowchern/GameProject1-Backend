@@ -161,7 +161,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             }
             
             var stage = new GameStage(this._Binder, map , player );
-            stage.DoneEvent += this._ToVerify;
+            stage.DoneEvent += () => { _ToGame(record , map) ;};
             _Machine.Push(stage);
         }
 

@@ -44,12 +44,15 @@ E:\Develop\Project\ItIsNotAGame1\Backend\PlayUser\bin\Release\ItIsNotAGame1PlayU
 E:\Develop\Project\ItIsNotAGame1\Backend\PlayUser\bin\Release\ItIsNotAGame1PlayUser.pdb
 E:\Develop\Project\ItIsNotAGame1\Backend\PlayUser\bin\Release\ItIsNotAGame1Data.dll
 E:\Develop\Project\ItIsNotAGame1\Backend\PlayUser\bin\Release\protobuf-net.dll
+E:\Develop\Project\ItIsNotAGame1\Backend\PlayUser\bin\Release\RegulusLibrary.dll
 E:\Develop\Project\ItIsNotAGame1\Backend\PlayUser\bin\Release\RegulusRemoting.dll
 E:\Develop\Project\ItIsNotAGame1\Backend\PlayUser\bin\Release\RegulusRemotingGhostNative.dll
 E:\Develop\Project\ItIsNotAGame1\Backend\PlayUser\bin\Release\RegulusRemotingStandalone.dll
 E:\Develop\Project\ItIsNotAGame1\Backend\PlayUser\bin\Release\ItIsNotAGame1Data.pdb
 E:\Develop\Project\ItIsNotAGame1\Backend\PlayUser\bin\Release\protobuf-net.pdb
 E:\Develop\Project\ItIsNotAGame1\Backend\PlayUser\bin\Release\protobuf-net.xml
+E:\Develop\Project\ItIsNotAGame1\Backend\PlayUser\bin\Release\RegulusLibrary.pdb
+E:\Develop\Project\ItIsNotAGame1\Backend\PlayUser\bin\Release\RegulusLibrary.xml
 E:\Develop\Project\ItIsNotAGame1\Backend\PlayUser\bin\Release\RegulusRemoting.pdb
 E:\Develop\Project\ItIsNotAGame1\Backend\PlayUser\bin\Release\RegulusRemoting.xml
 E:\Develop\Project\ItIsNotAGame1\Backend\PlayUser\bin\Release\RegulusRemotingGhostNative.pdb
@@ -58,6 +61,3 @@ E:\Develop\Project\ItIsNotAGame1\Backend\PlayUser\bin\Release\RegulusRemotingSta
 E:\Develop\Project\ItIsNotAGame1\Backend\PlayUser\obj\Release\PlayUser.csprojResolveAssemblyReference.cache
 E:\Develop\Project\ItIsNotAGame1\Backend\PlayUser\obj\Release\ItIsNotAGame1PlayUser.dll
 E:\Develop\Project\ItIsNotAGame1\Backend\PlayUser\obj\Release\ItIsNotAGame1PlayUser.pdb
-E:\Develop\Project\ItIsNotAGame1\Backend\PlayUser\bin\Release\RegulusLibrary.dll
-E:\Develop\Project\ItIsNotAGame1\Backend\PlayUser\bin\Release\RegulusLibrary.pdb
-E:\Develop\Project\ItIsNotAGame1\Backend\PlayUser\bin\Release\RegulusLibrary.xml

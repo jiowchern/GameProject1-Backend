@@ -27,7 +27,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         {
             Item item;
             _Items.TryGetValue(equip_type, out item);
-            if (item.IsValid())
+            if (Item.IsValid(item))
             {
                 _Items.Remove(equip_type);
                 RemoveEvent(item.Id);
@@ -45,7 +45,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         }
 
 
-        public Item? Find(EQUIP_PART part)
+        public Item Find(EQUIP_PART part)
         {
             if (_Items.ContainsKey(part))
                 return _Items[part];

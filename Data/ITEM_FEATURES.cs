@@ -13,5 +13,6 @@ namespace Regulus.Project.ItIsNotAGame1.Data
 
         WEAPON_TWOHANDSWORD,
         ILLUMINATION,
+        USABLE
     }
 }

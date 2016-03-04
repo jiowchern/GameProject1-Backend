@@ -132,14 +132,14 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                     select e.Value).Sum() > 0.0f;
         }
 
-        public bool IsSmash()
+        public float GetSmash()
         {
-            return (from e in Data.Effects where e.Type == EFFECT_TYPE.SMASH select e.Value).Any();
+            return (from e in Data.Effects where e.Type == EFFECT_TYPE.SMASH select e.Value).Sum();
         }
 
-        public bool IsPunch()
+        public float GetPunch()
         {
-            return (from e in Data.Effects where e.Type == EFFECT_TYPE.PUNCH select e.Value).Any();
+            return (from e in Data.Effects where e.Type == EFFECT_TYPE.PUNCH select e.Value).Sum();
         }
 
         public bool HasHit()
@@ -147,6 +147,11 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             var first = _IsHit;
             _IsHit = true;
             return first == false;
+        }
+
+        public float GetAid()
+        {
+            return (from e in Data.Effects where e.Type == EFFECT_TYPE.AID select e.Value).Sum();
         }
     }
 }

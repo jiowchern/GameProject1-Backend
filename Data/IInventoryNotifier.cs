@@ -11,6 +11,8 @@ namespace Regulus.Project.ItIsNotAGame1.Data
         void Discard(Guid id);
         void Equip(Guid id);
 
+        void Use(Guid id);
+
         event Action<Item[]> AllItemEvent;
         event Action<Item> AddEvent;
         event Action<Guid> RemoveEvent;

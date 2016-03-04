@@ -34,10 +34,9 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         }
 
         private void _ToGame(Map map)
-        {
-            
+        {            
             var stage = new GameStage(_Wisdom.GetSoulBinder() ,  map , _Actor , _Wisdom);
-            //stage.DoneEvent += _Idle ;
+            stage.DoneEvent += ()=> { _ToGame(map);  } ;
             _Machine.Push(stage);
 
             

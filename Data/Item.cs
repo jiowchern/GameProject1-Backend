@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Linq;
 
 namespace Regulus.Project.ItIsNotAGame1.Data
 {
     [ProtoBuf.ProtoContract]
-    public struct Item
+    public class Item
     {
        [ProtoBuf.ProtoMember(1)]
         public Guid Id { get; set; }
@@ -23,21 +24,26 @@ namespace Regulus.Project.ItIsNotAGame1.Data
         [ProtoBuf.ProtoMember(6)]
         public float Life { get; set; }
 
+        public Item()
+        {
+            Effects = new Effect[0];
+        }
 
         public Item Clone()
         {
-            var newItem = this;
+            var newItem = new Item();
             newItem.Id = Guid.NewGuid();
-            newItem.Count = Count;
-            newItem.Effects = this.Effects;
+            newItem.Count = Count;            
+            newItem.Effects = Regulus.Utility.ValueHelper.DeepCopy(Effects);
             newItem.Name = Name;
             newItem.Weight = Weight;
             return newItem;
         }
 
-        public bool IsValid()
+        public static bool IsValid(Item src)
         {            
-            return Id != Guid.Empty && Count > 0 && Effects != null;
+
+            return src != null && src.Id != Guid.Empty && src.Count > 0 && src.Effects != null;
         }
 
         public ItemPrototype GetPrototype()
@@ -75,6 +81,11 @@ namespace Regulus.Project.ItIsNotAGame1.Data
         public bool IsLife()
         {
             return Life > 0;
+        }
+
+        public float GetAid()
+        {
+            return (from e in Effects where e.Type == EFFECT_TYPE.AID select e.Value).Sum();
         }
     }
 }

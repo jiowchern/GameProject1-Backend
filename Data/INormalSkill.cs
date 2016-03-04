@@ -11,6 +11,8 @@ namespace Regulus.Project.ItIsNotAGame1.Data
         void Explore(Guid target);
         void Battle();
         void Make();
+
         
+
     }
 }

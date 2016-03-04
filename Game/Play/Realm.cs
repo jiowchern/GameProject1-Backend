@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using System.Runtime.InteropServices;
 
 using Regulus.CustomType;
 using Regulus.Extension;
@@ -101,42 +101,73 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private void _BuildEnterance(Map map)
         {
-            // player enterance
-            this._BuildPlayerEnternace(map);
+            var count = Maze.kDimension * Maze.kDimension;
+            int[] indexs = new int[count];
+            for (int i = 0; i < count; ++i)
+            {
+                indexs[i] = i;
+            }
+            var random = Regulus.Utility.Random.Instance;
+            var queue = new Queue<int>(indexs.OrderBy((i) => random.NextDouble()));
 
-            this._BuildAboriginalEnternace(map);
+            this._BuildPlayerEnternace(map , queue);
+
+            this._BuildAboriginalEnternace(map , queue);
         }
 
-        private void _BuildAboriginalEnternace(Map map)
+        private void _BuildAboriginalEnternace(Map map, Queue<int> positions)
         {
+            
+            
+            
+            for(int i = 0 ; i < Maze.kDimension/3 ; ++i)
+            {
+                this._BuildEnternace(map, new []{ENTITY.ACTOR2, ENTITY.ACTOR3 }, positions.Dequeue());
+            }
+
+            for (int i = 0; i < Maze.kDimension/3 ; ++i)
+            {
+                this._BuildEnternace(map, new[] { ENTITY.ACTOR2, ENTITY.ACTOR4 }, positions.Dequeue());
+            }
+
+            for (int i = 0; i < Maze.kDimension/3 ; ++i)
+            {
+                this._BuildEnternace(map, new[] { ENTITY.ACTOR2, ENTITY.ACTOR5 }, positions.Dequeue());
+            }
+
+
+
+        }
+
+        private void _BuildPlayerEnternace(Map map , Queue<int> positions)
+        {
+            
+
+
             var types = new[]
                 {
-                    ENTITY.ACTOR2 , ENTITY.ACTOR3 , ENTITY.ACTOR4, ENTITY.ACTOR5
+                    ENTITY.ACTOR1 , ENTITY.ACTOR2 , ENTITY.DEBIRS
                 };
-            for (int i = 0; i < 30; i++)
-            {
-                this._BuildEnternace(map, types);
-            }
+            var random = Regulus.Utility.Random.Instance;
+
+            
+            
+            _BuildEnternace(map, types, positions.Dequeue());
+            
             
         }
-
-        private void _BuildPlayerEnternace(Map map)
-        {
-            var types = new[]
-                {
-                    ENTITY.ACTOR1 , ENTITY.ACTOR2 , ENTITY.DEBIRS, ENTITY.ACTOR3 , ENTITY.ACTOR4, ENTITY.ACTOR5
-                };
-            this._BuildEnternace(map, types);
-        }
         
-        private void _BuildEnternace(Map map, ENTITY[] types)
+        private void _BuildEnternace(Map map, ENTITY[] types , int index)
         {
 
             
             var entity = EntityProvider.CreateEnterance(types);
             IIndividual individual = entity;
-            var x = this._Random.NextInt(0, Maze.kDimension) * this._Witdh;
-            var y = this._Random.NextInt(0, Maze.kDimension) * this._Height;
+            var dimension = Maze.kDimension;
+            var x = (index % dimension) * _Witdh;
+            var y = index/ dimension * _Height;
+
+            Regulus.Utility.Log.Instance.WriteDebug(string.Format("create enterance {2} : {0} ,{1}" , x,y, index ));
 
             individual.SetPosition(x, y);
 

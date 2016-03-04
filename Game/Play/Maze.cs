@@ -7,7 +7,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         /// <summary>
         /// The k dimension.
         /// </summary>
-        public static int kDimension = 50;
+        public static int kDimension = 10;
 
         /// <summary>
         /// The cell stack.

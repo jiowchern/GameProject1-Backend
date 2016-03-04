@@ -22,6 +22,10 @@ namespace Regulus.Project.ItIsNotAGame1.Game
 
         private readonly Regulus.Utility.TimeCounter _DeltaTimeCounter;
 
+        private float _LastDelta;
+
+        public float LastDelta { get { return _LastDelta;} }
+
         protected Wisdom()
         {
             
@@ -53,11 +57,11 @@ namespace Regulus.Project.ItIsNotAGame1.Game
         bool IUpdatable.Update()
         {
             var second = _DeltaTimeCounter.Second;
-
+            _LastDelta = second;
+            _DeltaTimeCounter.Reset();
 
             _Tree.Tick(second);
             _Update(second);
-            _DeltaTimeCounter.Reset();
 
             return true;
         }

@@ -28,5 +28,6 @@ namespace Regulus.Project.ItIsNotAGame1.Data
         MOVE_TURNRIGHT,
         MOVE_RUNFORWARD,
         DISARM,
+        AID
     }
 }

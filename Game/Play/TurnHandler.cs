@@ -19,8 +19,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         public TurnHandler(GoblinWisdom goblin_wisdom )
         {
-            _GoblinWisdom = goblin_wisdom;
-            
+            _GoblinWisdom = goblin_wisdom;            
         }
 
         public void Input(float angle)

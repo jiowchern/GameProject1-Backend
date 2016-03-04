@@ -24,16 +24,16 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         private readonly List<IVisible> _Vision;
 
 
-        private ActorMemory _ActorMemory;
-        
-        
+        private ActorMind _ActorMind;
+
+        private Regulus.Utility.IRandom _Random;
         private IMoveController _MoveController;
 
         private float _ScanCycle;
 
         private readonly float _DecisionTime;
-        
-        
+
+        private Regulus.Utility.FPSCounter _FPS;
 
         private IEmotion _Emotion;
 
@@ -55,13 +55,25 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         
 
-        private InventoryProxy _Inventory;
+        private readonly InventoryProxy _Inventory;
+
+        private readonly Dictionary<ENTITY , float> _EntityImperils;
+
+        private readonly Queue<string> _Messages;
 
         public GoblinWisdom(Entity entiry)
         {
+            var type  = entiry.GetVisible().EntityType;
+
+            _Messages = new Queue<string>();
+
+            _FPS = new FPSCounter();
+
             _Inventory = new InventoryProxy();
             _UsableSkills = new List<ACTOR_STATUS_TYPE>();
-            _ActorMemory = new ActorMemory(entiry.GetVisible().EntityType);
+
+            _EntityImperils = _InitialImperil(type);
+            _ActorMind = new ActorMind(type);
 
             _DecisionTime = 0.5f;
                         
@@ -69,10 +81,53 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                         
             _Entiry = entiry;
 
-            
+            _Random = Regulus.Utility.Random.Instance;
+
             //asin(2 / sqrt(2 ^ 2 + 10 ^ 2))
         }
-        
+
+        private Dictionary<ENTITY, float> _InitialImperil(ENTITY type)
+        {
+            if (type == ENTITY.ACTOR2)
+            {                
+                return new Dictionary<ENTITY, float>
+                {
+                    {ENTITY.ACTOR2, -30},
+                    {ENTITY.ACTOR3, 0},
+                    {ENTITY.ACTOR4, 0},
+                    {ENTITY.ACTOR5, 0}
+                }; 
+            }
+            else if (type == ENTITY.ACTOR3)
+            {
+                return new Dictionary<ENTITY, float>
+                {
+                    {ENTITY.ACTOR3, -10},
+                    {ENTITY.ACTOR4, 1},
+                    {ENTITY.ACTOR5, 0}
+                };
+            }
+            else if (type == ENTITY.ACTOR4)
+            {
+                return new Dictionary<ENTITY, float>
+                {
+                    {ENTITY.ACTOR3, 0},
+                    {ENTITY.ACTOR4, -10},
+                    {ENTITY.ACTOR5, 1}
+                };
+            }
+            else if (type == ENTITY.ACTOR5)
+            {
+                return new Dictionary<ENTITY, float>
+                {
+                    {ENTITY.ACTOR3, 1},
+                    {ENTITY.ACTOR4, 0},
+                    {ENTITY.ACTOR5, -10}
+                };
+            }
+
+            return new Dictionary<ENTITY, float>();
+        }
 
         protected override Regulus.BehaviourTree.ITicker _Launch()
         {
@@ -81,19 +136,18 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
 
             Guid actor = Guid.Empty ;
-            Guid enemy = Guid.Empty ;
-
-            
             
             _Bind();
             var builder = new Regulus.BehaviourTree.Builder();            
             var node = builder
                             .Selector()        
+                                .Sub(_ListenCommandStrategy())
+
                                 .Sequence()
                                     .Action((delta) => _DetectActor(_Entiry.GetViewLength(), _GetOffsetDirection(120) , out actor))
                                     .Action((delta) => _NotSeen(actor))
                                     .Action((delta) => _Remember(actor))
-                                    .Action((delta) => _Talk("!"))
+                                //    .Action((delta) => _Talk("!"))
                                 .End()
 
                                 .Sub(_CollisionWayfindingStrategy())
@@ -115,6 +169,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                                 .Sub(_LootStrategy())
                                 .Sub(_MakeItemStrategy())
                                 .Sub(_EquipItemStrategy())
+                                .Sub(_DiscardItemStrategy())
                                 // 沒事就前進
                                 .Sequence()
                                     .Action(_MoveForward)
@@ -122,6 +177,34 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                             .End()
                         .Build();
             return node;
+        }
+
+        
+
+        private ITicker _ListenCommandStrategy()
+        {
+            var builder = new Regulus.BehaviourTree.Builder();
+            return builder
+                    .Sequence()
+                        .Action(_HandleCommandAction)
+                    .End()
+                .Build();
+        }
+
+        private TICKRESULT _HandleCommandAction(float arg)
+        {
+            if (_Messages.Count > 0)
+            {
+                var message = _Messages.Dequeue();
+                if (message == "fps")
+                {
+                    if(_Emotion != null)
+                        _Emotion.Talk(string.Format("FPS:{0} Delta:{1}" , _FPS.Value , LastDelta));
+
+                }
+                return TICKRESULT.SUCCESS;
+            }
+            return TICKRESULT.FAILURE;
         }
 
         private ITicker _EquipItemStrategy()
@@ -156,13 +239,59 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             return TICKRESULT.FAILURE;
         }
 
-        
 
-        
+
+        private ITicker _DiscardItemStrategy()
+        {
+            var builder = new Regulus.BehaviourTree.Builder();
+
+            var timeTrigger = new TimeTriggerStrategy(10f);
+
+            var node = builder
+                    .Sequence()
+                        .Action(timeTrigger.Tick)
+                        .Action((delta) => timeTrigger.Reset(10f))                        
+                        .Selector()
+                            .Sequence()
+                                .Action((delta) => _CheckItemAmount("Axe", (count) => count >= 2))
+                                .Action((delta) => _DiscardItem("Axe" , 1))
+                                .Action((delta) => _Talk("Discard axe."))
+                            .End()
+                            .Sequence()
+                                .Action((delta) => _CheckItemAmount("Sword", (count) => count >= 2))
+                                .Action((delta) => _DiscardItem("Sword", 1))
+                                .Action((delta) => _Talk("Discard sword."))
+                            .End()
+
+                            .Sequence()
+                                .Action((delta) => _CheckItemAmount("Lamp", (count) => count >= 2))
+                                .Action((delta) => _DiscardItem("Lamp", 1))
+                                .Action((delta) => _Talk("Discard lamp."))
+                            .End()
+
+                            .Sequence()
+                                .Action((delta) => _CheckItemAmount("AidKit", (count) => count >= 2))
+                                .Action((delta) => _DiscardItem("AidKit", 1))
+                                .Action((delta) => _Talk("Discard AidKit."))
+                            .End()
+                            .Action((delta) => _Talk("Nothing discard."))
+                        .End()
+
+                    .End()
+                .Build();
+            return node;
+        }
+
+        private TICKRESULT _DiscardItem(string item_name, int count)
+        {
+            _Inventory.Discard(item_name, count);
+            return TICKRESULT.SUCCESS;            
+
+        }
 
         private ITicker _MakeItemStrategy()
         {
-            
+            var index = 0;
             var builder = new Regulus.BehaviourTree.Builder();
 
             var timeTrigger = new TimeTriggerStrategy(10f);
@@ -173,20 +302,113 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                         .Action((delta) => timeTrigger.Reset(10f))
                         .Action(_ToMake)      
                         .Action(()=>new WaitSecondStrategy(3))   
+                        .Action((delta) => _GetRandomIndex(0, 4 , out index))
                         .Selector()
                             .Sequence()
-                                .Action((delta) => _MakeItem())
-                                .Action((delta) => _Talk("Produced props."))
+                                .Action((delta) => _If( index == 0) )
+                                .Action((delta) => _CheckItemAmount("Axe" , (count) => count < 2 ))
+                                .Action((delta) => _MakeItem("Axe"))
+                                .Action((delta) => _Talk("Produced axe."))
                             .End()
-                            .Action((delta) => _Talk("Nothing maked."))
-                        .End()                                       
-                        
+                            .Sequence()
+                                .Action((delta) => _If(index == 1))
+                                .Action((delta) => _CheckItemAmount("Sword", (count) => count < 2))
+                                .Action((delta) => _MakeItem("Sword"))
+                                .Action((delta) => _Talk("Produced sword."))
+                            .End()
+
+                            .Sequence()
+                                .Action((delta) => _If(index == 2))
+                                .Action((delta) => _CheckItemAmount("Lamp", (count) => count < 2))
+                                .Action((delta) => _MakeItem("Lamp"))
+                                .Action((delta) => _Talk("Produced lamp."))
+                            .End()
+
+                            .Sequence()
+                                .Action((delta) => _If(index == 3))
+                                .Action((delta) => _CheckItemAmount("AidKit", (count) => count < 2))
+                                .Action((delta) => _MakeItem("AidKit"))
+                                .Action((delta) => _Talk("Produced aid."))
+                            .End()
+                            .Sequence()
+                                .Action((delta) => _Talk("Nothing maked."))                                
+                            .End()
+                            
+                        .End()
+                        .Action(_ReleaseMake)
                     .End()
                 .Build();
             return node;
         }
 
-        
+        private TICKRESULT _If(bool b)
+        {
+            if(b)
+                return TICKRESULT.SUCCESS;
+            return TICKRESULT.FAILURE;
+        }
+
+        private TICKRESULT _GetRandomIndex(int min, int max, out int index)
+        {
+            index = _Random.NextInt(min, max);
+            return TICKRESULT.SUCCESS;
+        }
+
+        private TICKRESULT _ReleaseMake(float arg)
+        {
+            if (_MakeSkill != null)
+            {
+                _MakeSkill.Exit();
+                return TICKRESULT.SUCCESS;
+            }
+            return TICKRESULT.FAILURE;
+
+        }
+
+        private TICKRESULT _MakeItem(string item_name)
+        {
+            if (_MakeSkill == null)
+            {
+                return TICKRESULT.FAILURE;
+            }
+
+            if (_MakeSkill != null && _Formulas == null)
+            {
+                return TICKRESULT.RUNNING;
+            }
+            var formula = _Formulas.FirstOrDefault((f) => f.Name == item_name);
+            if (formula != null)
+            {
+                bool enough = true;
+                foreach (var needItem in formula.NeedItems)
+                {
+
+                    var itemAmount = _Entiry.Bag.GetItemAmount(needItem.Item);
+                    if (itemAmount < needItem.Min)
+                    {
+                        enough = false;
+                        break;
+                    }
+                }
+
+                if (enough)
+                {
+                    _MakeSkill.Create(formula.Item, (from items in formula.NeedItems select items.Min).ToArray());                    
+                    return TICKRESULT.SUCCESS;
+                }
+            }            
+            return TICKRESULT.FAILURE;
+        }
+
+        private TICKRESULT _CheckItemAmount(string item, Func<int, bool> func)
+        {
+            var amount = _Inventory.GetAmount(item);
+            if (func(amount))
+            {
+                return TICKRESULT.SUCCESS;
+            }
+            return TICKRESULT.FAILURE;
+        }
 
         private TICKRESULT _MakeItem()
         {
@@ -291,6 +513,9 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         {
             float angle = 0.0f;
             var th = new TurnHandler(this);
+
+
+            var traceStrategy = new TraceStrategy(this);
             Guid target = Guid.Empty;
             var builder = new Regulus.BehaviourTree.Builder();
             var distance = 1f;
@@ -298,32 +523,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                     .Sequence()
                         .Action(_NotEnemy)
                         .Action((delta) => _FindLootTarget(out target) )
-                        .Sequence()
-                                .Action(
-                                    (delta) =>
-                                    {
-                                        var result = _GetTargetAngle(target, ref angle);
-                                        th.Input(angle);
-                                        return result;
-                                    })
-                                .Action((delta) => th.Run(delta))
-
-                                .Selector()
-                                    .Not()
-                                        .Sequence()
-                                            .Action((delta) => _Not(_CheckDistance(target, distance)))
-                                            .Action(_MoveForward)
-                                        .End()
-                                    .End()
-
-                                    .Sequence()
-                                        .Action((delta) => _CheckDistance(target, distance))
-                                    .End()
-                                .End()
-                                .Action(_StopMove)
-                                .Action((delta) => _GetTargetAngle(target, ref angle))
-                                .Action((delta) => _CheckAngle(angle))
-                            .End()
+                        .Action((delta) => traceStrategy.Set(target , distance , 45f ) )
+                        .Action((delta) => traceStrategy.Tick(delta))                               
                         .Action((delta) => _Loot(target))
                     .End()
                 .Build();
@@ -335,7 +536,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             if (_NormalSkill != null)
             {
                 _NormalSkill.Explore(target);
-                _ActorMemory.Loot(target);
+                _ActorMind.Loot(target);
                 return TICKRESULT.SUCCESS;
             }
             return TICKRESULT.FAILURE;
@@ -343,7 +544,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private TICKRESULT _FindLootTarget(out Guid target_id)
         {
-            var target = _ActorMemory.FindLootTarget(_Vision);
+            var target = _ActorMind.FindLootTarget(_Vision);
             if (target != null)
             {
                 target_id = target.Id;
@@ -370,6 +571,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                             } ) 
                         .Action((delta) => th.Run(delta))
                         .Action(_MoveForward)
+                        .Action(()=>new WaitSecondStrategy(0.5f))
                     .End()   
                 .Build();
         }
@@ -426,7 +628,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             float angle = 0.0f;
             var th = new TurnHandler(this);
             var builder = new Regulus.BehaviourTree.Builder();
-
+            var traceStrategy = new TraceStrategy(this);
             return builder
                 .Sequence()
                     .Action((delta) => _FindEnemy(out enemy))
@@ -435,34 +637,9 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                         .Sub(_ChangeToBattle())
                         .Sequence()
                             .Action((delta) => _FindSkill(ref skill, ref distance))
-                            .Sequence()
-                                .Action(
-                                    (delta) =>
-                                    {
-                                        var result = _GetTargetAngle(enemy, ref angle);
-                                        th.Input(angle);
-                                        return result;
-                                    })
-                                .Action((delta) => th.Run(delta))
-
-                                .Selector()
-                                    .Not()
-                                        .Sequence()
-                                            .Action((delta) => _Not(_CheckDistance(enemy, distance)))
-                                            .Action(_MoveForward)
-                                        .End()
-                                    .End()
-
-                                    .Sequence()
-                                        .Action((delta) => _CheckDistance(enemy, distance))
-                                    .End()
-                                .End()
-                                //.Action(_StopMove)
-                                .Action((delta) => _GetTargetAngle(enemy, ref angle))
-                                .Action((delta) => _CheckAngle(angle))
-                            .End()
-                            .Action((delta) => _UseSkill(skill))
-                            .Action(() => new WaitSecondStrategy(0.1f) )
+                            .Action((delta) => traceStrategy.Set(enemy, distance, 45f))
+                            .Action((delta) => traceStrategy.Tick(delta))
+                            .Action((delta) => _UseSkill(skill))                            
                         .End()
 
                     .End()
@@ -473,21 +650,12 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         }
 
-        
 
-       
 
-        
-
-        private TICKRESULT _Not(TICKRESULT check)
+        public TICKRESULT CheckAngle(float angle)
         {
-            if(check == TICKRESULT.FAILURE)
-                return TICKRESULT.SUCCESS;
-            if (check == TICKRESULT.SUCCESS)
-                return TICKRESULT.FAILURE;
-            return TICKRESULT.RUNNING;            
+            return _CheckAngle(angle);
         }
-
         private TICKRESULT _CheckAngle(float angle)
         {
             if (Math.Abs(angle ) < 45)
@@ -507,6 +675,10 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             return TICKRESULT.FAILURE;
         }
 
+        public TICKRESULT CheckDistance(Guid enemy, float distance)
+        {
+            return _CheckDistance(enemy , distance);
+        }
         private TICKRESULT _CheckDistance(Guid enemy, float distance)
         {
             var target = _Find(enemy);
@@ -517,6 +689,12 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                 return TICKRESULT.SUCCESS;
 
             return TICKRESULT.FAILURE;
+        }
+
+
+        public TICKRESULT GetTargetAngle(Guid id, ref float angle)
+        {
+            return _GetTargetAngle(id , ref angle);
         }
 
         private TICKRESULT _GetTargetAngle(Guid id , ref float angle)
@@ -602,7 +780,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private void _OnInjured(Guid target, float damage)
         {
-            if (_ActorMemory.Hate(target, damage) == false)
+            if (_ActorMind.Hate(target, damage) == false)
             {
                 _Investigate = true;
             }
@@ -611,7 +789,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         private TICKRESULT _FindEnemy(out Guid enemy)
         {
             enemy = Guid.Empty;
-            var result = _ActorMemory.FindEnemy(_Vision);
+            var result = _ActorMind.FindEnemy(_Vision);
             if (result != null)
             {                
                 enemy = result.Id;
@@ -644,7 +822,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private TICKRESULT _NotEnemy(float arg)
         {
-            var actor = _ActorMemory.FindEnemy(_Vision);
+            var actor = _ActorMind.FindEnemy(_Vision);
             if(actor == null)
                 return TICKRESULT.SUCCESS;
             return TICKRESULT.FAILURE;
@@ -662,16 +840,31 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private TICKRESULT _Remember(Guid id)
         {
-            _ActorMemory.Add(id);
-            
-            return TICKRESULT.SUCCESS;
+
+            var actor = _Vision.FindAll((a) => a.Id == id).FirstOrDefault();
+            if (actor != null)
+            {
+                
+                _ActorMind.Add(id , _GetImperil(actor.EntityType));
+                return TICKRESULT.SUCCESS;
+            }
+
+            return TICKRESULT.FAILURE;
+
+        }
+
+        private float _GetImperil(ENTITY entity_type)
+        {
+            float imperil ;
+            _EntityImperils.TryGetValue(entity_type, out imperil);
+            return imperil;
         }
 
         private TICKRESULT _NotSeen(Guid actor)
         {
 
             
-            if (_ActorMemory.Have(actor))
+            if (_ActorMind.Have(actor))
             {
                 return TICKRESULT.FAILURE;
                 
@@ -720,7 +913,12 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             
             return TICKRESULT.FAILURE;
         }
-        
+
+
+        public TICKRESULT MoveForward(float arg1)
+        {
+            return _MoveForward(arg1);
+        }
         private TICKRESULT _MoveForward(float arg1)
         {
             if (_MoveController != null)
@@ -876,12 +1074,31 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private void _ClearIndividual(IVisible obj)
         {
-            _Vision.RemoveAll(i => i.Id == obj.Id);
+            _Vision.RemoveAll(
+                i =>
+                {
+                    if (i.Id == obj.Id)
+                    {
+                        obj.TalkMessageEvent -= _TalkMessage;
+                        return true;
+                    }
+                    return false;
+                }
+            );
         }
+
+        
 
         private void _SetIndividual(IVisible obj)
         {
             _Vision.Add(obj);
+            obj.TalkMessageEvent += _TalkMessage;
+        }
+
+        
+        private void _TalkMessage(string message)
+        {
+            _Messages.Enqueue(message);
         }
 
         private void _ClearMoveController(IMoveController obj)
@@ -952,10 +1169,11 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         protected override void _Update(float delta)
         {
+            _FPS.Update();
             _ScanCycle += delta;
             _ScanCycle %= _DecisionTime;
 
-            _ActorMemory.Forget(delta);
+            _ActorMind.Forget(delta);
         }
 
 
@@ -1084,6 +1302,11 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             }
 
             return 0;
+        }
+
+        public TICKRESULT StopMove(float delta)
+        {
+            return _StopMove(delta);
         }
     }
 

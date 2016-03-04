@@ -25,7 +25,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             if (item.Effects.Length == 0)
             {
                 var inBagItem = (from i in _Items where i.Name == item.Name && i.Effects.Length == 0 select i).FirstOrDefault();
-                if(inBagItem.IsValid())
+                if(Item.IsValid(inBagItem))
                 {
                     item.Count += inBagItem.Count;
                     Remove(inBagItem.Id);
@@ -110,7 +110,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                 Remove(item);
             }
 
-            if (newItem.IsValid())
+            if (Item.IsValid(newItem))
             {
                 Add(newItem);
             }

@@ -14,10 +14,8 @@ using Regulus.Utility;
 
 namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
-    internal class GameStage : IStage, IQuitable,
-        IInventoryNotifier,
-        IEmotion,
-        IEquipmentNotifier
+    internal class GameStage : IStage, IQuitable,        
+        IEmotion        
     {
         private readonly ISoulBinder _Binder;
 
@@ -47,6 +45,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private readonly Wisdom _Wisdom;
 
+        public event Action DoneEvent;
+
         public GameStage(ISoulBinder binder, Map map, Entity entity)
         {
             _Map = map;
@@ -74,10 +74,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _DifferenceNoticer.LeftEvent -= this._BroadcastLeft;
 
             _Binder.Unbind<IEmotion>(this);
-            _Binder.Unbind<IDevelopActor>(_Player);
-            _Binder.Unbind<IInventoryNotifier>(this);
-            _Binder.Unbind<IPlayerProperys>(_Player);
-            _Binder.Unbind<IEquipmentNotifier>(this);
+            _Binder.Unbind<IDevelopActor>(_Player);            
+            _Binder.Unbind<IPlayerProperys>(_Player);            
             _Map.Left(_Player);
         }
 
@@ -87,9 +85,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             this._DifferenceNoticer.LeftEvent += this._BroadcastLeft;
 
             this._Map.JoinChallenger(this._Player);
-            this._Binder.Bind<IPlayerProperys>(_Player);
-            this._Binder.Bind<IInventoryNotifier>(this);
-            this._Binder.Bind<IEquipmentNotifier>(this);
+            this._Binder.Bind<IPlayerProperys>(_Player);                        
             _Binder.Bind<IDevelopActor>(_Player);
             _Binder.Bind<IEmotion>(this);
             _ToSurvival();
@@ -112,38 +108,14 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _Move(lastDeltaTime);
             _Broadcast(_Map.Find(_Player.GetView()));
             _Player.Equipment.UpdateEffect(lastDeltaTime);
-
-            _ResponseItems(deltaTime);
+            
             
 
         }
 
 
 
-
-        private void _ResponseItems(float deltaTime)
-        {
-            if (_UpdateAllItemTime - deltaTime <= 0)
-            {
-                if (_RequestAllItems)
-                {
-                    if (_FlushEvent != null)
-                    {
-                        _FlushEvent(_Player.Equipment.GetAll());
-                    }
-                    if (_AllItemEvent != null)
-                    {
-                        _AllItemEvent.Invoke(_Player.Bag.GetAll());
-                    }
-                    _UpdateAllItemTime = 10f;
-                    _RequestAllItems = false;
-                }
-            }
-            else
-            {
-                _UpdateAllItemTime -= deltaTime;
-            }
-        }
+        
 
 
         private void _Move(float deltaTime)
@@ -190,102 +162,12 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             return second;
         }
 
-
-
-
-
-        public event Action DoneEvent;
-        
-
-
-
         public void Quit()
         {
             this.DoneEvent.Invoke();
         }
-
-        private event Action<Item[]> _FlushEvent;
-        event Action<Item[]> IEquipmentNotifier.FlushEvent
-        {
-            add { _FlushEvent += value; }
-            remove { _FlushEvent += value; }
-        }
-
-        void IEquipmentNotifier.Query()
-        {
-            _RequestAllItems = true;
-        }
-
-        void IEquipmentNotifier.Unequip(Guid id)
-        {
-            var item = _Player.Equipment.Unequip(id);
-            if (item.IsValid())
-            {
-                _Player.Bag.Add(item);
-            }
-        }
-
-        void IInventoryNotifier.Query()
-        {
-            _RequestAllItems = true;
-        }
-
-        void IInventoryNotifier.Discard(Guid id)
-        {
-            _Player.Bag.Remove(id);
-        }
-
-        void IInventoryNotifier.Equip(Guid id)
-        {
-            var item = _Player.Bag.Find(id);
-            if (item.IsValid() && item.IsEquipable())
-            {
-
-                var equipItem = _Player.Equipment.Unequip(item.GetEquipPart());
-                if (equipItem.IsValid())
-                {
-                    _Player.Bag.Add(equipItem);
-                }
-                _Player.Bag.Remove(item.Id);
-
-                _Player.Equipment.Equip(item);
-            }
-        }
-
-        private event Action<Item[]> _AllItemEvent;
-        event Action<Item[]> IInventoryNotifier.AllItemEvent
-        {
-            add { _AllItemEvent += value; }
-            remove { _AllItemEvent -= value; }
-        }
-
-        event Action<Item> IInventoryNotifier.AddEvent
-        {
-            add { _Player.Bag.AddEvent += value; }
-            remove { _Player.Bag.AddEvent -= value; }
-        }
-
-
-        event Action<Guid> IEquipmentNotifier.RemoveEvent
-        {
-            add { _Player.Equipment.RemoveEvent += value; }
-            remove { _Player.Equipment.RemoveEvent -= value; }
-        }
-
-
-        event Action<Item> IEquipmentNotifier.AddEvent
-        {
-            add { _Player.Equipment.AddEvent += value; }
-            remove { _Player.Equipment.AddEvent -= value; }
-        }
-
-        event Action<Guid> IInventoryNotifier.RemoveEvent
-        {
-            add { _Player.Bag.RemoveEvent += value; }
-            remove { _Player.Bag.RemoveEvent -= value; }
-        }
-
-
+        
+        
         private void _ToSurvival()
         {
             var status = new ControlStatus(_Binder, _Player, _Mover, _Map);
@@ -296,7 +178,9 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         private void _ToStun()
         {
             var status = new StunStatus(_Binder, _Player);
-            status.SurvivalEvent += _ToSurvival;
+            status.ExitEvent += DoneEvent;
+            status.WakeEvent += _ToSurvival;
+
             _Machine.Push(status);
         }
 

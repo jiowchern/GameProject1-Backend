@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 
 using Regulus.Framework;
 using Regulus.Project.ItIsNotAGame1.Data;
@@ -39,6 +38,14 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             status.ExploreEvent += _ToExplore;
             status.BattleEvent += _ToCast;
             status.MakeEvent += _ToMake;
+            status.AidEvent += _ToAid;
+            _SetStatus(status);
+        }
+
+        private void _ToAid(Guid item_id)
+        {
+            var status = new AidStatus(_Binder, _Player,_Map , item_id);
+            status.DoneEvent += _ToDone;
             _SetStatus(status);
         }
 

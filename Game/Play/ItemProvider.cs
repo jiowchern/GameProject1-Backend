@@ -13,7 +13,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         {
             return (from i in Resource.Instance.Items
                    let winning = Regulus.Utility.Random.Instance.NextFloat(0.0f, 1.0f) > 0.5f
-                   where winning && i.EquipPart == EQUIP_PART.NONE
+                   where winning && i.Features == ITEM_FEATURES.MATERIAL
                    select CreateItem(i.Name , 10) ).ToArray();
         }
 

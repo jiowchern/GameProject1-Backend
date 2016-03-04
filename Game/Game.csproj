@@ -57,7 +57,8 @@
   <ItemGroup>
     <Compile Include="DummyFrature.cs" />
     <Compile Include="Play\Aboriginal.cs" />
-    <Compile Include="Play\ActorMemory.cs" />
+    <Compile Include="Play\ActorMind.cs" />
+    <Compile Include="Play\AidStatus.cs" />
     <Compile Include="Play\BehaviourTreeBuilder.cs" />
     <Compile Include="Play\GoblinWisdom.cs" />
     <Compile Include="Play\GpiTransponder.cs" />
@@ -93,6 +94,7 @@
     <Compile Include="Play\SkillCaster.cs" />
     <Compile Include="Play\StunStatus.cs" />
     <Compile Include="Play\TimeTriggerStrategy.cs" />
+    <Compile Include="Play\TraceStrategy.cs" />
     <Compile Include="Play\TurnHandler.cs" />
     <Compile Include="Play\WaitSecondStrategy.cs" />
     <Compile Include="Play\WallKind.cs" />

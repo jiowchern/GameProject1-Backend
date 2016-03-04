@@ -144,6 +144,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         void IStage.Update()
         {
             var nowTime = _CastTimer.Second;
+
             var poly = _Caster.FindDetermination(_CurrentCastTime, nowTime);
             _CurrentCastTime = nowTime;
 
@@ -185,20 +186,24 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                     var collision = Regulus.CustomType.Polygon.Collision(poly, individual.Mesh, new Vector2());
                     if (collision.Intersect)
                     {
-                        if (_Caster.IsSmash())
+                        var smash = _Caster.GetSmash();
+                        var punch = _Caster.GetPunch();
+                        
+                        if (smash > 0)
                         {
                             
-                            _AttachDamage(individual, true);                            
+                            _AttachDamage(individual, smash);                            
                         }
-                        else if (individual.IsBlock() == false && _Caster.IsPunch())
+                        else if (individual.IsBlock() == false && punch > 0)
                         {
-                            
-                            _AttachDamage(individual, false);                            
+
+                            _AttachDamage(individual, punch);                            
                         }
-                        else if (individual.IsBlock() && _Caster.IsPunch())
+                        else if (individual.IsBlock() && punch > 0)
                         {
                             guardImpact = true;
                         }
+                        
                     }
                 }
             }
@@ -224,9 +229,16 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                 NextEvent(_NextCaster);
             }
                 
+        }        
+
+        private void _AttachDamage(IIndividual individual, float damage)
+        {
+            HitForce hit = new HitForce();
+            hit.Damage = damage;
+            _AttachHit(individual , hit);
         }
 
-        private void _AttachDamage(IIndividual target, bool smash)
+        private void _AttachHit(IIndividual target, HitForce hit_force)
         {
             if (_Attacked.Contains(target.Id) == false)
             {
@@ -235,11 +247,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                 if (_Caster.HasHit() && _HitNextsEvent !=null)
                     _HitNextsEvent(_Caster.Data.HitNexts);
 
-                var hitForce = new HitForce();
-                hitForce.Damage = smash
-                    ? 3.0f
-                    : 1f;
-                target.AttachDamage(_Player.Id , hitForce);
+                
+                target.AttachHit(_Player.Id , hit_force);
                 
             }
         }
