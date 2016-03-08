@@ -63,15 +63,15 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         public GameStage(ISoulBinder binder, Map map, Entity entity, Wisdom wisdom) : this(binder, map, entity)
         {
             _Wisdom = wisdom;
-
-
         }
         void IStage.Leave()
         {
             _Machine.Termination();
             _Updater.Shutdown();
+            
+            _DifferenceNoticer.Set(new IIndividual[0]) ;
             _DifferenceNoticer.JoinEvent -= this._BroadcastJoin;
-            _DifferenceNoticer.LeftEvent -= this._BroadcastLeft;
+            _DifferenceNoticer.LeftEvent -= this._BroadcastLeft;            
 
             _Binder.Unbind<IEmotion>(this);
             _Binder.Unbind<IDevelopActor>(_Player);            
@@ -108,15 +108,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _Move(lastDeltaTime);
             _Broadcast(_Map.Find(_Player.GetView()));
             _Player.Equipment.UpdateEffect(lastDeltaTime);
-            
-            
 
         }
-
-
-
-        
-
 
         private void _Move(float deltaTime)
         {

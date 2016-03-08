@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+using Regulus.BehaviourTree;
 using Regulus.Project.ItIsNotAGame1.Data;
 
 
@@ -98,7 +99,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             
         }
 
-        public IVisible FindLootTarget(List<IVisible> vision)
+        public IVisible FindLootTarget(IEnumerable<IVisible> vision)
         {
             return (from visible in vision
                     let notLoot = (from actor in _Actors.Values
@@ -111,9 +112,25 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                     select visible).FirstOrDefault();
         }
 
-        public IVisible FindEnemy(List<IVisible> vision)
+        public IVisible FindWounded(ENTITY type, IEnumerable<IVisible> field_of_vision)
         {
-            return (from visible in vision
+
+            var companions = _FindCompanion(type , field_of_vision);
+            return companions.FirstOrDefault((companion) => companion.Status == ACTOR_STATUS_TYPE.STUN);
+        }
+
+        private IEnumerable<IVisible> _FindCompanion(ENTITY type, IEnumerable<IVisible> field_of_vision)
+        {
+            var companions = from vis in field_of_vision where vis.EntityType == type  select vis;
+
+            return (from companion in companions
+                    from value in _Actors.Values
+                    where companion.Id == value.Id select companion);
+        }
+
+        public IVisible FindEnemy(IEnumerable<IVisible> field_of_vision)
+        {
+            return (from visible in field_of_vision
                     let imperil = (   from actor in _Actors.Values
                                     where actor.Imperil > 0 && actor.Id == visible.Id 
                                       select actor.Imperil).Sum()
@@ -145,6 +162,18 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                 actor.Loot();
             }
         }
+
+        public void Release()
+        {
+            _Actors.Clear();
+        }
+
+        public int GetActorCount()
+        {
+            return _Actors.Count;
+        }
+
+        
     }
 
     

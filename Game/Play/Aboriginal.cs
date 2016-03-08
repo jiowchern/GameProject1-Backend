@@ -28,8 +28,14 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         }
 
         void IBootable.Launch()
-        {            
+        {
+            var provider = new ItemProvider();
             Map map = this._Zone.FindMap("test");
+            _Actor.Bag.Add(provider.BuildItem(1 , "AidKit" , new [] {new ItemEffect()
+            {
+                Effects = new []{ new Effect() { Type =  EFFECT_TYPE.AID , Value = 10 } },
+                Quality = 0.5f                                 
+            } }));
             _ToGame(map);
         }
 

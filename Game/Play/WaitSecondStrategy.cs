@@ -12,6 +12,11 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _Second = second;            
         }
 
+        void ITicker.Reset()
+        {
+            _Count = 0.0f;
+        }
+
         TICKRESULT ITicker.Tick(float delta)
         {
             _Count += delta;

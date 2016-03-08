@@ -146,7 +146,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
             var types = new[]
                 {
-                    ENTITY.ACTOR1 , ENTITY.ACTOR2 , ENTITY.DEBIRS
+                    ENTITY.ACTOR1 , ENTITY.ACTOR2 , ENTITY.DEBIRS //, ENTITY.ACTOR3 , ENTITY.ACTOR4 , ENTITY.ACTOR5
                 };
             var random = Regulus.Utility.Random.Instance;
 

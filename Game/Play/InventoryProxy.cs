@@ -77,5 +77,27 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             if(i != null)
                 _Notifier.Discard(i.Id);
         }
+
+        public bool Use(string name)
+        {
+            if (_Notifier != null)
+            {
+                var id = _FindIdByName(name);
+                if (id != Guid.Empty)
+                {
+                    _Notifier.Use(id);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private Guid _FindIdByName(string name)
+        {
+            var result =_Items.Find((item) => item.Name == name);
+            if(result != null)
+                return result.Id;
+            return Guid.Empty;
+        }
     }
 }
