@@ -11,8 +11,11 @@ namespace Regulus.Project.ItIsNotAGame1.Data
 
         public ItemFormula[] Formulas;
 
+        public EntityGroupLayout[] EntityGroupLayouts;
+
         public Resource()
         {
+            EntityGroupLayouts = new EntityGroupLayout[0];
             Entitys = new EntityData[0];
             SkillDatas = new SkillData[0];
             Items = new ItemPrototype[0];
@@ -32,6 +35,11 @@ namespace Regulus.Project.ItIsNotAGame1.Data
         public ItemPrototype FindItem(string name)
         {
             return (from e in this.Items where e.Name == name select e).Single();
+        }
+
+        public EntityGroupLayout FindEntityGroupLayout(string id)
+        {
+            return (from e in this.EntityGroupLayouts where e.Id == id select e).Single();
         }
     }
 }

@@ -11,20 +11,20 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         public static Entity Create(GamePlayerRecord record)
         {
             var data = Singleton<Resource>.Instance.FindEntity(record.Entity);
-            return new Entity(record.Entity , record.Name, data.Mesh.Clone()  );
+            return new Entity(data, record.Name);
         }
 
         public static Entity Create(ENTITY type)
         {
             var data = Singleton<Resource>.Instance.FindEntity(type);
-            return new Entity(type,  data.Mesh.Clone());
+            return new Entity(data);
         }
 
         public static Entity CreateEnterance(ENTITY[] types)
         {
             var data = Singleton<Resource>.Instance.FindEntity(ENTITY.ENTRANCE);
             var mesh = data.Mesh.Clone();
-            return new Entity(ENTITY.ENTRANCE, "" , mesh , new Concierge(mesh , types));
+            return new Entity(data , "", types);
         }
     }
 }

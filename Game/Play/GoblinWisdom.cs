@@ -1220,8 +1220,15 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             foreach (var visible in _FieldOfVision)
             {
                 var data = Resource.Instance.FindEntity(visible.EntityType);
+
                 var mesh = data.Mesh.Clone();
+
                 mesh.Offset(visible.Position);
+                if (data.CollisionRotation)
+                {
+                    mesh.RotationByDegree(visible.Direction);
+                    
+                }
                 float dis;
                 Vector2 normal;
                 Vector2 point;
@@ -1353,7 +1360,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                    entity_type == ENTITY.WALL_NORTH ||
                    entity_type == ENTITY.WALL_NORTH_AISLE ||
                    entity_type == ENTITY.WALL_SOUTH ||
-                   entity_type == ENTITY.WALL_SOUTH_AISLE;
+                   entity_type == ENTITY.WALL_SOUTH_AISLE ||
+                   entity_type == ENTITY.WALL_GATE;
 
         }
 

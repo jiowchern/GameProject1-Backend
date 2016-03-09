@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Regulus.Collection;
 using Regulus.CustomType;
 using Regulus.Project.ItIsNotAGame1.Data;
+using Regulus.Extension;
 
 namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
@@ -87,14 +88,13 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
 
             var concierges = this._FindConcierges(individual);
-            var count = concierges.Count();
-            var index = _Random.NextInt(0, count);
-            var concierge = concierges.Skip(index).FirstOrDefault();
+            
+            var concierge = concierges.Shuffle().FirstOrDefault();
             if(concierge != null)
             {
                 Vector2 position = concierge.GetPosition();
                 individual.SetPosition(position.X, position.Y);
-                individual.SetDirection(_Random.NextInt(0, 360));
+                individual.AddDirection(_Random.NextInt(0, 360));
                 return true;
             }
             return false;

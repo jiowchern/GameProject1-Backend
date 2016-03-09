@@ -46,8 +46,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                 return _BaseView + _IlluminateView;
             }
         }
-
-        public float ScanLength { get { return _View / 2; } }
+        
 
         private float _DetectionRange;
 
@@ -60,18 +59,20 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         
 
-        public Entity(ENTITY type, string name, Polygon mesh, Concierge concierge)
-            : this(type, name, mesh)
+        public Entity(EntityData data, string name, ENTITY[] enter_types)
+            : this(data, name )
         {
-            _Concierge = concierge;
+            _Concierge = new Concierge(_Mesh , enter_types);
 
 
         }
 
-        public Entity(ENTITY type, Polygon mesh) : this(mesh)
+        
+        public Entity(EntityData data) : this(data.Mesh)
         {
+            _RotationMesh = data.CollisionRotation;
             _Name = "";
-            _EntityType = type;
+            _EntityType = data.Name;
             _Datas = Resource.Instance.SkillDatas;
 
             this._Id = Guid.NewGuid();
@@ -85,14 +86,16 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
             _Status = ACTOR_STATUS_TYPE.NORMAL_IDLE;
         }
-        public Entity(ENTITY type, string name, Polygon mesh) : this(type, mesh)
+
+
+        public Entity(EntityData data, string name) : this(data)
         {
             _Name = name;
         }
 
         public Entity(Polygon mesh)
-        {
-            this._Mesh = mesh;
+        {            
+            this._Mesh = mesh.Clone();
             this._Bound = this._BuildBound(this._Mesh);
             _CollideTargets = new DifferenceNoticer<IIndividual>();
 
@@ -250,6 +253,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private float _AidCount;
 
+        private readonly bool _RotationMesh;
+
         public Guid Id { get { return this._Id; } }
 
         public float Direction { get; private set; }
@@ -264,14 +269,29 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             remove { this._BoundsEvent -= value; }
         }
 
+        void IIndividual.SetPosition(Vector2 postion)
+        {
+            _SetPosition(postion.X, postion.Y);
+        }
         void IIndividual.SetPosition(float x, float y)
         {
+            _SetPosition(x, y);
+        }
 
+        private void _SetPosition(float x, float y)
+        {
             var offset = new Vector2(x, y) - this._Mesh.Center;
             this._Mesh.Offset(offset);
+            _UpdateBound();
+        }
+
+        private void _UpdateBound()
+        {
             this._Bound = this._BuildBound(this._Mesh);
             if (this._BoundsEvent != null)
+            {
                 this._BoundsEvent.Invoke();
+            }
         }
 
         Item[] IIndividual.Stolen()
@@ -353,7 +373,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             if (speed != _Speed)
             {
                 this._Speed = speed * _BaseSpeed;
-                _AddDirection(angle);
+                _AddRotation(angle);
                 _InvokeStatusEvent();
             }
         }
@@ -397,7 +417,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         public void TrunDirection(float delta_time)
         {
-            _AddDirection(_Trun * delta_time);
+            _AddRotation(_Trun * delta_time);
         }
 
         private Vector2 _ToVector(float angle)
@@ -513,10 +533,15 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             return _Mesh.Center;
         }
 
-        public void SetRotation(float next_float)
+        private void _AddRotation(float degree)
         {
-            _AddDirection(next_float);
-            _Mesh.RotationByDegree(next_float);
+            _AddDirection(degree);
+            if (_RotationMesh)
+            {
+                _Mesh.RotationByDegree(degree);
+                _UpdateBound();
+            }                
+                
         }
 
         public void Talk(string message)
@@ -544,11 +569,13 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _CollideTargets.Set(hitthetargets);
         }
 
-        public void SetDirection(float dir)
+        void IIndividual.AddDirection(float dir)
         {
-            _AddDirection(dir);
+            _AddRotation(dir);
             _InvokeStatusEvent();
         }
+
+        
 
         public ACTOR_STATUS_TYPE GetIdle()
         {

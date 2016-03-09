@@ -60,6 +60,8 @@
     <Compile Include="Effect.cs" />
     <Compile Include="ENTITY.cs" />
     <Compile Include="EntityData.cs" />
+    <Compile Include="EntityGroupLayout.cs" />
+    <Compile Include="EntityLayout.cs" />
     <Compile Include="EquipStatus.cs" />
     <Compile Include="EQUIP_PART.cs" />
     <Compile Include="GamePlayerRecord.cs" />

@@ -82,7 +82,8 @@
 copy ..\..\..\..\Data\entitys.txt
 copy ..\..\..\..\Data\skills.txt
 copy ..\..\..\..\Data\items.txt
-copy ..\..\..\..\Data\itemformulas.txt</PostBuildEvent>
+copy ..\..\..\..\Data\itemformulas.txt
+copy ..\..\..\..\Data\entitygrouplayout.txt</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -92,45 +92,125 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         private Map _BuildMap()
         {
             var map = new Map();
-            this._BuildWall(map);
-            
-            _BuildEnterance(map);
+
+            List<MazeCell> rooms = new List<MazeCell>();
+            _BuildWall(map , ref rooms);
+            _BuildGate(map, rooms);
+            _BuildEnterance(map ,rooms);
             this._BuildDebirs(map);
             return map;
         }
 
-        private void _BuildEnterance(Map map)
+        private void _BuildGate(Map map, IEnumerable<MazeCell> rooms)
         {
-            var count = Maze.kDimension * Maze.kDimension;
-            int[] indexs = new int[count];
-            for (int i = 0; i < count; ++i)
+            foreach (var room in rooms)
             {
-                indexs[i] = i;
+
+                var center = _GetCellPosition(room);
+                IEnumerable<IIndividual> individuals = null;
+                if (room.Walls[MAZEWALL.WESTERN] == false)
+                {
+                    individuals = _BuildGate(0,  center);                    
+                }
+                if (room.Walls[MAZEWALL.NORTH] == false)
+                {
+                    individuals = _BuildGate(270, center);
+                }
+                if (room.Walls[MAZEWALL.EAST] == false)
+                {
+                    individuals = _BuildGate(180, center);
+                }
+                if (room.Walls[MAZEWALL.SOUTH] == false)
+                {
+                    individuals = _BuildGate(90, center);
+                }
+
+                foreach (var individual in individuals)
+                {
+                    map.JoinStaff(individual);
+                }
+                
             }
-            var random = Regulus.Utility.Random.Instance;
-            var queue = new Queue<int>(indexs.OrderBy((i) => random.NextDouble()));
+        }
+
+        private IEnumerable<IIndividual> _BuildGate(float degree, Vector2 center)
+        {
+            
+            List<IIndividual> individuals = new List<IIndividual>();
+            var layout = _GetGroupLayout("gate");
+            var buildInfos = from e in layout.Entitys 
+                let radians = degree * (float)Math.PI / 180f 
+                let position = Polygon.RotatePoint(e.Position , new Vector2(), radians)
+                select new
+                {
+                    EntityType = e.Type,
+                    Position = position + center,
+                    Direction = e.Direction + degree
+                };
+
+
+            foreach (var info in buildInfos)
+            {
+                IIndividual individual = _GetEntity(info.EntityType);
+                individual.SetPosition(info.Position);
+                individual.AddDirection(degree);
+                individuals.Add(individual);
+            }
+            return individuals;
+        }
+
+        private EntityGroupLayout _GetGroupLayout(string name)
+        {
+            return Resource.Instance.FindEntityGroupLayout(name);
+        }
+
+        private IIndividual _BuildGate(float rot, MAZEWALL dir, Vector2 center)
+        {
+            
+            var wall1 = _GetEntity(ENTITY.WALL_GATE);
+            var wall2 = _GetEntity(ENTITY.WALL_GATE);
+
+            IIndividual gate = wall1;
+            gate.AddDirection(rot);
+            var result = _GetOffset(dir, -center.X, -center.Y, gate.Mesh.Points.ToRect());
+            gate.SetPosition(-result.X , -result.Y);
+            
+            return gate;
+        }
+
+        private Vector2 _GetCellPosition(MazeCell cell)
+        {
+            var x = cell.Row * _Witdh;
+            var y = cell.Column * _Height;
+            return new Vector2(x,y);
+        }
+
+        private void _BuildEnterance(Map map ,IEnumerable<MazeCell> rooms)
+        {
+            var queue = new Queue<MazeCell>(rooms.Shuffle());
 
             this._BuildPlayerEnternace(map , queue);
 
             this._BuildAboriginalEnternace(map , queue);
         }
 
-        private void _BuildAboriginalEnternace(Map map, Queue<int> positions)
+        private void _BuildAboriginalEnternace(Map map, Queue<MazeCell> positions)
         {
-            
-            
-            
-            for(int i = 0 ; i < Maze.kDimension/3 ; ++i)
+
+
+            var len = Maze.kDimension / 3;
+
+            for (int i = 0 ; i < len && positions.Any(); ++i)
             {
                 this._BuildEnternace(map, new []{ENTITY.ACTOR2, ENTITY.ACTOR3 }, positions.Dequeue());
             }
 
-            for (int i = 0; i < Maze.kDimension/3 ; ++i)
+            for (int i = 0; i < len && positions.Any(); ++i)
             {
                 this._BuildEnternace(map, new[] { ENTITY.ACTOR2, ENTITY.ACTOR4 }, positions.Dequeue());
             }
 
-            for (int i = 0; i < Maze.kDimension/3 ; ++i)
+            for (int i = 0; i < len && positions.Any(); ++i)
             {
                 this._BuildEnternace(map, new[] { ENTITY.ACTOR2, ENTITY.ACTOR5 }, positions.Dequeue());
             }
@@ -139,53 +219,42 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         }
 
-        private void _BuildPlayerEnternace(Map map , Queue<int> positions)
+        private void _BuildPlayerEnternace(Map map , Queue<MazeCell> positions)
         {
-            
-
 
             var types = new[]
                 {
                     ENTITY.ACTOR1 , ENTITY.ACTOR2 , ENTITY.DEBIRS //, ENTITY.ACTOR3 , ENTITY.ACTOR4 , ENTITY.ACTOR5
-                };
-            var random = Regulus.Utility.Random.Instance;
-
-            
+                };            
             
             _BuildEnternace(map, types, positions.Dequeue());
-            
-            
         }
         
-        private void _BuildEnternace(Map map, ENTITY[] types , int index)
+        private void _BuildEnternace(Map map, ENTITY[] types , MazeCell cell)
         {
-
-            
             var entity = EntityProvider.CreateEnterance(types);
             IIndividual individual = entity;
-            var dimension = Maze.kDimension;
-            var x = (index % dimension) * _Witdh;
-            var y = index/ dimension * _Height;
 
-            Regulus.Utility.Log.Instance.WriteDebug(string.Format("create enterance {2} : {0} ,{1}" , x,y, index ));
+            var position = _GetCellPosition(cell);            
 
-            individual.SetPosition(x, y);
+            individual.SetPosition(position.X, position.Y);
 
             map.JoinStaff(individual);
         }
 
-        private void _BuildWall(Map map)
+        private void _BuildWall(Map map , ref List<MazeCell> rooms)
         {
             IEnumerable<MazeCell> cells = this._BuildMaze();
             foreach(var cell in cells)
             {
-                
-                foreach (var wall in cell.Walls)
+                if (cell.Walls.Count() >= 3)
                 {
-                    var room = _Random.NextInt(0, 2) == 0;
-                    if (cell.Walls.Count() >= 3)
-                        room = true;
-                    IIndividual entity = this._BuildWall(wall, cell.Row, cell.Column, room);
+                    rooms.Add(cell);
+                }
+
+                foreach (var wall in cell.Walls)
+                {                                        
+                    IIndividual entity = this._BuildWall(wall, cell.Row, cell.Column, true);
                     map.JoinStaff(entity);
                 }
             }
@@ -195,10 +264,10 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         {            
             for(int i = 0; i < 20; ++ i )
             {
-                var entity = this._GetEntity(ENTITY.DEBIRS);
-                entity.SetRotation(Utility.Random.Instance.NextFloat(0, 360));
+                var entity = this._GetEntity(ENTITY.DEBIRS);                
                 map.JoinChallenger(entity);
                 IIndividual individual = entity;
+                individual.AddDirection(Utility.Random.Instance.NextFloat(0, 360));
 
                 var x = individual.Position.X;
                 var y = individual.Position.Y;

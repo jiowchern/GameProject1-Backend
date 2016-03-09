@@ -66,6 +66,10 @@ namespace Regulus.Project.ItIsNotAGame1.Play
 
         private void _LoadData()
         {
+            var entityGroupLayoutBuffer = System.IO.File.ReadAllBytes("entityGroupLayout.txt");
+            var entityGroupLayouts = Utility.Serialization.Read<EntityGroupLayout[]>(entityGroupLayoutBuffer);
+            Singleton<Resource>.Instance.EntityGroupLayouts = entityGroupLayouts;
+
             var buffer = System.IO.File.ReadAllBytes("entitys.txt");
             var entitys = Utility.Serialization.Read<EntityData[]>(buffer);
             Singleton<Resource>.Instance.Entitys = entitys;
