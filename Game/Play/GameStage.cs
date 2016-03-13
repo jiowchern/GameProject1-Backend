@@ -6,7 +6,7 @@ using System.Linq;
 
 
 using Regulus.Collection;
-
+using Regulus.CustomType;
 using Regulus.Project.ItIsNotAGame1.Data;
 using Regulus.Remoting;
 using Regulus.Utility;
@@ -129,7 +129,36 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private void _Broadcast(IEnumerable<IIndividual> controllers)
         {
+            
             this._DifferenceNoticer.Set(controllers);
+        }
+        
+
+        private IIndividual _CheckHit(IEnumerable<IIndividual> controllers, Vector2 center,Guid self, Vector2 ray)
+        {
+            
+            foreach (var individual in controllers)
+            {                
+                if(individual.Id == _Player.Id)
+                    continue;
+                if (individual.Id == self)
+                    continue;
+
+                float distance;
+                Vector2 hitPoint;
+                Vector2 normal;
+                if (StandardWisdom.RayPolygonIntersect(
+                    center,
+                    ray,
+                    individual.Mesh.Points,
+                    out distance,
+                    out hitPoint,
+                    out normal))
+                {
+                    return individual;
+                }
+            }
+            return null;
         }
 
         private void _BroadcastLeft(IEnumerable<IIndividual> controllers)

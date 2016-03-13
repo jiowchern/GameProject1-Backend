@@ -47,7 +47,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                 var result = Polygon.Collision(target.Mesh, explore, new Vector2());
                 if (result.Intersect)
                 {
-                    var items = target.Stolen();
+                    var items = target.Stolen(_Player.Id);
                     foreach (var item in items)
                     {
                         _Player.Bag.Add(item);

@@ -7,7 +7,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
     internal class TurnHandler 
     {
-        private readonly GoblinWisdom _GoblinWisdom;
+        private readonly StandardWisdom _StandardWisdom;
 
         private float _Angle;
 
@@ -17,9 +17,9 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private IEnumerator<TICKRESULT> _Iterator;
 
-        public TurnHandler(GoblinWisdom goblin_wisdom )
+        public TurnHandler(StandardWisdom standard_wisdom )
         {
-            _GoblinWisdom = goblin_wisdom;            
+            _StandardWisdom = standard_wisdom;            
         }
 
         public void Input(float angle)
@@ -38,14 +38,14 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 #if UNITY_EDITOR
             //UnityEngine.Debug.Log("Done TurnTimeCounter = " + _TimeCounter);
 #endif
-            _GoblinWisdom.StopTrun();
+            _StandardWisdom.StopTrun();
             return TICKRESULT.SUCCESS;
         }
 
         void _Start()
         {
 
-            var turnSpeed = _GoblinWisdom.GetTrunSpeed();
+            var turnSpeed = _StandardWisdom.GetTrunSpeed();
             if (turnSpeed <= 0)
                 return ;
             var angle = _Angle;
@@ -62,9 +62,9 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
 
             if (angle > 180)
-                _GoblinWisdom.MoveLeft();
+                _StandardWisdom.MoveLeft();
             else if (angle <= 180)
-                _GoblinWisdom.MoveRight();
+                _StandardWisdom.MoveRight();
 
 #if UNITY_EDITOR
             // UnityEngine.Debug.Log("TurnTimeCounter = " + _TimeCounter);

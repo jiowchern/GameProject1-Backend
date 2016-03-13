@@ -61,7 +61,9 @@
     <Compile Include="Play\ActorMind.cs" />
     <Compile Include="Play\AidStatus.cs" />
     <Compile Include="Play\BehaviourTreeBuilder.cs" />
-    <Compile Include="Play\GoblinWisdom.cs" />
+    <Compile Include="Play\ResourceInventory.cs" />
+    <Compile Include="Play\SignRoster.cs" />
+    <Compile Include="Play\StandardWisdom.cs" />
     <Compile Include="Play\GpiTransponder.cs" />
     <Compile Include="Play\HitForce.cs" />
     <Compile Include="Play\InventoryProxy.cs" />

@@ -52,45 +52,53 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
     {
         private readonly Zone _Zone;
 
-        private readonly List<Aboriginal> _Aboriginals;
+        
 
         private readonly TimesharingUpdater _Updater;
         public Race(Zone zone)
         {
-            _Aboriginals = new List<Aboriginal>();
+            var itemProvider = new ItemProvider();
             this._Zone = zone;
             _Updater = new TimesharingUpdater(1.0f / 30.0f);
 
             for (int i = 0; i < 50; i++)
-            {
-                var entiry = EntityProvider.Create(ENTITY.ACTOR2);
-                var wisdom = new GoblinWisdom(entiry);
-                _Updater.Add(new Aboriginal(_Zone , entiry , wisdom));
-                
+            {                
+                var entiry = _Create(ENTITY.ACTOR2,  itemProvider);
+                _Updater.Add(entiry);                
             }
 
             for (int i = 0; i < 50; i++)
             {
-                var entiry = EntityProvider.Create(ENTITY.ACTOR3);
-                var wisdom = new GoblinWisdom(entiry);
-                _Updater.Add(new Aboriginal(_Zone, entiry, wisdom));
+                var entiry = _Create(ENTITY.ACTOR3, itemProvider);
+                _Updater.Add(entiry);
             }
 
             for (int i = 0; i < 50; i++)
             {
-                var entiry = EntityProvider.Create(ENTITY.ACTOR4);
-                var wisdom = new GoblinWisdom(entiry);
-                _Updater.Add(new Aboriginal(_Zone, entiry, wisdom));
+                var entiry = _Create(ENTITY.ACTOR4, itemProvider);
+                _Updater.Add(entiry);
             }
 
             for (int i = 0; i < 50; i++)
             {
-                var entiry = EntityProvider.Create(ENTITY.ACTOR5);
-                var wisdom = new GoblinWisdom(entiry);
-                _Updater.Add(new Aboriginal(_Zone, entiry, wisdom));
+                var entiry = _Create(ENTITY.ACTOR5, itemProvider);
+                _Updater.Add(entiry);
             }
             
 
+        }
+
+        private Aboriginal _Create(ENTITY type, ItemProvider itemProvider)
+        {
+            var entiry = EntityProvider.Create(type);
+            var items = itemProvider.FromStolen();
+            foreach (var item in items)
+            {
+                entiry.Bag.Add(item);
+            }
+
+            var wisdom = new StandardWisdom(entiry);
+            return new Aboriginal(_Zone, entiry, wisdom);
         }
 
         void IBootable.Launch()

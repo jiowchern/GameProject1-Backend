@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 
 using Regulus.Project.ItIsNotAGame1.Data;
 using Regulus.Remoting;
@@ -73,7 +74,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                     }
                     if (_AllItemEvent != null)
                     {
-                        _AllItemEvent.Invoke(_Player.Bag.GetAll());
+                        _AllItemEvent.Invoke(_Player.Bag.ToArray());
                     }
                     _UpdateAllItemTime = 10f;
                     _RequestAllItems = false;

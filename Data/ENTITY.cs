@@ -20,6 +20,8 @@ namespace Regulus.Project.ItIsNotAGame1.Data
         ACTOR3,
         ACTOR4,
         ACTOR5,
-        WALL_GATE
+        WALL_GATE,
+        POOL,
+        CHEST
     }
 }

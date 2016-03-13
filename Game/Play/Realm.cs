@@ -93,12 +93,64 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         {
             var map = new Map();
 
-            List<MazeCell> rooms = new List<MazeCell>();
-            _BuildWall(map , ref rooms);
+            var rooms = new List<MazeCell>();
+            var ailses = new List<MazeCell>();
+            _BuildWall(map , ref rooms , ref ailses);
+            _BuildResource(map, ailses);            
             _BuildGate(map, rooms);
-            _BuildEnterance(map ,rooms);
+
+            var emptyRooms = new Queue<MazeCell>(rooms.Shuffle());
+            _BuildEnterance(map, emptyRooms);
+            _BuildChest(map, emptyRooms);
+
             this._BuildDebirs(map);
             return map;
+        }
+
+        
+
+        private void _BuildResource(Map map, List<MazeCell> ailses)
+        {
+            
+            var random = Regulus.Utility.Random.Instance;
+            foreach (var mazeCell in ailses)
+            {
+                var val = random.NextDouble();
+                if (val > 0.5)
+                    continue;
+
+
+                var center = _GetCellPosition(mazeCell);
+                                
+                var individuals = _BuildEntityGroup("pool" , mazeCell, center);
+                foreach (var individual in individuals)
+                {
+                    map.JoinStaff(individual);
+                }
+
+            }
+        }
+
+        private IEnumerable<IIndividual> _BuildEntityGroup(string id , MazeCell maze_cell, Vector2 center)
+        {
+            IEnumerable<IIndividual> individuals = new IIndividual[0];
+            if (maze_cell.Walls[MAZEWALL.WESTERN])
+            {
+                individuals = _BuildEntityGroup(id, 180, center);
+            }
+            else if (maze_cell.Walls[MAZEWALL.NORTH])
+            {
+                individuals = _BuildEntityGroup(id, 90, center);
+            }
+            else if (maze_cell.Walls[MAZEWALL.EAST])
+            {
+                individuals = _BuildEntityGroup(id, 0, center);
+            }
+            else if (maze_cell.Walls[MAZEWALL.SOUTH])
+            {
+                individuals = _BuildEntityGroup(id, 270, center);
+            }
+            return individuals;
         }
 
         private void _BuildGate(Map map, IEnumerable<MazeCell> rooms)
@@ -107,37 +159,39 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             {
 
                 var center = _GetCellPosition(room);
-                IEnumerable<IIndividual> individuals = null;
+
+                IEnumerable<IIndividual> individuals = new IIndividual[0];
                 if (room.Walls[MAZEWALL.WESTERN] == false)
                 {
-                    individuals = _BuildGate(0,  center);                    
+                    individuals = _BuildEntityGroup("gate", 0, center);
                 }
-                if (room.Walls[MAZEWALL.NORTH] == false)
+                else if (room.Walls[MAZEWALL.NORTH] == false)
                 {
-                    individuals = _BuildGate(270, center);
+                    individuals = _BuildEntityGroup("gate", 270, center);
                 }
-                if (room.Walls[MAZEWALL.EAST] == false)
+                else if (room.Walls[MAZEWALL.EAST] == false)
                 {
-                    individuals = _BuildGate(180, center);
+                    individuals = _BuildEntityGroup("gate", 180, center);
                 }
-                if (room.Walls[MAZEWALL.SOUTH] == false)
+                else if (room.Walls[MAZEWALL.SOUTH] == false)
                 {
-                    individuals = _BuildGate(90, center);
+                    individuals = _BuildEntityGroup("gate", 90, center);
                 }
 
                 foreach (var individual in individuals)
                 {
                     map.JoinStaff(individual);
                 }
-                
+
+
             }
         }
 
-        private IEnumerable<IIndividual> _BuildGate(float degree, Vector2 center)
+        private IEnumerable<IIndividual> _BuildEntityGroup(string id,float degree, Vector2 center)
         {
             
             List<IIndividual> individuals = new List<IIndividual>();
-            var layout = _GetGroupLayout("gate");
+            var layout = _GetGroupLayout(id);
             var buildInfos = from e in layout.Entitys 
                 let radians = degree * (float)Math.PI / 180f 
                 let position = Polygon.RotatePoint(e.Position , new Vector2(), radians)
@@ -150,8 +204,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
 
             foreach (var info in buildInfos)
-            {
-                IIndividual individual = _GetEntity(info.EntityType);
+            {                
+                IIndividual individual = _GetResourctEntity(info.EntityType);
                 individual.SetPosition(info.Position);
                 individual.AddDirection(degree);
                 individuals.Add(individual);
@@ -163,20 +217,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         {
             return Resource.Instance.FindEntityGroupLayout(name);
         }
-
-        private IIndividual _BuildGate(float rot, MAZEWALL dir, Vector2 center)
-        {
-            
-            var wall1 = _GetEntity(ENTITY.WALL_GATE);
-            var wall2 = _GetEntity(ENTITY.WALL_GATE);
-
-            IIndividual gate = wall1;
-            gate.AddDirection(rot);
-            var result = _GetOffset(dir, -center.X, -center.Y, gate.Mesh.Points.ToRect());
-            gate.SetPosition(-result.X , -result.Y);
-            
-            return gate;
-        }
+        
 
         private Vector2 _GetCellPosition(MazeCell cell)
         {
@@ -184,10 +225,18 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             var y = cell.Column * _Height;
             return new Vector2(x,y);
         }
-
-        private void _BuildEnterance(Map map ,IEnumerable<MazeCell> rooms)
+        private void _BuildChest(Map map, Queue<MazeCell> empty_rooms)
         {
-            var queue = new Queue<MazeCell>(rooms.Shuffle());
+            while (empty_rooms.Count > 0)
+            {
+                var room = empty_rooms.Dequeue();
+
+            }
+        }
+
+        private void _BuildEnterance(Map map , Queue<MazeCell> rooms)
+        {
+            var queue = rooms;
 
             this._BuildPlayerEnternace(map , queue);
 
@@ -242,7 +291,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             map.JoinStaff(individual);
         }
 
-        private void _BuildWall(Map map , ref List<MazeCell> rooms)
+        private void _BuildWall(Map map , ref List<MazeCell> rooms , ref List<MazeCell> aisles)
         {
             IEnumerable<MazeCell> cells = this._BuildMaze();
             foreach(var cell in cells)
@@ -250,6 +299,10 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                 if (cell.Walls.Count() >= 3)
                 {
                     rooms.Add(cell);
+                }
+                else
+                {
+                    aisles.Add(cell);
                 }
 
                 foreach (var wall in cell.Walls)
@@ -300,12 +353,19 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         private Entity _GetEntity(MAZEWALL wall , bool room)
         {                        
             var entity  = this._WallToEntity[wall].Get(room);
-            return EntityProvider.Create(entity);
+            return _GetEntity(entity);
         }
 
-        private Entity _GetEntity(ENTITY entity)
+        private Entity _GetResourctEntity(ENTITY type)
+        {
+            var entity = EntityProvider.CreateResource(type, new ResourceInventory());
+            return entity;
+
+        }
+        private Entity _GetEntity(ENTITY type)
         {            
-            return EntityProvider.Create(entity);
+            var entity = EntityProvider.Create(type);            
+            return entity;
         }
 
         private IEnumerable<MazeCell> _BuildMaze()

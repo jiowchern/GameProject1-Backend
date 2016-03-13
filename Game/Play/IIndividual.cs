@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 using Regulus.CustomType;
 using Regulus.Project.ItIsNotAGame1.Data;
@@ -15,7 +16,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         void SetPosition(float x, float y);
 
-        Item[] Stolen();
+        IEnumerable<Item> Stolen(Guid id);
 
         void AttachHit(Guid target, HitForce force);
 
@@ -26,5 +27,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         void AddDirection(float dir);
 
         void SetPosition(Vector2 position);
+
+        event Action<Guid,IEnumerable<Item>> TheftEvent;
     }
 }

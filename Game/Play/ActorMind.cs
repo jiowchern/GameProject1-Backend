@@ -98,7 +98,15 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             }
             
         }
-
+        public IVisible FindResourceTarget(List<IVisible> field_of_vision)
+        {
+            return (from visible in field_of_vision
+                    let target = (from actor in _Actors.Values
+                                   where EntityData.IsResource(visible.EntityType) && actor.Id == visible.Id && actor.IsLooted() == false
+                                   select visible).FirstOrDefault()
+                    where target != null                                  
+                    select target).FirstOrDefault();
+        }
         public IVisible FindLootTarget(IEnumerable<IVisible> vision)
         {
             return (from visible in vision
@@ -173,7 +181,15 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             return _Actors.Count;
         }
 
-        
+        public bool IsLooted(Guid id)
+        {
+            Actor actor;
+            if (_Actors.TryGetValue(id, out actor))
+            {
+                return actor.IsLooted();
+            }
+            return false;
+        }
     }
 
     

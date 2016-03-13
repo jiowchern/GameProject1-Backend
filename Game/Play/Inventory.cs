@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
@@ -9,7 +10,7 @@ using Regulus.Project.ItIsNotAGame1.Data;
 
 namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
-    public class Inventory 
+    public class Inventory : IEnumerable<Item>
     {
         private readonly List<Item> _Items;
 
@@ -31,6 +32,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                     Remove(inBagItem.Id);
                 }                
             }
+            if (item.Count > 999)
+                item.Count = 999;
             this._Items.Add(item);
             this._Weight += item.Weight;
 
@@ -64,9 +67,9 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             this._Weight -= weight;
         }
 
-        public Item[] GetAll()
+        public IEnumerable<Item> GetAll()
         {
-            return _Items.ToArray();
+            return _Items;
         }
 
         public event Action<Item> AddEvent;
@@ -120,6 +123,24 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         public Item Find(Guid id)
         {
             return _Items.FirstOrDefault(i => i.Id == id);
+        }
+
+        public void Add(Item[] items)
+        {
+            foreach (var item in items)
+            {
+                Add(item);
+            }
+        }
+
+        IEnumerator<Item> IEnumerable<Item>.GetEnumerator()
+        {
+            return _Items.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return _Items.GetEnumerator();
         }
     }
 }

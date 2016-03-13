@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Runtime.Remoting.Messaging;
 
 using Regulus.BehaviourTree;
+using Regulus.CustomType;
 using Regulus.Extension;
 using Regulus.Project.ItIsNotAGame1.Data;
 using Regulus.Utility;
@@ -17,7 +18,7 @@ using Vector2 = Regulus.CustomType.Vector2;
 
 namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
-    internal class GoblinWisdom : Wisdom
+    internal class StandardWisdom : Wisdom
     {
         private readonly Entity _Entiry;
 
@@ -68,7 +69,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private int _DebugRejoinCount;
 
-        public GoblinWisdom(Entity entiry)
+        public StandardWisdom(Entity entiry)
         {
             var type  = entiry.GetVisible().EntityType;
 
@@ -175,8 +176,6 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                     .Sub(_CollisionWayfindingStrategy())
                     .Sub(_AttackStrategy())
                     .Sub(_InvestigateStrategy())
-                    .Sub(_DistanceWayfindingStrategy())
-
               
                     .Sequence()
                         .Action(_NotEnemy)
@@ -188,15 +187,17 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                             
                             .Sub(_RescueCompanion())
                             .Sub(_LootStrategy())
+                            .Sub(_ResourceObtaionStrategy())
                             .Sub(_MakeItemStrategy())
                             .Sub(_EquipItemStrategy())
                             .Sub(_DiscardItemStrategy())
 
                         .End()                        
                     .End()
-                    
 
-                // 沒事就前進
+                    .Sub(_DistanceWayfindingStrategy())
+
+                    // 沒事就前進
                     .Sequence()
                         .Action(_MoveForward)
                     .End()
@@ -204,6 +205,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                 .Build();
             return node;
         }
+
+        
 
         private ITicker _RescueCompanion()
         {
@@ -575,6 +578,77 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             return TICKRESULT.FAILURE;
 
         }
+        private ITicker _ResourceObtaionStrategy()
+        {
+            float angle = 0.0f;
+            var th = new TurnHandler(this);
+
+
+            var traceStrategy = new TraceStrategy(this);
+            Guid target = Guid.Empty;
+            var builder = new Regulus.BehaviourTree.Builder();
+            var distance = 1f;
+            var node = builder
+                    .Sequence()
+                        .Action(_NotEnemy)
+                        .Action((delta) => _FindResourceTarget(out target))
+                        .Action((delta) => _GetDistance(target , out distance))
+                        //.Action((delta) => _Talk(string.Format("Mining Target. Distance:{0}", distance)))
+                        .Sequence()
+                                .Action((delta) => traceStrategy.Reset(target, distance))
+                                .Action((delta) => traceStrategy.Tick(delta))
+                                //.Action((delta) => _Talk("Begin Mining ."))
+                                .Action((delta) => _Loot(target))
+                                //.Action((delta) => _Talk("Mining Done."))
+                        .End()
+                    .End()
+                .Build();
+            return node;
+        }
+
+        private TICKRESULT _GetDistance(Guid target, out float distance)
+        {
+            distance = 0f;
+            var entity = _FieldOfVision.Find((e) => e.Id == target);
+            if(entity == null)
+                return TICKRESULT.FAILURE;
+
+            var mesh = _BuildMesh(entity);
+
+            float dis;
+            Vector2 point;
+            Vector2 normal;
+
+            if (RayPolygonIntersect(
+                _Entiry.GetPosition(),
+                Vector2.AngleToVector(_Entiry.Direction),
+                mesh.Points,
+                out dis,
+                out point,
+                out normal))
+            {
+                distance = dis - _Entiry.GetDetectionRange();
+                return TICKRESULT.SUCCESS;
+            }
+            return TICKRESULT.FAILURE;
+        }
+
+        private TICKRESULT _FindResourceTarget(out Guid target_id)
+        {
+            if (_FieldOfVision.Any(e => e.EntityType == ENTITY.POOL))
+            {
+                var target = _ActorMind.FindResourceTarget(_FieldOfVision);
+                if (target != null)
+                {
+                    target_id = target.Id;
+                    return TICKRESULT.SUCCESS;
+                }
+            }
+            
+
+            target_id = Guid.Empty;
+            return TICKRESULT.FAILURE;
+        }
 
         private ITicker _LootStrategy()
         {
@@ -757,7 +831,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
             if(target == null)
                 return TICKRESULT.FAILURE;
-            if(target.Position.DistanceTo(_Entiry.GetPosition()) <= distance )
+
+            if(target.Position.DistanceTo(_Entiry.GetPosition()) <= distance || distance <= 0f)
                 return TICKRESULT.SUCCESS;
 
             return TICKRESULT.FAILURE;
@@ -961,7 +1036,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         {
             
             var target = _Detect(angle + _Entiry.Direction, distance);
-            if (target.Visible != null && _IsActor(target.Visible.EntityType) )
+            if (target.Visible != null )
             {
                 actor = target.Visible.Id;
                 return TICKRESULT.SUCCESS;
@@ -977,7 +1052,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             
             var target = _Detect(angle + _Entiry.Direction, distance);
 
-            if (target.Visible != null && IsWall(target.Visible.EntityType))
+            if (target.Visible != null && 
+                IsWall(target.Visible.EntityType) )
             {
                 
                 return TICKRESULT.SUCCESS;
@@ -986,6 +1062,13 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             return TICKRESULT.FAILURE;
         }
 
+        private bool _InvalidResource(IVisible visible)
+        {
+            if (EntityData.IsResource(visible.EntityType))
+                return _ActorMind.IsLooted(visible.Id) ;
+
+            return false;
+        }
 
         public TICKRESULT MoveForward(float arg1)
         {
@@ -1219,16 +1302,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             hit.Distance = max_distance;
             foreach (var visible in _FieldOfVision)
             {
-                var data = Resource.Instance.FindEntity(visible.EntityType);
-
-                var mesh = data.Mesh.Clone();
-
-                mesh.Offset(visible.Position);
-                if (data.CollisionRotation)
-                {
-                    mesh.RotationByDegree(visible.Direction);
-                    
-                }
+                var mesh = StandardWisdom._BuildMesh(visible);
                 float dis;
                 Vector2 normal;
                 Vector2 point;
@@ -1247,7 +1321,19 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             return hit;
         }
 
+        private static Polygon _BuildMesh(IVisible visible)
+        {
+            var data = Resource.Instance.FindEntity(visible.EntityType);
 
+            var mesh = data.Mesh.Clone();
+
+            mesh.Offset(visible.Position);
+            if (data.CollisionRotation)
+            {
+                mesh.RotationByDegree(visible.Direction);
+            }
+            return mesh;
+        }
 
         private float _GetOffsetDirection(float angle)
         {
@@ -1342,27 +1428,11 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             return t >= 0.0f && s >= 0.0f && s <= 1.0f;
         }
 
-        private bool _IsActor(ENTITY entity_type)
-        {
-            return entity_type == ENTITY.ACTOR1 ||
-                   entity_type == ENTITY.ACTOR2 ||
-                   entity_type == ENTITY.ACTOR3 ||
-                   entity_type == ENTITY.ACTOR4 ||
-                   entity_type == ENTITY.ACTOR5;
-        }
+        
 
         public bool IsWall(ENTITY entity_type)
         {
-            return entity_type == ENTITY.WALL_EAST ||
-                   entity_type == ENTITY.WALL_EAST_AISLE ||
-                   entity_type == ENTITY.WALL_WESTERN ||
-                   entity_type == ENTITY.WALL_WESTERN_AISLE ||
-                   entity_type == ENTITY.WALL_NORTH ||
-                   entity_type == ENTITY.WALL_NORTH_AISLE ||
-                   entity_type == ENTITY.WALL_SOUTH ||
-                   entity_type == ENTITY.WALL_SOUTH_AISLE ||
-                   entity_type == ENTITY.WALL_GATE;
-
+            return EntityData.IsWall(entity_type);
         }
 
         public Hit Detect(float f, float view)

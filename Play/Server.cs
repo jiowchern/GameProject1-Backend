@@ -1,8 +1,10 @@
 ﻿using Regulus.Project.ItIsNotAGame1.Game.Play;
 using System;
+using System.Collections.Generic;
 using System.Reflection.Emit;
 
 using Regulus.Project.ItIsNotAGame1.Data;
+using Regulus.Remoting;
 using Regulus.Utility;
 
 namespace Regulus.Project.ItIsNotAGame1.Play
@@ -23,8 +25,11 @@ namespace Regulus.Project.ItIsNotAGame1.Play
 
         private CustomType.Verify _StorageVerifyData;
 
+        
+
         public Server()
         {
+            
             this._LogRecorder = new Utility.LogFileRecorder("Play");
 
             this._StorageVerifyData = new CustomType.Verify();
@@ -38,15 +43,27 @@ namespace Regulus.Project.ItIsNotAGame1.Play
 
         void Remoting.ICore.AssignBinder(Remoting.ISoulBinder binder)
         {
+            if (_Center != null)
+            {
+                _Join(binder);
+            }
+
+        }
+
+        private void _Join(ISoulBinder binder)
+        {
             this._Center.Join(binder);
         }
 
         bool Utility.IUpdatable.Update()
         {
+            
             this._Updater.Working();
             this._Machine.Update();
             return true;
         }
+
+        
 
         void Framework.IBootable.Shutdown()
         {
