@@ -9,7 +9,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
     internal class Aboriginal : Regulus.Utility.IUpdatable
     {
-        private readonly Zone _Zone;
+        private readonly Map _Map;
 
         private readonly Entity _Actor;
 
@@ -17,26 +17,27 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private readonly Regulus.Utility.Updater _Updater;
 
-        private Wisdom _Wisdom;
-        public Aboriginal(Zone zone , Entity actor ,  Wisdom wisdom)
+        private readonly Wisdom _Wisdom;
+        public Aboriginal(Map map, Entity actor ,  Wisdom wisdom)
         {
             _Wisdom = wisdom;
             _Updater = new Updater();
-            _Zone = zone;
+            _Map = map;
             _Actor = actor;
             _Machine = new StageMachine();
         }
 
+        public IIndividual Entity { get { return _Actor; } }
+
         void IBootable.Launch()
         {
-            var provider = new ItemProvider();
-            Map map = this._Zone.FindMap("test");
+            var provider = new ItemProvider();            
             _Actor.Bag.Add(provider.BuildItem(1 , "AidKit" , new [] {new ItemEffect()
             {
                 Effects = new []{ new Effect() { Type =  EFFECT_TYPE.AID , Value = 10 } },
                 Quality = 0.5f                                 
             } }));
-            _ToGame(map);
+            _ToGame(_Map);
         }
 
         private void _ToGame(Map map)

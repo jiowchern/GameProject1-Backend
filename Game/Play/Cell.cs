@@ -105,26 +105,6 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             return 3;
         }
 
-        /// <summary>
-        /// The get random wall.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="int"/>.
-        /// </returns>
-        public int GetRandomWall()
-        {
-            var nextWall = Cell.TheRandom.Next(0, 3);
-            while ((this.Walls[nextWall] == 0)
-                   || ((this.Row == 0) && (nextWall == 0)) ||
-                   ((this.Row == Maze.kDimension - 1) && (nextWall == 2)) ||
-                   ((this.Column == 0) && (nextWall == 1)) ||
-                   ((this.Column == Maze.kDimension - 1) && (nextWall == 3))
-                )
-            {
-                nextWall = Cell.TheRandom.Next(0, 3);
-            }
 
-            return nextWall;
-        }
     }
 }

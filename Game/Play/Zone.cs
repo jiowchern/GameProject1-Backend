@@ -16,24 +16,31 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private readonly Dictionary<string, Realm> _Realms;
 
-        public Zone(RealmMaterial[] realm_materials)
+        public Zone(RealmInfomation[] realm_infomations)
         {
-            if (realm_materials == null)
+            if (realm_infomations == null)
                 throw new System.NullReferenceException();
 
             this._Realms = new Dictionary<string, Realm>();
 
-            foreach (var material in realm_materials)
+            foreach (var material in realm_infomations)
             {
-                this._Realms.Add(material.Name , new Realm());
+                this._Realms.Add(material.Name , new Realm(material.Dimension));
             }            
         }
-        
+
+        public Realm FindRealm(string name)
+        {
+            Realm realm;
+            return this._Realms.TryGetValue(name, out realm)
+                ? realm
+                : null;
+        }
         public Map FindMap(string name)
         {
-            Realm map = null;
-            return this._Realms.TryGetValue(name, out map)
-                ? map.Query()
+            Realm realm;
+            return this._Realms.TryGetValue(name, out realm)
+                ? realm.Query()
                 : null;
         }
         

@@ -7,7 +7,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         /// <summary>
         /// The k dimension.
         /// </summary>
-        public static int kDimension = 20;
+        private int _Dimension;
 
         /// <summary>
         /// The cell stack.
@@ -27,7 +27,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         /// <summary>
         /// The total cells.
         /// </summary>
-        private int TotalCells = Maze.kDimension * Maze.kDimension;
+        private int TotalCells ;
 
         /// <summary>
         /// The visited cells.
@@ -37,9 +37,10 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         /// <summary>
         /// Initializes a new instance of the <see cref="Maze"/> class.
         /// </summary>
-        public Maze()
+        public Maze(int dimension)
         {
-            // TODO: Add constructor logic here
+            _Dimension = dimension;
+            TotalCells = _Dimension * _Dimension;
             this.Initialize();
         }
 
@@ -59,8 +60,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             for (var countRow = -1; countRow <= 1; countRow++)
                 for (var countCol = -1; countCol <= 1; countCol++)
                 {
-                    if ((aCell.Row + countRow < Maze.kDimension) &&
-                        (aCell.Column + countCol < Maze.kDimension) &&
+                    if ((aCell.Row + countRow < _Dimension) &&
+                        (aCell.Column + countCol < _Dimension) &&
                         (aCell.Row + countRow >= 0) &&
                         (aCell.Column + countCol >= 0) &&
                         ((countCol == 0) || (countRow == 0)) &&
@@ -82,10 +83,10 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         /// </summary>
         public void Initialize()
         {
-            this.Cells = new Cell[Maze.kDimension, Maze.kDimension];
-            this.TotalCells = Maze.kDimension * Maze.kDimension;
-            for (var i = 0; i < Maze.kDimension; i++)
-                for (var j = 0; j < Maze.kDimension; j++)
+            this.Cells = new Cell[_Dimension, _Dimension];
+            this.TotalCells = _Dimension * _Dimension;
+            for (var i = 0; i < _Dimension; i++)
+                for (var j = 0; j < _Dimension; j++)
                 {
                     this.Cells[i, j] = new Cell();
                     this.Cells[i, j].Row = i;

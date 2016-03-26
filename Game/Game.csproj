@@ -61,6 +61,8 @@
     <Compile Include="Play\ActorMind.cs" />
     <Compile Include="Play\AidStatus.cs" />
     <Compile Include="Play\BehaviourTreeBuilder.cs" />
+    <Compile Include="Play\IMapEntityProivder.cs" />
+    <Compile Include="Play\LevelGenerator.cs" />
     <Compile Include="Play\ResourceInventory.cs" />
     <Compile Include="Play\SignRoster.cs" />
     <Compile Include="Play\StandardWisdom.cs" />
@@ -96,6 +98,7 @@
     <Compile Include="Play\Realm.cs" />
     <Compile Include="Play\SkillCaster.cs" />
     <Compile Include="Play\StunStatus.cs" />
+    <Compile Include="Play\TimesharingUpdater.cs" />
     <Compile Include="Play\TimeTriggerStrategy.cs" />
     <Compile Include="Play\TraceStrategy.cs" />
     <Compile Include="Play\TurnHandler.cs" />

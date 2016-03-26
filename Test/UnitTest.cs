@@ -290,13 +290,13 @@ namespace Regulus.Project.ItIsNotAGame1.Test
         public void TestZone()
         {
             
-            var material = new RealmMaterial();
+            var material = new RealmInfomation();
             material.Name = "test";
             material.EntityDatas = new[]
             {
                 new EntityData {  }
             };
-            var zone = new Zone(new RealmMaterial[] { material });
+            var zone = new Zone(new RealmInfomation[] { material });
             var map = zone.FindMap("test");
             Assert.AreNotEqual(null, map);
         }

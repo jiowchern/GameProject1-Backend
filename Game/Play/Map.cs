@@ -11,6 +11,12 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
     public class Map 
     {
+        public struct Room
+        {
+            public Vector2 Center;
+
+            public CustomType.Flag<MAZEWALL> Walls;
+        }
         public class Visible : IQuadObject
         {
             public Visible(IIndividual noumenon)
@@ -59,7 +65,9 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private readonly List<Visible> _EntranceSet;
 
-        private Regulus.Utility.IRandom _Random;
+        private readonly Regulus.Utility.IRandom _Random;
+
+
         public Map()
         {
             _Random = Regulus.Utility.Random.Instance;
@@ -68,21 +76,32 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             this._QuadTree = new QuadTree<Visible>(new Size(2, 2), 100);
         }
 
-        public Map(Regulus.Utility.IRandom random)
+        public Map(Regulus.Utility.IRandom random) : this()
         {
-            _Random = random;
-            _EntranceSet = new List<Visible>();
-            this._Set = new List<Visible>();
-            this._QuadTree = new QuadTree<Visible>(new Size(2, 2), 100);
+            _Random = random;            
         }
 
 
-
+        public void JoinStaffs(IEnumerable<IIndividual> individuals)
+        {
+            foreach (var individual in individuals)
+            {
+                JoinStaff(individual);
+            }
+        }
         public void JoinStaff(IIndividual individual)
         {
             this._Join(individual);
         }
-        public bool JoinChallenger(IIndividual individual)
+
+        public void JoinChallengers(IEnumerable<IIndividual> individuals)
+        {
+            foreach (var individual in individuals)
+            {
+                JoinChallenger(individual);
+            }
+        }
+        public void JoinChallenger(IIndividual individual)
         {            
             this._Join(individual);
 
@@ -94,10 +113,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             {
                 Vector2 position = concierge.GetPosition();
                 individual.SetPosition(position.X, position.Y);
-                individual.AddDirection(_Random.NextInt(0, 360));
-                return true;
-            }
-            return false;
+                individual.AddDirection(_Random.NextInt(0, 360));                
+            }            
         }
 
         private IEnumerable<Concierge> _FindConcierges(IIndividual individual)
@@ -140,6 +157,9 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
             return (from r in results select r.Noumenon).ToArray();
         }
+
+        
+
         
     }
 }

@@ -32,8 +32,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                     Remove(inBagItem.Id);
                 }                
             }
-            if (item.Count > 999)
-                item.Count = 999;
+            item.RefCount ++;
             this._Items.Add(item);
             this._Weight += item.Weight;
 
@@ -49,28 +48,30 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         public void Remove(Guid id)
         {
             int weight = 0;
-            this._Items.RemoveAll(
+            var removeCount = _Items.RemoveAll(
                 (item) =>
                 {
                     if (item.Id == id)
                     {
-                        weight+=item.Weight;
-                        if (RemoveEvent != null)
-                        {
-                            RemoveEvent(id);
-                        }
+                        item.RefCount --;
+                        weight+=item.Weight;                        
                         return true;        
                     }
                     return false;
                 });
 
             this._Weight -= weight;
-        }
+            if (RemoveEvent != null)
+            {
+                RemoveEvent(id);
+            }
 
-        public IEnumerable<Item> GetAll()
-        {
-            return _Items;
+            
+            if (removeCount != 1)
+                throw new Exception("錯誤的道具刪除");
+            
         }
+        
 
         public event Action<Item> AddEvent;
 
@@ -141,6 +142,14 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         IEnumerator IEnumerable.GetEnumerator()
         {
             return _Items.GetEnumerator();
+        }
+
+        public void Remove(IEnumerable<Item> items)
+        {
+            foreach (var item in items)
+            {
+                Remove(item.Id);
+            }
         }
     }
 }

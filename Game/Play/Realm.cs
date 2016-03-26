@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
 
 using Regulus.CustomType;
-using Regulus.Extension;
+
 using Regulus.Project.ItIsNotAGame1.Data;
 
 namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
     public class Realm
     {        
-        private readonly Map _Map;
+        private Map _Map;
 
         private readonly float _Witdh;
 
@@ -62,13 +60,18 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         private readonly Dictionary<MAZEWALL ,WallKind > _WallToEntity;
 
         private readonly Regulus.Utility.IRandom _Random;
-        public Realm(Regulus.Utility.IRandom rnd) :this()
+
+        private readonly int _Dimension;
+
+        public Realm(int dimension , Regulus.Utility.IRandom rnd) :this(dimension)
         {
+            
             _Random = rnd;
         }
-        public Realm()
+        public Realm(int dimension)
         {
-            if(_Random == null)
+            _Dimension = dimension;
+            if (_Random == null)
                 _Random = Regulus.Utility.Random.Instance;
             this._WallToEntity = new Dictionary<MAZEWALL, WallKind>();
             this._WallToEntity.Add(MAZEWALL.EAST, new WallKind(ENTITY.WALL_EAST , ENTITY.WALL_EAST_AISLE) );
@@ -85,138 +88,15 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             this._DirectionPoints.Add(MAZEWALL.WESTERN, new WallShift(new Vector2(-this._Witdh/ 2, 0), WallShift._Western));
             this._DirectionPoints.Add(MAZEWALL.NORTH, new WallShift(new Vector2(0, this._Height / 2), WallShift._North));
 
-            this._Map = this._BuildMap();
+            
 
-        }
-
-        private Map _BuildMap()
-        {
-            var map = new Map();
-
-            var rooms = new List<MazeCell>();
-            var ailses = new List<MazeCell>();
-            _BuildWall(map , ref rooms , ref ailses);
-            _BuildResource(map, ailses);            
-            _BuildGate(map, rooms);
-
-            var emptyRooms = new Queue<MazeCell>(rooms.Shuffle());
-            _BuildEnterance(map, emptyRooms);
-            _BuildChest(map, emptyRooms);
-
-            this._BuildDebirs(map);
-            return map;
         }
 
         
 
-        private void _BuildResource(Map map, List<MazeCell> ailses)
-        {
-            
-            var random = Regulus.Utility.Random.Instance;
-            foreach (var mazeCell in ailses)
-            {
-                var val = random.NextDouble();
-                if (val > 0.5)
-                    continue;
+        
 
-
-                var center = _GetCellPosition(mazeCell);
-                                
-                var individuals = _BuildEntityGroup("pool" , mazeCell, center);
-                foreach (var individual in individuals)
-                {
-                    map.JoinStaff(individual);
-                }
-
-            }
-        }
-
-        private IEnumerable<IIndividual> _BuildEntityGroup(string id , MazeCell maze_cell, Vector2 center)
-        {
-            IEnumerable<IIndividual> individuals = new IIndividual[0];
-            if (maze_cell.Walls[MAZEWALL.WESTERN])
-            {
-                individuals = _BuildEntityGroup(id, 180, center);
-            }
-            else if (maze_cell.Walls[MAZEWALL.NORTH])
-            {
-                individuals = _BuildEntityGroup(id, 90, center);
-            }
-            else if (maze_cell.Walls[MAZEWALL.EAST])
-            {
-                individuals = _BuildEntityGroup(id, 0, center);
-            }
-            else if (maze_cell.Walls[MAZEWALL.SOUTH])
-            {
-                individuals = _BuildEntityGroup(id, 270, center);
-            }
-            return individuals;
-        }
-
-        private void _BuildGate(Map map, IEnumerable<MazeCell> rooms)
-        {
-            foreach (var room in rooms)
-            {
-
-                var center = _GetCellPosition(room);
-
-                IEnumerable<IIndividual> individuals = new IIndividual[0];
-                if (room.Walls[MAZEWALL.WESTERN] == false)
-                {
-                    individuals = _BuildEntityGroup("gate", 0, center);
-                }
-                else if (room.Walls[MAZEWALL.NORTH] == false)
-                {
-                    individuals = _BuildEntityGroup("gate", 270, center);
-                }
-                else if (room.Walls[MAZEWALL.EAST] == false)
-                {
-                    individuals = _BuildEntityGroup("gate", 180, center);
-                }
-                else if (room.Walls[MAZEWALL.SOUTH] == false)
-                {
-                    individuals = _BuildEntityGroup("gate", 90, center);
-                }
-
-                foreach (var individual in individuals)
-                {
-                    map.JoinStaff(individual);
-                }
-
-
-            }
-        }
-
-        private IEnumerable<IIndividual> _BuildEntityGroup(string id,float degree, Vector2 center)
-        {
-            
-            List<IIndividual> individuals = new List<IIndividual>();
-            var layout = _GetGroupLayout(id);
-            var buildInfos = from e in layout.Entitys 
-                let radians = degree * (float)Math.PI / 180f 
-                let position = Polygon.RotatePoint(e.Position , new Vector2(), radians)
-                select new
-                {
-                    EntityType = e.Type,
-                    Position = position + center,
-                    Direction = e.Direction + degree
-                };
-
-
-            foreach (var info in buildInfos)
-            {                
-                IIndividual individual = _GetResourctEntity(info.EntityType);
-                individual.SetPosition(info.Position);
-                individual.AddDirection(degree);
-                individuals.Add(individual);
-            }
-            return individuals;
-        }
-
-        private EntityGroupLayout _GetGroupLayout(string name)
-        {
-            return Resource.Instance.FindEntityGroupLayout(name);
-        }
+        
         
 
         private Vector2 _GetCellPosition(MazeCell cell)
@@ -225,93 +105,17 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             var y = cell.Column * _Height;
             return new Vector2(x,y);
         }
-        private void _BuildChest(Map map, Queue<MazeCell> empty_rooms)
-        {
-            while (empty_rooms.Count > 0)
-            {
-                var room = empty_rooms.Dequeue();
-
-            }
-        }
-
-        private void _BuildEnterance(Map map , Queue<MazeCell> rooms)
-        {
-            var queue = rooms;
-
-            this._BuildPlayerEnternace(map , queue);
-
-            this._BuildAboriginalEnternace(map , queue);
-        }
-
-        private void _BuildAboriginalEnternace(Map map, Queue<MazeCell> positions)
-        {
-
-
-            var len = Maze.kDimension / 3;
-
-            for (int i = 0 ; i < len && positions.Any(); ++i)
-            {
-                this._BuildEnternace(map, new []{ENTITY.ACTOR2, ENTITY.ACTOR3 }, positions.Dequeue());
-            }
-
-            for (int i = 0; i < len && positions.Any(); ++i)
-            {
-                this._BuildEnternace(map, new[] { ENTITY.ACTOR2, ENTITY.ACTOR4 }, positions.Dequeue());
-            }
-
-            for (int i = 0; i < len && positions.Any(); ++i)
-            {
-                this._BuildEnternace(map, new[] { ENTITY.ACTOR2, ENTITY.ACTOR5 }, positions.Dequeue());
-            }
-
-
-
-        }
-
-        private void _BuildPlayerEnternace(Map map , Queue<MazeCell> positions)
-        {
-
-            var types = new[]
-                {
-                    ENTITY.ACTOR1 , ENTITY.ACTOR2 , ENTITY.DEBIRS //, ENTITY.ACTOR3 , ENTITY.ACTOR4 , ENTITY.ACTOR5
-                };            
-            
-            _BuildEnternace(map, types, positions.Dequeue());
-        }
         
-        private void _BuildEnternace(Map map, ENTITY[] types , MazeCell cell)
-        {
-            var entity = EntityProvider.CreateEnterance(types);
-            IIndividual individual = entity;
 
-            var position = _GetCellPosition(cell);            
+        
 
-            individual.SetPosition(position.X, position.Y);
+        
 
-            map.JoinStaff(individual);
-        }
+        
+        
+        
 
-        private void _BuildWall(Map map , ref List<MazeCell> rooms , ref List<MazeCell> aisles)
-        {
-            IEnumerable<MazeCell> cells = this._BuildMaze();
-            foreach(var cell in cells)
-            {
-                if (cell.Walls.Count() >= 3)
-                {
-                    rooms.Add(cell);
-                }
-                else
-                {
-                    aisles.Add(cell);
-                }
-
-                foreach (var wall in cell.Walls)
-                {                                        
-                    IIndividual entity = this._BuildWall(wall, cell.Row, cell.Column, true);
-                    map.JoinStaff(entity);
-                }
-            }
-        }
+        
 
         private void _BuildDebirs(Map map)
         {            
@@ -331,46 +135,30 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             }
         }
 
-        private IIndividual _BuildWall(MAZEWALL wall, int row, int column , bool room)
-        {
-            Entity entity = this._GetEntity(wall , room);
-            IIndividual individual = entity;
+        
 
-            var bound = individual.Mesh.Points.ToRect();
+        
 
-            Vector2 offset = this._GetOffset(wall , -row * this._Witdh,- column * this._Height , bound);
-
-            individual.SetPosition(-offset.X , -offset.Y);
-            return entity;
-        }
-
-        private Vector2 _GetOffset(MAZEWALL wall, float center_x, float center_y, Rect bound)
-        {
-            Vector2 directPoint = this._DirectionPoints[wall].GetDatum(bound);
-            return new Vector2(directPoint.X + center_x , directPoint.Y + center_y);
-        }
-
-        private Entity _GetEntity(MAZEWALL wall , bool room)
-        {                        
-            var entity  = this._WallToEntity[wall].Get(room);
-            return _GetEntity(entity);
-        }
-
-        private Entity _GetResourctEntity(ENTITY type)
-        {
-            var entity = EntityProvider.CreateResource(type, new ResourceInventory());
-            return entity;
-
-        }
+        
         private Entity _GetEntity(ENTITY type)
         {            
             var entity = EntityProvider.Create(type);            
             return entity;
         }
 
+
+        internal static IEnumerable<MazeCell> BuildMaze(int dimension)
+        {
+            return _BuildMaze(dimension);
+        }
+
         private IEnumerable<MazeCell> _BuildMaze()
         {
-            var maze = new Maze();
+            return _BuildMaze(_Dimension);
+        }
+        private static IEnumerable<MazeCell> _BuildMaze(int dimension)
+        {
+            var maze = new Maze(dimension);
             maze.Generate();
             int index = 0;
             
@@ -410,6 +198,14 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         public Map Query()
         {
             return this._Map;
+        }
+
+        public Map NewMap(IMapEntityProivder provider)
+        {
+            var builder = new LevelGenerator(provider);
+            var map = builder.Build(_Witdh , _Height , _Dimension);
+            _Map =  map;
+            return _Map;
         }
     }
 }

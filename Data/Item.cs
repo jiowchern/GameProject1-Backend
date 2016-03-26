@@ -6,6 +6,7 @@ namespace Regulus.Project.ItIsNotAGame1.Data
     [ProtoBuf.ProtoContract]
     public class Item
     {
+        public int RefCount;
        [ProtoBuf.ProtoMember(1)]
         public Guid Id { get; set; }
         

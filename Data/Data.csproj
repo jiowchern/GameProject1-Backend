@@ -95,7 +95,7 @@
     <Compile Include="IVisible.cs" />
     <Compile Include="Location.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RealmMaterial.cs" />
+    <Compile Include="RealmInfomation.cs" />
     <Compile Include="Resource.cs" />
     <Compile Include="SkillData.cs" />
     <Compile Include="Translate.cs" />

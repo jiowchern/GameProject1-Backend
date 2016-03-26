@@ -23,7 +23,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             this._GameRecorder = gameRecorder;
             this._Hall = new Hall();
             this._Updater = new Updater();
-            this._Zone = new Zone(new RealmMaterial[] { new RealmMaterial { Name = "test", EntityDatas = new EntityData[0] } });
+            this._Zone = new Zone(new RealmInfomation[] { new RealmInfomation { Name = "test", EntityDatas = new EntityData[0] , Dimension = 20} });
 
             _Race = new Race(_Zone);
         }

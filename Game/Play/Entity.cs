@@ -338,7 +338,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
             if (Bag.Any())
             {
-                var items = Bag.GetAll().Shuffle().Take(1);
+                var items = Bag.Shuffle().Take(1).ToArray();
+                Bag.Remove(items);
                 if (_TheftEvent != null)
                     _TheftEvent(id, items);
 
