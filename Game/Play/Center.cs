@@ -1,4 +1,5 @@
-﻿using System.Security.Policy;
+﻿using System;
+using System.Security.Policy;
 
 using Regulus.Framework;
 using Regulus.Game;
@@ -17,13 +18,14 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         private readonly Race _Race;
 
         private Zone _Zone;
-        public Center(IAccountFinder accountFinder, IGameRecorder gameRecorder  )
+        public Center(IAccountFinder account_finder, IGameRecorder game_recorder  )
         {
-            this._AccountFinder = accountFinder;
-            this._GameRecorder = gameRecorder;
+            
+            this._AccountFinder = account_finder;
+            this._GameRecorder = game_recorder;
             this._Hall = new Hall();
             this._Updater = new Updater();
-            this._Zone = new Zone(new RealmInfomation[] { new RealmInfomation { Name = "test", EntityDatas = new EntityData[0] , Dimension = 20} });
+            this._Zone = new Zone(new [] { new RealmInfomation { Name = "test", EntityDatas = new EntityData[0] , Dimension = 20} });
 
             _Race = new Race(_Zone);
         }

@@ -19,13 +19,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             var data = Singleton<Resource>.Instance.FindEntity(type);
             return new Entity(data);
         }
-
-        public static Entity CreateResource(ENTITY type , Inventory inventory)
-        {
-            var data = Singleton<Resource>.Instance.FindEntity(type);
-            var entity = new Entity(data , inventory);
-            return entity;
-        }
+        
 
         public static Entity CreateEnterance(ENTITY[] types)
         {

@@ -3,11 +3,11 @@ using System.Linq;
 
 namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
-    internal class ResourceInventory : Inventory
+    internal class ResourceBag : Bag
     {
         
 
-        public ResourceInventory()
+        public ResourceBag()
         {
             _Supplement();
             RemoveEvent += _Supplement;

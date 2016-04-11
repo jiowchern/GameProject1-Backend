@@ -7,13 +7,11 @@ using Regulus.Project.ItIsNotAGame1.Data;
 
 namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
-    public class Equipment
+    public class Equipment : IEquipmentNotifier
     {
         private readonly Entity _Entity;
 
         private readonly Dictionary<EQUIP_PART, Item> _Items;
-
-
 
         public event Action<Item> AddEvent;
         public event Action<Guid> RemoveEvent;

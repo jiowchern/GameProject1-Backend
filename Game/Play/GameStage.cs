@@ -19,24 +19,20 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
     {
         private readonly ISoulBinder _Binder;
 
-        private readonly Map _Map;
+        private readonly IMapFinder _Map;
 
 
         private readonly TimeCounter _DeltaTimeCounter;
         private readonly TimeCounter _UpdateTimeCounter;
         private const float _UpdateTime = 1.0f / 30.0f;
 
-        private float _UpdateAllItemTime;
+        
 
         private readonly Entity _Player;
 
         private readonly Mover _Mover;
 
         private readonly DifferenceNoticer<IIndividual> _DifferenceNoticer;
-
-
-
-        private bool _RequestAllItems;
         
 
         private readonly Regulus.Utility.Updater _Updater;
@@ -47,8 +43,11 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         public event Action DoneEvent;
 
-        public GameStage(ISoulBinder binder, Map map, Entity entity)
+        private readonly IMapGate _Gate;
+
+        public GameStage(ISoulBinder binder, IMapFinder map , IMapGate gate, Entity entity)
         {
+            _Gate = gate;
             _Map = map;
             _Binder = binder;
             _DeltaTimeCounter = new TimeCounter();
@@ -60,7 +59,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _Player = entity;
             _Mover = new Mover(this._Player);            
         }
-        public GameStage(ISoulBinder binder, Map map, Entity entity, Wisdom wisdom) : this(binder, map, entity)
+        public GameStage(ISoulBinder binder, IMapFinder map, IMapGate gate, Entity entity, Wisdom wisdom) : this(binder, map, gate, entity)
         {
             _Wisdom = wisdom;
         }
@@ -76,7 +75,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _Binder.Unbind<IEmotion>(this);
             _Binder.Unbind<IDevelopActor>(_Player);            
             _Binder.Unbind<IPlayerProperys>(_Player);            
-            _Map.Left(_Player);
+            _Gate.Left(_Player);
         }
 
         void IStage.Enter()
@@ -84,7 +83,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             this._DifferenceNoticer.JoinEvent += this._BroadcastJoin;
             this._DifferenceNoticer.LeftEvent += this._BroadcastLeft;
 
-            this._Map.JoinChallenger(this._Player);
+            this._Gate.Join(this._Player);
             this._Binder.Bind<IPlayerProperys>(_Player);                        
             _Binder.Bind<IDevelopActor>(_Player);
             _Binder.Bind<IEmotion>(this);

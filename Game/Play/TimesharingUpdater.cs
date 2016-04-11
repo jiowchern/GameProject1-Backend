@@ -10,7 +10,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private int _Index;
 
-        private TimeCounter _Counter;
+        private readonly TimeCounter _Counter;
 
         public TimesharingUpdater(float timeup_per_loop)
         {
@@ -27,15 +27,17 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _Counter.Reset();
             while (second <= _TimeupPerLoop && count < array.Length)
             {
+                if (_Index >= array.Length)
+                {
+                    _Index = 0;
+                }
+
                 var updater = array[_Index];
                 count++;
                 _Index++;
                 updater.Update();
 
-                if (_Index == array.Length)
-                {
-                    _Index = 0;
-                }                    
+                
                                 
                 second = _Counter.Second;
             }

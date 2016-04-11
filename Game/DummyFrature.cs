@@ -105,6 +105,75 @@ namespace Regulus.Project.ItIsNotAGame1.Game
                     Password = "1",
                     Name = "10",
                     Competnces = Account.AllCompetnce()
+                },new Account
+                {
+                    Id = Guid.NewGuid(),
+                    Password = "1",
+                    Name = "11",
+                    Competnces = Account.AllCompetnce()
+                }
+                ,new Account
+                {
+                    Id = Guid.NewGuid(),
+                    Password = "1",
+                    Name = "12",
+                    Competnces = Account.AllCompetnce()
+                }
+                ,new Account
+                {
+                    Id = Guid.NewGuid(),
+                    Password = "1",
+                    Name = "13",
+                    Competnces = Account.AllCompetnce()
+                }
+                ,new Account
+                {
+                    Id = Guid.NewGuid(),
+                    Password = "1",
+                    Name = "14",
+                    Competnces = Account.AllCompetnce()
+                }
+                ,new Account
+                {
+                    Id = Guid.NewGuid(),
+                    Password = "1",
+                    Name = "15",
+                    Competnces = Account.AllCompetnce()
+                }
+                ,new Account
+                {
+                    Id = Guid.NewGuid(),
+                    Password = "1",
+                    Name = "16",
+                    Competnces = Account.AllCompetnce()
+                }
+                ,new Account
+                {
+                    Id = Guid.NewGuid(),
+                    Password = "1",
+                    Name = "17",
+                    Competnces = Account.AllCompetnce()
+                }
+                ,new Account
+                {
+                    Id = Guid.NewGuid(),
+                    Password = "1",
+                    Name = "18",
+                    Competnces = Account.AllCompetnce()
+                }
+                ,new Account
+                {
+                    Id = Guid.NewGuid(),
+                    Password = "1",
+                    Name = "19",
+                    Competnces = Account.AllCompetnce()
+                }
+                ,new Account
+                {
+                    Id = Guid.NewGuid(),
+                    Password = "1",
+                    Name = "20",
+                    Competnces = Account.AllCompetnce()
                 }
 
 

@@ -13,7 +13,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
     {
         private readonly Entity _Player;
 
-        private readonly Map _Map;
+        private readonly IMapFinder _Map;
 
         private readonly Guid _TargetId;
 
@@ -24,7 +24,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         public event Action DoneEvent;
 
         private bool _Done;
-        public ExploreStatus(ISoulBinder binder, Entity player , Map map , Guid target_id)
+        public ExploreStatus(ISoulBinder binder, Entity player , IMapFinder map , Guid target_id)
         {
             _Binder = binder;
             _Player = player;

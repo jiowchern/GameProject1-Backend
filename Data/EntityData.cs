@@ -33,7 +33,7 @@ namespace Regulus.Project.ItIsNotAGame1.Data
         }
 
         public static bool IsResource(ENTITY entity_type)
-        {
+        {            
             return entity_type == ENTITY.POOL;
         }
     }

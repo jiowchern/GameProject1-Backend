@@ -13,7 +13,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private readonly Entity _Player;        
 
-        private readonly Map _Map;
+        private readonly IMapFinder _Map;
 
         private readonly StageMachine _Status;
 
@@ -22,7 +22,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         private Regulus.Utility.TimeCounter _TimeCounter;
 
 
-        public ControlStatus(ISoulBinder binder, Entity player, Mover mover , Map map)
+        public ControlStatus(ISoulBinder binder, Entity player, Mover mover , IMapFinder map)
         {
             _Binder = binder;
             _Player = player;            
@@ -82,6 +82,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         
         void IStage.Enter()
         {
+            _Binder.Bind<IEquipmentNotifier>(_Player.Equipment);
+            _Binder.Bind<IBagNotifier>(_Player.Bag);
             _Player.ResetProperty();
             _ToDone();
         }
@@ -89,7 +91,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         void IStage.Leave()
         {
             _Status.Termination();
-           
+            _Binder.Unbind<IBagNotifier>(_Player.Bag);
+            _Binder.Unbind<IEquipmentNotifier>(_Player.Equipment);
         }
 
         void IStage.Update()

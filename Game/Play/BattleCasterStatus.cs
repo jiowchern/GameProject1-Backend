@@ -21,7 +21,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private readonly Entity _Player;
 
-        private readonly Map _Map;
+        private readonly IMapFinder _Map;
 
         private readonly SkillCaster _Caster;
 
@@ -45,7 +45,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         private SkillCaster _NextCaster;
         
 
-        public BattleCasterStatus(ISoulBinder binder, Entity player, Map map, SkillCaster caster)
+        public BattleCasterStatus(ISoulBinder binder, Entity player, IMapFinder map, SkillCaster caster)
         {
             _CastTimer = new TimeCounter();
             _Attacked = new HashSet<Guid>();

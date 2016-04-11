@@ -147,11 +147,11 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         private void _ToRequestMap(GamePlayerRecord record)
         {
             this._GamePlayerRecord = record;
-            Map map = this._Zone.FindMap("test");
-            this._ToGame(record, map);
+            var realm = this._Zone.FindRealm("test");
+            this._ToGame(record, realm);
         }
 
-        private void _ToGame(GamePlayerRecord record , Map map)
+        private void _ToGame(GamePlayerRecord record , Realm realm)
         {
             var player = EntityProvider.Create(record);
 
@@ -160,8 +160,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                 player.Bag.Add(item);
             }
             
-            var stage = new GameStage(this._Binder, map , player );
-            stage.DoneEvent += () => { _ToGame(record , map) ;};
+            var stage = new GameStage(this._Binder, realm.GetFinder() , realm.GetGate() , player );
+            stage.DoneEvent += () => { _ToGame(record , realm) ;};
             _Machine.Push(stage);
         }
 

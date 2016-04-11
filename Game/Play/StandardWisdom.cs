@@ -54,7 +54,9 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private ItemFormulaLite[] _Formulas;
 
-        private readonly InventoryProxy _Inventory;
+        private readonly InventoryProxy _Bag;
+
+        private readonly InventoryProxy _Equipment;
 
         private readonly Dictionary<ENTITY , float> _EntityImperils;
 
@@ -69,15 +71,18 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private int _DebugRejoinCount;
 
+        private IInventoryController _InventoryController;
+
         public StandardWisdom(Entity entiry)
         {
+            _Equipment = new InventoryProxy();
+            _Bag = new InventoryProxy();
             var type  = entiry.GetVisible().EntityType;
 
             _Messages = new Queue<string>();
 
             _FPS = new FPSCounter();
-
-            _Inventory = new InventoryProxy();
+            
             _UsableSkills = new List<ACTOR_STATUS_TYPE>();
 
             _EntityImperils = _InitialImperil(type);
@@ -184,14 +189,13 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                                 .Action(_InBattle)
                                 .Action(_ToNormal)
                             .End()
-                            
+
                             .Sub(_RescueCompanion())
                             .Sub(_LootStrategy())
                             .Sub(_ResourceObtaionStrategy())
                             .Sub(_MakeItemStrategy())
                             .Sub(_EquipItemStrategy())
                             .Sub(_DiscardItemStrategy())
-
                         .End()                        
                     .End()
 
@@ -272,16 +276,15 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private ITicker _EquipItemStrategy()
         {
-            var timeTrigger = new TimeTriggerStrategy(10f);
+            var timeTrigger = new TimeTriggerStrategy(1f);
             var builder = new Regulus.BehaviourTree.Builder();
             var node = builder
                     .Sequence()
                         .Action(timeTrigger.Tick)
-                        .Action((delta) => timeTrigger.Reset(10))                        
-                        .Action(()=> new WaitSecondStrategy(1.0f))
+                        .Action((delta) => timeTrigger.Reset(1))                                                
                         .Selector()
-                            .Action((delta) => _Equip(EQUIP_PART.FIXTURES))
                             .Action((delta) => _Equip(EQUIP_PART.RIGHT_HAND))
+                            .Action((delta) => _Equip(EQUIP_PART.FIXTURES))                            
                         .End()
                         
                     .End()
@@ -291,24 +294,37 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private TICKRESULT _Equip(EQUIP_PART part)
         {
-            
-            var items = _Inventory.FindByPart(part);
-            
-            if (items.Any())
+            if(_InventoryController == null)
+                return TICKRESULT.FAILURE;
+            var items = _Bag.FindByPart(part);
+            var item = items.Concat(new Item[] {null}).Shuffle().FirstOrDefault();
+            if (item != null)
             {
-                var item = items.OrderBy(i => Regulus.Utility.Random.Instance.NextDouble()).First();
-                _Inventory.Equip(item.Id);
+                _InventoryController.Equip(item.Id);
+                return TICKRESULT.SUCCESS;
+            }
+
+            return _Unequip(part);
+        }
+
+        private TICKRESULT _Unequip(EQUIP_PART part)
+        {
+            var item = _Equipment.FindByPart(part).FirstOrDefault();
+            if (item != null)
+            {
+                _InventoryController.Unequip(item.Id);
                 return TICKRESULT.SUCCESS;
             }
             return TICKRESULT.FAILURE;
         }
+
         private TICKRESULT _UseItem(string item)
         {
-            if (_Inventory.Use(item))
-            {
-                return TICKRESULT.SUCCESS;
-            }
-            return TICKRESULT.FAILURE;
+            if(_InventoryController == null)
+                return TICKRESULT.FAILURE;
+            var id = _Bag.FindIdByName(item);
+            _InventoryController.Use(id);
+           return TICKRESULT.SUCCESS;
         }
 
 
@@ -354,7 +370,11 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private TICKRESULT _DiscardItem(string item_name, int count)
         {
-            _Inventory.Discard(item_name, count);
+            if(_InventoryController == null)
+                return TICKRESULT.FAILURE;
+            var item = _Bag.FindIdByName(item_name);
+            _InventoryController.Discard(item);
+
             return TICKRESULT.SUCCESS;            
 
         }
@@ -472,7 +492,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private TICKRESULT _CheckItemAmount(string item, Func<int, bool> func)
         {
-            var amount = _Inventory.GetAmount(item);
+            var amount = _Bag.GetAmount(item);
             if (func(amount))
             {
                 return TICKRESULT.SUCCESS;
@@ -580,7 +600,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         }
         private ITicker _ResourceObtaionStrategy()
         {
-            float angle = 0.0f;
+            
             var th = new TurnHandler(this);
 
 
@@ -651,8 +671,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         }
 
         private ITicker _LootStrategy()
-        {
-            float angle = 0.0f;
+        {            
             var th = new TurnHandler(this);
 
 
@@ -770,9 +789,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             Guid enemy = Guid.Empty;
             
             var skill = ACTOR_STATUS_TYPE.NORMAL_IDLE;
-            float distance = 0;
-            float angle = 0.0f;
-            var th = new TurnHandler(this);
+            float distance = 0;                        
             var builder = new Regulus.BehaviourTree.Builder();
             var traceStrategy = new TraceStrategy(this);
             return builder
@@ -1090,10 +1107,14 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
        
         private void _Bind()
         {
-            Transponder.Query<IInventoryNotifier>().Supply += _SetInventory;
-            Transponder.Query<IInventoryNotifier>().Unsupply += _ClearInventory;
+            Transponder.Query<IInventoryController>().Supply += _SetInventoryController;
+            Transponder.Query<IInventoryController>().Unsupply += _ClearInventoryController;
 
-                        
+            Transponder.Query<IEquipmentNotifier>().Supply += _SetEquipment;
+            Transponder.Query<IEquipmentNotifier>().Unsupply += _ClearEquipment;
+
+            Transponder.Query<IBagNotifier>().Supply += _SetBag;
+            Transponder.Query<IBagNotifier>().Unsupply += _ClearBag;
 
             Transponder.Query<IMakeSkill>().Supply += _SetMake;
             Transponder.Query<IMakeSkill>().Unsupply += _ClearMake;
@@ -1121,9 +1142,6 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         private void _Unbind()
         {
 
-
-            
-
             Transponder.Query<IEmotion>().Supply -= _SetEmotion;
             Transponder.Query<IEmotion>().Unsupply -= _ClearEmotion;
             Transponder.Query<IMoveController>().Supply -= _SetMoveController;
@@ -1143,19 +1161,68 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             Transponder.Query<IMakeSkill>().Supply -= _SetMake;
             Transponder.Query<IMakeSkill>().Unsupply -= _ClearMake;
 
-            Transponder.Query<IInventoryNotifier>().Supply -= _SetInventory;
-            Transponder.Query<IInventoryNotifier>().Unsupply -= _ClearInventory;
+            Transponder.Query<IBagNotifier>().Supply -= _SetBag;
+            Transponder.Query<IBagNotifier>().Unsupply -= _ClearBag;
+
+            Transponder.Query<IEquipmentNotifier>().Supply -= _SetEquipment;
+            Transponder.Query<IEquipmentNotifier>().Unsupply -= _ClearEquipment;
+
+
+            Transponder.Query<IInventoryController>().Supply -= _SetInventoryController;
+            Transponder.Query<IInventoryController>().Unsupply -= _ClearInventoryController;
         }
 
-        private void _ClearInventory(IInventoryNotifier obj)
+        private void _ClearInventoryController(IInventoryController obj)
         {
-            _Inventory.Clear();
+            _InventoryController.BagItemsEvent -= _RefreshBag;
+            _InventoryController.EquipItemsEvent -= _RefreshEquip;
+            _InventoryController = null;
+            
         }
 
-        private void _SetInventory(IInventoryNotifier obj)
+        private void _SetInventoryController(IInventoryController obj)
         {
-            _Inventory.Set(obj);
+            _InventoryController = obj;
+            _InventoryController.BagItemsEvent += _RefreshBag;
+            _InventoryController.EquipItemsEvent += _RefreshEquip;
+            _InventoryController.Refresh();
+        }
 
+        private void _RefreshEquip(Item[] obj)
+        {
+            _Equipment.Refresh(obj);
+        }
+
+        private void _RefreshBag(Item[] obj)
+        {
+            _Bag.Refresh(obj);
+        }
+
+        private void _ClearEquipment(IEquipmentNotifier obj)
+        {
+            _Equipment.Clear();
+        }
+
+        private void _SetEquipment(IEquipmentNotifier obj)
+        {
+            _Equipment.Set(obj);
+            if (_InventoryController != null)
+                _InventoryController.Refresh();
+        }
+
+        private void _ClearBag(IBagNotifier obj)
+        {
+            _Bag.Clear();
+
+        }
+
+        private void _SetBag(IBagNotifier obj)
+        {
+            _Bag.Set(obj);
+
+            if(_InventoryController != null)
+                _InventoryController.Refresh();
+            
         }
         
 

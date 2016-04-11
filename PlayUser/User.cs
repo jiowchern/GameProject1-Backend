@@ -83,9 +83,13 @@ namespace Regulus.Project.ItIsNotAGame1
 			get { return this._Agent.QueryNotifier<IAccountStatus>(); }
 		}
 
-        INotifier<IInventoryNotifier> IUser.InventoryNotifierProvider
+	    INotifier<IInventoryController> IUser.InventoryControllerProvider
         {
-            get { return this._Agent.QueryNotifier<IInventoryNotifier>(); }
+            get { return this._Agent.QueryNotifier<IInventoryController>(); }
+        }
+        INotifier<IBagNotifier> IUser.BagNotifierProvider
+        {
+            get { return this._Agent.QueryNotifier<IBagNotifier>(); }
         }
 
 	    INotifier<IEquipmentNotifier> IUser.EquipmentNotifierProvider

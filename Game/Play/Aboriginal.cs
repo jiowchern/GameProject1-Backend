@@ -9,7 +9,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
     internal class Aboriginal : Regulus.Utility.IUpdatable
     {
-        private readonly Map _Map;
+        private readonly IMapFinder _Map;
 
         private readonly Entity _Actor;
 
@@ -18,8 +18,13 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         private readonly Regulus.Utility.Updater _Updater;
 
         private readonly Wisdom _Wisdom;
-        public Aboriginal(Map map, Entity actor ,  Wisdom wisdom)
+
+        private readonly IMapGate _Gate;
+
+        public event Action DoneEvent;
+        public Aboriginal(IMapFinder map,IMapGate gate, Entity actor ,  Wisdom wisdom)
         {
+            _Gate = gate;
             _Wisdom = wisdom;
             _Updater = new Updater();
             _Map = map;
@@ -37,20 +42,31 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                 Effects = new []{ new Effect() { Type =  EFFECT_TYPE.AID , Value = 10 } },
                 Quality = 0.5f                                 
             } }));
+
+            _Actor.Bag.Add(provider.BuildItem(1, "Axe", new[] {new ItemEffect()
+            {
+                Effects = new []{ new Effect() { Type =  EFFECT_TYPE.ATTACK_ADD , Value = 1 } },
+                Quality = 0.5f
+            } }));
             _ToGame(_Map);
         }
 
-        private void _ToGame(Map map)
+        private void _ToGame(IMapFinder map)
         {            
-            var stage = new GameStage(_Wisdom.GetSoulBinder() ,  map , _Actor , _Wisdom);
-            stage.DoneEvent += ()=> { _ToGame(map);  } ;
+            var stage = new GameStage(_Wisdom.GetSoulBinder() ,  map , _Gate, _Actor , _Wisdom);
+            stage.DoneEvent += _ToDone ;
             _Machine.Push(stage);
+        }
 
-            
+        private void _ToDone()
+        {
+            _Machine.Empty();
+            DoneEvent();
         }
 
         void IBootable.Shutdown()
         {
+            _Machine.Termination();
             _Updater.Shutdown();
         }
 

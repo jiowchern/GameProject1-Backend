@@ -67,7 +67,7 @@ namespace Regulus.Project.ItIsNotAGame1.Test
         [TestMethod]
         public void TestInventoryRemove()
         {
-            var inventory = new Inventory();
+            var inventory = new Bag();
             Item item1 = new Item();
             item1.Id = Guid.NewGuid();
             item1.Weight = 10;
@@ -90,7 +90,7 @@ namespace Regulus.Project.ItIsNotAGame1.Test
         [TestMethod]
         public void TestInventoryGetSum1()
         {
-            var inventory = new Inventory();
+            var inventory = new Bag();
             Item item1 = new Item();
             item1.Id = Guid.NewGuid();
             item1.Name = "a";
@@ -115,7 +115,7 @@ namespace Regulus.Project.ItIsNotAGame1.Test
         [TestMethod]
         public void TestInventoryGetSum2()
         {
-            var inventory = new Inventory();
+            var inventory = new Bag();
             Item item1 = new Item();
             item1.Id = Guid.NewGuid();
             item1.Name = "a";
@@ -163,7 +163,7 @@ namespace Regulus.Project.ItIsNotAGame1.Test
         [TestMethod]
         public void TestInventoryGetSum3()
         {
-            var inventory = new Inventory();
+            var inventory = new Bag();
             Item item1 = new Item();
             item1.Id = Guid.NewGuid();
             item1.Name = "a";
@@ -188,7 +188,7 @@ namespace Regulus.Project.ItIsNotAGame1.Test
         [TestMethod]
         public void TestInventoryGetSum4()
         {
-            var inventory = new Inventory();
+            var inventory = new Bag();
             Item item1 = new Item();
             item1.Id = Guid.NewGuid();
             item1.Name = "a";
@@ -215,7 +215,7 @@ namespace Regulus.Project.ItIsNotAGame1.Test
         [TestMethod]
         public void TestInventoryGetSum5()
         {
-            var inventory = new Inventory();
+            var inventory = new Bag();
             Item item1 = new Item();
             item1.Id = Guid.NewGuid();
             item1.Name = "a";
@@ -243,7 +243,7 @@ namespace Regulus.Project.ItIsNotAGame1.Test
         [TestMethod]
         public void TestInventoryGetSum6()
         {
-            var inventory = new Inventory();
+            var inventory = new Bag();
             Item item1 = new Item();
             item1.Id = Guid.NewGuid();
             item1.Name = "a";
@@ -271,7 +271,7 @@ namespace Regulus.Project.ItIsNotAGame1.Test
         [TestMethod]
         public void TestInventoryWeight1()
         {
-            var inventory = new Inventory();
+            var inventory = new Bag();
             Item item1 = new Item();
             item1.Weight = 10;
             item1.Effects = new Effect[0];
@@ -285,21 +285,7 @@ namespace Regulus.Project.ItIsNotAGame1.Test
 
             Assert.AreEqual(20 , weight);
         }
-
-        [TestMethod]
-        public void TestZone()
-        {
-            
-            var material = new RealmInfomation();
-            material.Name = "test";
-            material.EntityDatas = new[]
-            {
-                new EntityData {  }
-            };
-            var zone = new Zone(new RealmInfomation[] { material });
-            var map = zone.FindMap("test");
-            Assert.AreNotEqual(null, map);
-        }
+        
 
         [TestMethod]
         public void TestCenter()
@@ -375,8 +361,8 @@ namespace Regulus.Project.ItIsNotAGame1.Test
             {
                 map.JoinChallenger(visable);    
             }
-            
-            var results = map.Find(rect);
+            IMapFinder finder = map;
+            var results = finder.Find(rect);
 
             foreach (var visable in visables)
             {

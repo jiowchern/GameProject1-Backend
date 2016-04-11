@@ -7,7 +7,7 @@ using Regulus.Utility;
 
 namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
-    internal class NormalStatus : ActorStatus , INormalSkill , IInventoryNotifier , IEquipmentNotifier
+    internal class NormalStatus : ActorStatus , INormalSkill , IInventoryController
     {
         private readonly ISoulBinder _Binder;
 
@@ -24,7 +24,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private bool _RequestAllItems;
 
-        private Regulus.Utility.TimeCounter _TimeCounter;
+        private readonly Regulus.Utility.TimeCounter _TimeCounter;
 
         private float _UpdateAllItemTime;
 
@@ -42,8 +42,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         {
             _Binder.Unbind<INormalSkill>(this);
             _Binder.Unbind<IMoveController>(_MoveController);
-            _Binder.Unbind<IInventoryNotifier>(this);
-            _Binder.Unbind<IEquipmentNotifier>(this);
+            
+            _Binder.Unbind<IInventoryController>(this);
         }
 
         public override void Update()
@@ -54,8 +54,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         public override void Enter()
         {
-            _Binder.Bind<IEquipmentNotifier>(this);
-            this._Binder.Bind<IInventoryNotifier>(this);
+            _Binder.Bind<IInventoryController>(this);            
             _Binder.Bind<IMoveController>(_MoveController);
             _Binder.Bind<INormalSkill>(this);
 
@@ -68,13 +67,13 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             {
                 if (_RequestAllItems)
                 {
-                    if (_FlushEvent != null)
+                    if (_EquipItemsEvent != null)
                     {
-                        _FlushEvent(_Player.Equipment.GetAll());
+                        _EquipItemsEvent(_Player.Equipment.GetAll());
                     }
-                    if (_AllItemEvent != null)
+                    if (_BagItemsEvent != null)
                     {
-                        _AllItemEvent.Invoke(_Player.Bag.ToArray());
+                        _BagItemsEvent.Invoke(_Player.Bag.ToArray());
                     }
                     _UpdateAllItemTime = 10f;
                     _RequestAllItems = false;
@@ -106,19 +105,29 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             MakeEvent();
         }
 
-        private event Action<Item[]> _FlushEvent;
-        event Action<Item[]> IEquipmentNotifier.FlushEvent
+
+        private event Action<Item[]> _BagItemsEvent;
+        event Action<Item[]> IInventoryController.BagItemsEvent
         {
-            add { _FlushEvent += value; }
-            remove { _FlushEvent += value; }
+            add { _BagItemsEvent += value; }
+            remove { _BagItemsEvent -= value; }
         }
 
-        void IEquipmentNotifier.Query()
+        private event Action<Item[]> _EquipItemsEvent;
+        event Action<Item[]> IInventoryController.EquipItemsEvent
         {
-            _RequestAllItems = true;
+            add { _EquipItemsEvent += value; }
+            remove { _EquipItemsEvent -= value; }
         }
 
-        void IEquipmentNotifier.Unequip(Guid id)
+        void IInventoryController.Refresh()
+        {
+            _RequestAllItems = true;            
+        }
+
+        
+
+        void IInventoryController.Unequip(Guid id)
         {
             var item = _Player.Equipment.Unequip(id);
             if (Item.IsValid(item))
@@ -127,17 +136,14 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             }
         }
 
-        void IInventoryNotifier.Query()
-        {
-            _RequestAllItems = true;
-        }
+       
 
-        void IInventoryNotifier.Discard(Guid id)
+        void IInventoryController.Discard(Guid id)
         {
             _Player.Bag.Remove(id);
         }
 
-        void IInventoryNotifier.Equip(Guid id)
+        void IInventoryController.Equip(Guid id)
         {
             var item = _Player.Bag.Find(id);
             if (Item.IsValid(item) && item.IsEquipable())
@@ -154,7 +160,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             }
         }
 
-        void IInventoryNotifier.Use(Guid id)
+        void IInventoryController.Use(Guid id)
         {
             var item = _Player.Bag.Find(id);
             if (item != null)
@@ -163,36 +169,10 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                     AidEvent(id);
             }
         }
+        
 
-        private event Action<Item[]> _AllItemEvent;
-        event Action<Item[]> IInventoryNotifier.AllItemEvent
-        {
-            add { _AllItemEvent += value; }
-            remove { _AllItemEvent -= value; }
-        }
+        
 
-        event Action<Item> IInventoryNotifier.AddEvent
-        {
-            add { _Player.Bag.AddEvent += value; }
-            remove { _Player.Bag.AddEvent -= value; }
-        }
-
-        event Action<Guid> IEquipmentNotifier.RemoveEvent
-        {
-            add { _Player.Equipment.RemoveEvent += value; }
-            remove { _Player.Equipment.RemoveEvent -= value; }
-        }
-
-        event Action<Item> IEquipmentNotifier.AddEvent
-        {
-            add { _Player.Equipment.AddEvent += value; }
-            remove { _Player.Equipment.AddEvent -= value; }
-        }
-
-        event Action<Guid> IInventoryNotifier.RemoveEvent
-        {
-            add { _Player.Bag.RemoveEvent += value; }
-            remove { _Player.Bag.RemoveEvent -= value; }
-        }
+        
     }
 }

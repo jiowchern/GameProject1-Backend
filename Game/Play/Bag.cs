@@ -10,14 +10,14 @@ using Regulus.Project.ItIsNotAGame1.Data;
 
 namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
-    public class Inventory : IEnumerable<Item>
+    public class Bag : IEnumerable<Item> , IBagNotifier
     {
         private readonly List<Item> _Items;
 
         private int _Weight;
 
 
-        public Inventory()
+        public Bag()
         {
             this._Items = new List<Item>();
         }
@@ -71,11 +71,23 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                 throw new Exception("錯誤的道具刪除");
             
         }
-        
+
 
         public event Action<Item> AddEvent;
 
+        event Action<Item> IInventoryNotifier.AddEvent
+        {
+            add { this.AddEvent += value; }
+            remove { this.AddEvent -= value; }
+        }
+
         public event Action<Guid> RemoveEvent;
+
+        event Action<Guid> IInventoryNotifier.RemoveEvent
+        {
+            add { this.RemoveEvent += value; }
+            remove { this.RemoveEvent -= value; }
+        }
 
         public int GetItemAmount(string item)
         {

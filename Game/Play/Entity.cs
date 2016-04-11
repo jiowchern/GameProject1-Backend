@@ -53,33 +53,32 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         private SkillData[] _Datas;
 
 
-        public Inventory Bag { get; private set; }
+        public Bag Bag { get; private set; }
+
+        public void SetBag(Bag bag)
+        {
+            Bag = bag;
+        }
 
         private Concierge _Concierge;
 
         
 
         public Entity(EntityData data, string name, ENTITY[] enter_types)
-            : this(data, name, enter_types, new Inventory())
+            : this(data, name, enter_types, new Bag())
         {
             
         }
 
         
-        public Entity(EntityData data) : this(data , "" , new ENTITY[0] , new Inventory() )
+        public Entity(EntityData data) : this(data , "" , new ENTITY[0] , new Bag() )
         {
             
             
         }
 
 
-        public Entity(EntityData data, Inventory inventory) : this(data, "", new ENTITY[0], inventory)
-        {
-
-        }
-
-
-        public Entity(EntityData data, string name) : this(data, name, new ENTITY[0], new Inventory())
+        public Entity(EntityData data, string name) : this(data, name, new ENTITY[0], new Bag())
         {
             
         }
@@ -89,11 +88,11 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _Mesh = mesh.Clone();
         }
 
-        private Entity(EntityData data, string name , ENTITY[] enter_types ,Inventory inventory )
+        private Entity(EntityData data, string name , ENTITY[] enter_types ,Bag bag )
             : this()
         {
             _Name = name;
-            Bag = inventory;
+            Bag = bag;
             _Mesh = data.Mesh.Clone();
             _Bound = this._BuildBound(this._Mesh);
             _Concierge = new Concierge(_Mesh, enter_types);
@@ -282,6 +281,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         public Equipment Equipment { get; set; }
 
         public float Speed { get { return _Speed; } }
+
+        public ENTITY Type { get { return _EntityType;  } }
 
         event Action IIndividual.BoundsEvent
         {

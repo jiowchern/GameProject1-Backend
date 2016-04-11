@@ -16,7 +16,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private readonly Entity _Player;
 
-        private readonly Map _Map;
+        private readonly IMapFinder _Map;
 
         private readonly ISoulBinder _Binder;
 
@@ -33,7 +33,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         public Action DoneEvent;
 
-        public AidStatus(ISoulBinder binder, Entity player,Map map, Guid item_id)
+        public AidStatus(ISoulBinder binder, Entity player,IMapFinder map, Guid item_id)
         {
             _Targets = new Dictionary<Guid, IIndividual>();
             _TimeCounter = new TimeCounter();

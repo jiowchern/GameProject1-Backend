@@ -35,14 +35,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             return this._Realms.TryGetValue(name, out realm)
                 ? realm
                 : null;
-        }
-        public Map FindMap(string name)
-        {
-            Realm realm;
-            return this._Realms.TryGetValue(name, out realm)
-                ? realm.Query()
-                : null;
-        }
+        }        
         
         void IBootable.Launch()
         {

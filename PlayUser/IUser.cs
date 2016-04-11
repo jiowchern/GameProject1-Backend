@@ -22,7 +22,8 @@ namespace Regulus.Project.ItIsNotAGame1
 
         INotifier<Data.IAccountStatus> AccountStatusProvider { get; }
 
-        INotifier<Data.IInventoryNotifier> InventoryNotifierProvider { get; }
+        INotifier<Data.IInventoryController> InventoryControllerProvider { get; }
+        INotifier<Data.IBagNotifier> BagNotifierProvider { get; }
         INotifier<Data.IEquipmentNotifier> EquipmentNotifierProvider { get; }
         INotifier<Data.INormalSkill> NormalControllerProvider { get; }
 

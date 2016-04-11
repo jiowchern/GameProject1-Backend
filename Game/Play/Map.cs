@@ -9,7 +9,7 @@ using Regulus.Extension;
 
 namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
-    public class Map 
+    public class Map : IMapFinder
     {
         public struct Room
         {
@@ -61,7 +61,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private readonly QuadTree<Visible> _QuadTree;
 
-        private readonly List<Visible> _Set;
+        private readonly Dictionary<Guid,Visible> _Set;
 
         private readonly List<Visible> _EntranceSet;
 
@@ -72,7 +72,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         {
             _Random = Regulus.Utility.Random.Instance;
             _EntranceSet = new List<Visible>();
-            this._Set = new List<Visible>();
+            this._Set = new Dictionary<Guid, Visible>();
             this._QuadTree = new QuadTree<Visible>(new Size(2, 2), 100);
         }
 
@@ -129,7 +129,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         {
             var v = new Visible(individual);
             v.Initial();
-            this._Set.Add(v);
+            this._Set.Add(individual.Id , v);
             this._QuadTree.Insert(v);
 
             if(individual.EntityType == ENTITY.ENTRANCE)
@@ -141,25 +141,23 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         public void Left(IIndividual individual)
         {
-            var results = this._Set.FindAll(v => v.Noumenon.Id == individual.Id);
-            foreach (var result in results)
+            
+            Visible visible;
+            if (_Set.TryGetValue(individual.Id, out visible))
             {
-                this._QuadTree.Remove(result);
-                this._Set.Remove(result);
-                _EntranceSet.Remove(result);
-                result.Release();
+                this._QuadTree.Remove(visible);
+                this._Set.Remove(individual.Id);
+                _EntranceSet.Remove(visible);
+                visible.Release();
             }
         }
 
-        public IIndividual[] Find(Rect bound)
+        IIndividual[] IMapFinder.Find(Rect bound)
         {
             var results = this._QuadTree.Query(bound);
 
             return (from r in results select r.Noumenon).ToArray();
         }
-
-        
-
         
     }
 }
