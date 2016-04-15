@@ -76,7 +76,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         private TICKRESULT _Spawn(float arg)
         {
 
-            var id = _Gate.Spawn(_Entitys.Shuffle().First() ) ;
+            var id = _Gate.SpawnEnterance(_Entitys.Shuffle().First() ) ;
             if (id != Guid.Empty)
             {
                 _Ids.Enqueue(id);

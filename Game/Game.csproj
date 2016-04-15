@@ -61,6 +61,8 @@
     <Compile Include="Play\ActorMind.cs" />
     <Compile Include="Play\AidStatus.cs" />
     <Compile Include="Play\BehaviourTreeBuilder.cs" />
+    <Compile Include="Play\ChestExcludeAction.cs" />
+    <Compile Include="Play\ChestIdleAction.cs" />
     <Compile Include="Play\ChestWisdom.cs" />
     <Compile Include="Play\EnterancePostProduction.cs" />
     <Compile Include="Play\EnteranceWisdom.cs" />
@@ -84,7 +86,7 @@
     <Compile Include="Play\GpiTransponder.cs" />
     <Compile Include="Play\HitForce.cs" />
     <Compile Include="Play\ObstacleDetector.cs" />
-    <Compile Include="Play\Race.cs" />
+    <Compile Include="Play\Dungeon.cs" />
     <Compile Include="Play\ActorStatus.cs" />
     <Compile Include="Play\BattleCasterStatus.cs" />
     <Compile Include="Play\Cell.cs" />
@@ -95,7 +97,6 @@
     <Compile Include="Play\ExploreStatus.cs" />
     <Compile Include="Play\ExtendPolygon.cs" />
     <Compile Include="Play\GameStage.cs" />
-    <Compile Include="Play\Concierge.cs" />
     <Compile Include="Play\Bag.cs" />
     <Compile Include="Play\IIndividual.cs" />
     <Compile Include="Play\ItemProvider.cs" />

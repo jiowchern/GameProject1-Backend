@@ -21,10 +21,6 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         }
         
 
-        public static Entity CreateEnterance(ENTITY[] types)
-        {
-            var data = Singleton<Resource>.Instance.FindEntity(ENTITY.ENTRANCE);            
-            return new Entity(data , "", types);
-        }
+        
     }
 }

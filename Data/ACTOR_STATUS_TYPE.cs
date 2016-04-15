@@ -35,6 +35,7 @@ namespace Regulus.Project.ItIsNotAGame1.Data
         
         TIRED   ,
         STUN,
-        AID
+        AID,
+        TWO_HAND_SWORD_ATTACK2,
     }
 }

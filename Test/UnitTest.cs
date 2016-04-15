@@ -359,7 +359,7 @@ namespace Regulus.Project.ItIsNotAGame1.Test
 
             foreach (var visable in visables)
             {
-                map.JoinChallenger(visable);    
+                map.JoinStaff(visable);
             }
             IMapFinder finder = map;
             var results = finder.Find(rect);

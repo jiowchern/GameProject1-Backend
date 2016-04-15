@@ -94,36 +94,10 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             this._Join(individual);
         }
 
-        public void JoinChallengers(IEnumerable<IIndividual> individuals)
-        {
-            foreach (var individual in individuals)
-            {
-                JoinChallenger(individual);
-            }
-        }
-        public void JoinChallenger(IIndividual individual)
-        {            
-            this._Join(individual);
+        
+        
 
-
-            var concierges = this._FindConcierges(individual);
-            
-            var concierge = concierges.Shuffle().FirstOrDefault();
-            if(concierge != null)
-            {
-                Vector2 position = concierge.GetPosition();
-                individual.SetPosition(position.X, position.Y);
-                individual.AddDirection(_Random.NextInt(0, 360));                
-            }            
-        }
-
-        private IEnumerable<Concierge> _FindConcierges(IIndividual individual)
-        {
-            return (from e in this._EntranceSet
-                    let concierge = e.Noumenon.GetConcierge()
-                    where concierge != null && concierge.IsAcceptsType(individual)
-                    select concierge);
-        }
+        
 
         private void _Join(IIndividual individual)
         {

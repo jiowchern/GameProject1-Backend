@@ -60,25 +60,20 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             Bag = bag;
         }
 
-        private Concierge _Concierge;
-
         
 
-        public Entity(EntityData data, string name, ENTITY[] enter_types)
-            : this(data, name, enter_types, new Bag())
-        {
-            
-        }
+        
+        
 
         
-        public Entity(EntityData data) : this(data , "" , new ENTITY[0] , new Bag() )
+        public Entity(EntityData data) : this(data , "" , new Bag() )
         {
             
             
         }
 
 
-        public Entity(EntityData data, string name) : this(data, name, new ENTITY[0], new Bag())
+        public Entity(EntityData data, string name) : this(data, name, new Bag())
         {
             
         }
@@ -88,14 +83,14 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _Mesh = mesh.Clone();
         }
 
-        private Entity(EntityData data, string name , ENTITY[] enter_types ,Bag bag )
+        private Entity(EntityData data, string name ,Bag bag )
             : this()
         {
             _Name = name;
             Bag = bag;
             _Mesh = data.Mesh.Clone();
             _Bound = this._BuildBound(this._Mesh);
-            _Concierge = new Concierge(_Mesh, enter_types);
+            
             _RotationMesh = data.CollisionRotation;
             _Name = "";
             _EntityType = data.Name;
@@ -274,6 +269,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private SignRoster _SignRoster;
 
+        public event Action<bool> UnlockEvent;
+
         public Guid Id { get { return this._Id; } }
 
         public float Direction { get; private set; }
@@ -283,6 +280,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         public float Speed { get { return _Speed; } }
 
         public ENTITY Type { get { return _EntityType;  } }
+        
 
         event Action IIndividual.BoundsEvent
         {
@@ -333,6 +331,15 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             }
             if (_EntityType == ENTITY.DEBIRS)
             {
+                var unlockSuccess = Regulus.Utility.Random.Instance.NextFloat() > 0.9f;
+                if(UnlockEvent != null)
+                    UnlockEvent(unlockSuccess);
+
+                if (unlockSuccess == false)
+                {                    
+                    return new Item[0];
+                }
+                
                 _Status = ACTOR_STATUS_TYPE.CHEST_OPEN;
                 _InvokeStatusEvent();
             }
@@ -358,10 +365,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             return _Block;
         }
 
-        Concierge IIndividual.GetConcierge()
-        {
-            return _Concierge;
-        }
+        
 
         
 
@@ -645,6 +649,31 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _BaseSpeed = speed;
         }
 
+        void IDevelopActor.MakeItem(string name, float quality)
+        {
+            var formulas = Resource.Instance.Formulas;
+            var formula = (from f in formulas where f.Name == name select f).FirstOrDefault();
+            if (formula == null)
+                return;
+
+            var ip = new ItemProvider();
+            var item = ip.BuildItem(quality, formula.Item, formula.Effects);
+
+            Bag.Add(item);
+        }
+
+        void IDevelopActor.CreateItem(string name, int count)
+        {
+            var ip = new ItemProvider();
+            var item = ip.CreateItem(name, count);
+            Bag.Add(item);
+        }
+
+        void IDevelopActor.SetPosition(float x, float y)
+        {
+            _SetPosition(x, y);
+        }
+
         public SkillCaster GetBattleCaster()
         {
 
@@ -726,5 +755,6 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _Status = ACTOR_STATUS_TYPE.AID;
             _InvokeStatusEvent();
         }
+        
     }
 }

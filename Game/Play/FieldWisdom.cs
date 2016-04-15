@@ -75,9 +75,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         }
 
         private TICKRESULT _NeedSpawn(float arg)
-        {
-            IIndividual individual = _Owner;
-            var actors = _Finder.Find(individual.Bounds);
+        {            
+            var actors = _Finder.Find(_Owner.GetView());
             var anyActor = (from actor in actors where EntityData.IsActor(actor.EntityType) select actor).Any();
             if (anyActor)
                 return TICKRESULT.FAILURE;

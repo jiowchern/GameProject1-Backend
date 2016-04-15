@@ -21,7 +21,6 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         public IUpdatable ProcessStronghold(Entity[] entitys,IMapGate gate)
         {
-
             var owner = (from e in entitys where e.Type == ENTITY.ENTRANCE select e).Single();
             return new InorganicsOwner(entitys , gate , new StrongholdWisdom(_Types , owner , gate , _Finder));
         }
@@ -36,6 +35,11 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         {
             var owner = (from e in entitys where e.Type == ENTITY.FIELD select e).Single();
             return new InorganicsOwner(entitys, gate, new FieldWisdom(_Types, owner, gate, _Finder));
+        }
+
+        public IUpdatable ProcessChest(Entity[] entitys, IMapGate gate)
+        {
+            return new ChestWisdom(_Types, entitys, gate, _Finder);
         }
     }
 }

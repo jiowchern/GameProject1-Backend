@@ -23,6 +23,11 @@ namespace Regulus.Project.ItIsNotAGame1.Data
         WALL_GATE,
         POOL,
         CHEST,
-        FIELD,
+        FIELD,        
+        CHEST_OWNER,
+
+        CHEST_GATE,
+
+        CHEST_EXIT
     }
 }

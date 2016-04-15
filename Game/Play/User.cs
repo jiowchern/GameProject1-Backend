@@ -148,6 +148,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         {
             this._GamePlayerRecord = record;
             var realm = this._Zone.FindRealm("test");
+            
             this._ToGame(record, realm);
         }
 

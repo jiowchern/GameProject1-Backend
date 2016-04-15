@@ -22,7 +22,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         bool IsBlock();
 
-        Concierge GetConcierge();
+    
 
         void AddDirection(float dir);
 

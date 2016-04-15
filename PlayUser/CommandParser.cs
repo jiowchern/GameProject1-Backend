@@ -101,6 +101,9 @@ namespace Regulus.Project.ItIsNotAGame1
             var binder = factory.Create(this._User.DevelopActorProvider);
             binder.Bind<float>( (gpi , view ) => gpi.SetBaseView(view) );
             binder.Bind<float>((gpi, speed) => gpi.SetSpeed(speed));
+            binder.Bind<string , int>((gpi, name , count) => gpi.CreateItem(name , count));
+            binder.Bind<string, float>((gpi, name, quality) => gpi.MakeItem(name, quality));
+            binder.Bind<float, float>((gpi, x, y) => gpi.SetPosition(x,y));
         }
 
         private void _VerifyResult(bool result)

@@ -10,5 +10,11 @@ namespace Regulus.Project.ItIsNotAGame1.Data
 
         void SetBaseView(float range);
         void SetSpeed(float speed);
+
+        void MakeItem(string name, float quality );
+
+        void CreateItem(string name, int count);
+
+        void SetPosition(float x , float y);
     }
 }

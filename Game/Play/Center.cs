@@ -15,19 +15,20 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         private readonly Hall _Hall;
         private readonly Updater _Updater;
 
-        private readonly Race _Race;
+        private readonly Dungeon _Dungeon;
 
         private Zone _Zone;
         public Center(IAccountFinder account_finder, IGameRecorder game_recorder  )
         {
             
-            this._AccountFinder = account_finder;
-            this._GameRecorder = game_recorder;
-            this._Hall = new Hall();
-            this._Updater = new Updater();
-            this._Zone = new Zone(new [] { new RealmInfomation { Name = "test", EntityDatas = new EntityData[0] , Dimension = 20} });
+            _AccountFinder = account_finder;
+            _GameRecorder = game_recorder;
+            _Hall = new Hall();
+            _Updater = new Updater();
+            _Zone = new Zone(new [] { new RealmInfomation { Name = "test", EntityDatas = new EntityData[0] , Dimension = 20} });
+            
+            _Dungeon = new Dungeon(_Zone);
 
-            _Race = new Race(_Zone);
         }
         public void Join(Remoting.ISoulBinder binder)
         {
@@ -38,7 +39,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         {
             this._Updater.Add(this._Hall);
             this._Updater.Add(this._Zone);
-            _Updater.Add(_Race);
+            _Updater.Add(_Dungeon);
         }
 
         void IBootable.Shutdown()

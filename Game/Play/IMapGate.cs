@@ -9,13 +9,19 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
     {
         void Left(Entity player);
 
-        void Join(Entity player);
+        void Join(Entity player);        
 
         void Pass(Vector2 position, ENTITY[] entitys);
 
         void Pass(Vector2 position, Guid id);
 
-        Guid Spawn(ENTITY type);
+        Guid SpawnEnterance(ENTITY type);
         Guid[] SpawnField(ENTITY[] types);
+
+        Guid Spawn(ENTITY type);
+
+        void Exit(Guid contestant);
+
+        event Action<Guid> WaitEvent;
     }
 }
