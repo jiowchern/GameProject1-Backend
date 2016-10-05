@@ -105,8 +105,10 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy ..\..\..\Library\GhostProviderGenerator.exe
-copy ..\..\..\Library\buildgpi.ini
+    <PostBuildEvent>copy ..\..\..\Library\GhostProviderGenerator.exe 
+
+copy ..\..\..\Library\buildgpi.ini 
+
 GhostProviderGenerator.exe buildgpi.ini
 
 del GhostProviderGenerator.exe
