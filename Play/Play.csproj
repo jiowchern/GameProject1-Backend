@@ -78,7 +78,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy ..\..\..\Library\server.exe
+    <PostBuildEvent>copy ..\..\..\Library\Server.exe
 copy ..\..\..\..\Data\entitys.txt
 copy ..\..\..\..\Data\skills.txt
 copy ..\..\..\..\Data\items.txt
