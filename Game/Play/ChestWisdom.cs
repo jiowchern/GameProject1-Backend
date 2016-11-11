@@ -10,63 +10,38 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
     internal class ChestWisdom : Wisdom 
     {
-        private enum MODE
-        {
-            IDLE,
 
-            EXCLUDE
-        };
-
-        private MODE _Mode;
-        private readonly ENTITY[] _Types;
+        
 
         private readonly IMapGate _Gate;
 
-        private Entity _Owner;
+        private readonly Entity _Owner;
         
 
         private readonly IMapFinder _Finder;
 
-        private Entity _Exit;
+        private readonly Entity _Exit;
 
-        private Entity _Door;
+        private readonly Entity _Door;
 
-        private Entity _Chest;
-
-        private Entity[] _Walls;
+        private readonly Entity _Chest;
 
         
 
-        public ChestWisdom(ENTITY[] types, Entity[] entitys, IMapGate gate, IMapFinder finder)
+        
+        
+        
+
+        public ChestWisdom(Entity owner, Entity exit, Entity debirs, Entity door, IMapFinder finder, IMapGate gate)
         {
-            
-            _Types = types;
-            _Gate = gate;
+            _Owner = owner;
+            _Exit = exit;
+            _Chest = debirs;
+            _Door = door;
             _Finder = finder;
-
-            _Owner = (from e in entitys where e.Type == ENTITY.CHEST_OWNER select e).FirstOrDefault();
-            if(_Owner == null)
-                throw new Exception("Can not find the owner.");            
-
-            _Exit = (from e in entitys where e.Type == ENTITY.CHEST_EXIT select e).FirstOrDefault();
-            if (_Exit == null)
-                throw new Exception("Can not find the exit.");
-
-            _Chest = (from e in entitys where e.Type == ENTITY.DEBIRS select e).FirstOrDefault();
-            if (_Chest == null)
-                throw new Exception("Can not find the chest.");
-
-            _Door = (from e in entitys where e.Type == ENTITY.CHEST_GATE select e).FirstOrDefault();
-            if (_Door == null)
-                throw new Exception("Can not find the door.");
-
-            _Walls = (from e in entitys where e.Type == ENTITY.WALL_GATE select e).ToArray();
-            
+            _Gate = gate;
         }
 
-        
-
-        
 
         protected override void _Update(float delta)
         {
@@ -75,21 +50,10 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         protected override void _Shutdown()
         {
-            foreach (var wall in _Walls)
-            {
-                _Gate.Left(wall);
-            }
-            
-            
         }
 
         protected override ITicker _Launch()
-        {
-            foreach (var wall in _Walls)
-            {
-                _Gate.Join(wall);
-            }
-
+        {            
             var builder = new Regulus.BehaviourTree.Builder();
             var ticker = builder
                     .Sequence()
