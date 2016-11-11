@@ -19,8 +19,10 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             var data = Singleton<Resource>.Instance.FindEntity(type);
             return new Entity(data);
         }
-        
 
-        
+        public static Entity CreateStatic(Polygon mesh)
+        {
+            return new Entity(new EntityData() { CollisionRotation = false , Name = ENTITY.STATIC , Mesh = mesh});
+        }
     }
 }

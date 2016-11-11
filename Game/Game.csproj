@@ -67,6 +67,7 @@
     <Compile Include="Play\EnterancePostProduction.cs" />
     <Compile Include="Play\EnteranceWisdom.cs" />
     <Compile Include="Play\FieldWisdom.cs" />
+    <Compile Include="Play\PortalWisdom.cs" />
     <Compile Include="Play\StrongholdWisdom.cs" />
     <Compile Include="Play\EntityCreateParameter.cs" />
     <Compile Include="Play\EntityGroupBuilder.cs" />

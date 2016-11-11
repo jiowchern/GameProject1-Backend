@@ -9,8 +9,7 @@ using Regulus.Extension;
 using Regulus.Project.ItIsNotAGame1.Data;
 namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
-    public class Entity : IIndividual, IDevelopActor
-        , IPlayerProperys
+    public class Entity : IIndividual, IDevelopActor         
     {
         private readonly ENTITY _EntityType;
         private readonly string _Name;
@@ -88,22 +87,22 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         {
             _Name = name;
             Bag = bag;
-            _Mesh = data.Mesh.Clone();
-            _Bound = this._BuildBound(this._Mesh);
-            
-            _RotationMesh = data.CollisionRotation;
-            _Name = "";
-            _EntityType = data.Name;
-            _DetectionRange = 1.0f + _Mesh.Points.ToRect().Width;
 
+            _Mesh = data.Mesh.Clone();
+            _RotationMesh = data.CollisionRotation;
+            _EntityType = data.Name;            
         }
 
         private Entity()
         {
+            _Bound = this._BuildBound(this._Mesh);
+            _DetectionRange = 1.0f + _Mesh.Points.ToRect().Width;
+
+
             _Datas = Resource.Instance.SkillDatas;
 
             this._Id = Guid.NewGuid();
-            this._BaseView = 15.0f;
+            this._BaseView = 30.0f;
             _DetectionRange = 1.0f ;
 
 
@@ -121,6 +120,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
             _Status = ACTOR_STATUS_TYPE.NORMAL_IDLE;
         }
+
+       
 
         private void _BroadcastEquipEvent(Guid obj)
         {
@@ -172,12 +173,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
             return _Health;
         }
-
-        float IPlayerProperys.Strength {
-            get { return _Strength; }
-        }
-
-        float IPlayerProperys.Health { get { return _Health; } }
+      
 
         string IVisible.Name
         {
@@ -243,6 +239,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             }
         }
 
+        
+
         private Rect _BuildBound(Polygon mesh)
         {
 
@@ -268,6 +266,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         private readonly bool _RotationMesh;
 
         private SignRoster _SignRoster;
+
+        private string _TransmitRealm;
 
         public event Action<bool> UnlockEvent;
 
@@ -299,6 +299,11 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         {
             add { _TheftEvent += value; }
             remove { _TheftEvent -= value; }
+        }
+
+        void IIndividual.Transmit(string target_realm)
+        {
+            _TransmitRealm = target_realm;
         }
 
         void IIndividual.SetPosition(float x, float y)
@@ -553,6 +558,13 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             return values;
         }
 
+        public string HaveTransmit()
+        {
+            var target = _TransmitRealm;
+            _TransmitRealm = null;
+            return target;
+        }
+        
         public float HaveDamage()
         {
             var values = _DamageCount;
@@ -755,6 +767,10 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _Status = ACTOR_STATUS_TYPE.AID;
             _InvokeStatusEvent();
         }
-        
+
+        public Rect GetBound()
+        {
+            return _Bound;
+        }
     }
 }

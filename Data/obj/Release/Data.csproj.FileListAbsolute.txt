@@ -39,3 +39,16 @@ E:\Develop\Project\ItIsNotAGame1\Backend\Data\bin\Release\RegulusRemoting.xml
 E:\Develop\Project\ItIsNotAGame1\Backend\Data\obj\Release\ItIsNotAGame1Data.dll
 E:\Develop\Project\ItIsNotAGame1\Backend\Data\obj\Release\ItIsNotAGame1Data.pdb
 E:\Develop\Project\ItIsNotAGame1\Backend\Data\obj\Release\Data.csprojResolveAssemblyReference.cache
+D:\Develop\ItIsNotAGame1-Backend\Data\bin\Release\ItIsNotAGame1Data.dll
+D:\Develop\ItIsNotAGame1-Backend\Data\bin\Release\ItIsNotAGame1Data.pdb
+D:\Develop\ItIsNotAGame1-Backend\Data\bin\Release\protobuf-net.dll
+D:\Develop\ItIsNotAGame1-Backend\Data\bin\Release\RegulusLibrary.dll
+D:\Develop\ItIsNotAGame1-Backend\Data\bin\Release\RegulusRemoting.dll
+D:\Develop\ItIsNotAGame1-Backend\Data\bin\Release\protobuf-net.xml
+D:\Develop\ItIsNotAGame1-Backend\Data\bin\Release\RegulusLibrary.pdb
+D:\Develop\ItIsNotAGame1-Backend\Data\bin\Release\RegulusLibrary.xml
+D:\Develop\ItIsNotAGame1-Backend\Data\bin\Release\RegulusRemoting.pdb
+D:\Develop\ItIsNotAGame1-Backend\Data\bin\Release\RegulusRemoting.xml
+D:\Develop\ItIsNotAGame1-Backend\Data\obj\Release\ItIsNotAGame1Data.dll
+D:\Develop\ItIsNotAGame1-Backend\Data\obj\Release\ItIsNotAGame1Data.pdb
+D:\Develop\ItIsNotAGame1-Backend\Data\obj\Release\Data.csprojResolveAssemblyReference.cache

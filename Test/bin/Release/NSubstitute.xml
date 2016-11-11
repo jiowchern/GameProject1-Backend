@@ -100,6 +100,108 @@
             <param name="useArgument"></param>
             <returns></returns>
         </member>
+        <member name="T:NSubstitute.Callback">
+            <summary>
+            Perform this chain of callbacks and/or always callback when called.
+            </summary>
+        </member>
+        <member name="M:NSubstitute.Callback.First(System.Action{NSubstitute.Core.CallInfo})">
+            <summary>
+            Perform as first in chain of callback when called.
+            </summary>
+            <param name="doThis"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NSubstitute.Callback.Always(System.Action{NSubstitute.Core.CallInfo})">
+            <summary>
+            Perform this action always when callback is called.
+            </summary>
+            <param name="doThis"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NSubstitute.Callback.FirstThrow``1(System.Func{NSubstitute.Core.CallInfo,``0})">
+            <summary>
+            Throw exception returned by function as first callback in chain of callback when called.
+            </summary>
+            <param name="throwThis"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NSubstitute.Callback.FirstThrow``1(``0)">
+            <summary>
+            Throw this exception as first callback in chain of callback when called.
+            </summary>
+            <param name="exception"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NSubstitute.Callback.AlwaysThrow``1(System.Func{NSubstitute.Core.CallInfo,``0})">
+            <summary>
+            Throw exception returned by function always when callback is called.
+            </summary>
+            <typeparam name="TException">The type of the exception.</typeparam>
+            <param name="throwThis">The throw this.</param>
+            <returns></returns>
+        </member>
+        <member name="M:NSubstitute.Callback.AlwaysThrow``1(``0)">
+            <summary>
+            Throw this exception always when callback is called.
+            </summary>
+            <typeparam name="TException">The type of the exception.</typeparam>
+            <param name="exception">The exception.</param>
+            <returns></returns>
+        </member>
+        <member name="M:NSubstitute.Callbacks.EndCallbackChain.AndAlways(System.Action{NSubstitute.Core.CallInfo})">
+            <summary>
+            Perform the given action for every call.
+            </summary>
+            <param name="doThis">The action to perform for every call</param>
+            <returns></returns>
+        </member>
+        <member name="M:NSubstitute.Callbacks.ConfiguredCallback.Then(System.Action{NSubstitute.Core.CallInfo})">
+            <summary>
+            Perform this action once in chain of called callbacks.
+            </summary>
+            <param name="doThis"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NSubstitute.Callbacks.ConfiguredCallback.ThenKeepDoing(System.Action{NSubstitute.Core.CallInfo})">
+            <summary>
+            Keep doing this action after the other callbacks have run.
+            </summary>
+            <param name="doThis"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NSubstitute.Callbacks.ConfiguredCallback.ThenKeepThrowing``1(System.Func{NSubstitute.Core.CallInfo,``0})">
+            <summary>
+            Keep throwing this exception after the other callbacks have run.
+            </summary>
+            <typeparam name="TException"></typeparam>
+            <param name="throwThis"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NSubstitute.Callbacks.ConfiguredCallback.ThenKeepThrowing``1(``0)">
+            <summary>
+            Keep throwing this exception after the other callbacks have run.
+            </summary>
+            <typeparam name="TException"></typeparam>
+            <param name="throwThis"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NSubstitute.Callbacks.ConfiguredCallback.ThenThrow``1(System.Func{NSubstitute.Core.CallInfo,``0})">
+            <summary>
+            Throw exception returned by function once when called in a chain of callbacks.
+            </summary>
+            <typeparam name="TException">The type of the exception</typeparam>
+            <param name="throwThis">Produce the exception to throw for a CallInfo</param>
+            <returns></returns>
+        </member>
+        <member name="M:NSubstitute.Callbacks.ConfiguredCallback.ThenThrow``1(``0)">
+            <summary>
+            Throw this exception once when called in a chain of callbacks.
+            </summary>
+            <typeparam name="TException">The type of the exception</typeparam>
+            <param name="exception">The exception to throw</param>
+            <returns></returns>
+        </member>
         <member name="T:NSubstitute.Core.Arguments.IArgumentMatcher">
             <summary>
             Provides a specification for arguments for use with <see ctype="Arg.Matches (IArgumentMatcher)" />.
@@ -259,6 +361,24 @@
             <param name="argument"></param>
             <returns></returns>
         </member>
+        <member name="M:NSubstitute.Extensions.ReturnsForAllExtensions.ReturnsForAll``1(System.Object,``0)">
+            <summary>
+            Configure default return value for all methods that return the specified type
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name = "substitute"></param>
+            <param name="returnThis"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NSubstitute.Extensions.ReturnsForAllExtensions.ReturnsForAll``1(System.Object,System.Func{NSubstitute.Core.CallInfo,``0})">
+            <summary>
+            Configure default return value for all methods that return the specified type, calculated by a function
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="substitute"></param>
+            <param name="returnThis"></param>
+            <returns></returns>
+        </member>
         <member name="M:NSubstitute.Received.InOrder(System.Action)">
             <summary>
             Asserts the calls to the substitutes contained in the given Action were
@@ -337,7 +457,7 @@
         <member name="M:NSubstitute.Raise.Event``1(System.Object[])">
             <summary>
             Raise an event of type <typeparamref name="THandler" /> with the provided arguments. If no arguments are provided
-            NSubstitute will try and provide reasonble defaults.
+            NSubstitute will try to provide reasonable defaults.
             </summary>
         </member>
         <member name="T:NSubstitute.Substitute">
@@ -414,6 +534,46 @@
         <member name="M:NSubstitute.SubstituteExtensions.Returns``1(``0,System.Func{NSubstitute.Core.CallInfo,``0},System.Func{NSubstitute.Core.CallInfo,``0}[])">
             <summary>
             Set a return value for this call, calculated by the provided function.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="value"></param>
+            <param name="returnThis">Function to calculate the return value</param>
+            <param name="returnThese">Optionally use these functions next</param>
+            <returns></returns>
+        </member>
+        <member name="M:NSubstitute.SubstituteExtensions.Returns``1(System.Threading.Tasks.Task{``0},``0,``0[])">
+            <summary>
+            Set a return value for this call. The value(s) to be returned will be wrapped in Tasks.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="value"></param>
+            <param name="returnThis">Value to return. Will be wrapped in a Task</param>
+            <param name="returnThese">Optionally use these functions next</param>
+            <returns></returns>
+        </member>
+        <member name="M:NSubstitute.SubstituteExtensions.Returns``1(System.Threading.Tasks.Task{``0},System.Func{NSubstitute.Core.CallInfo,``0},System.Func{NSubstitute.Core.CallInfo,``0}[])">
+            <summary>
+            Set a return value for this call, calculated by the provided function. The value(s) to be returned will be wrapped in Tasks.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="value"></param>
+            <param name="returnThis">Function to calculate the return value</param>
+            <param name="returnThese">Optionally use these functions next</param>
+            <returns></returns>
+        </member>
+        <member name="M:NSubstitute.SubstituteExtensions.ReturnsForAnyArgs``1(System.Threading.Tasks.Task{``0},``0,``0[])">
+            <summary>
+            Set a return value for this call made with any arguments. The value(s) to be returned will be wrapped in Tasks.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="value"></param>
+            <param name="returnThis">Value to return</param>
+            <param name="returnThese">Optionally return these values next</param>
+            <returns></returns>
+        </member>
+        <member name="M:NSubstitute.SubstituteExtensions.ReturnsForAnyArgs``1(System.Threading.Tasks.Task{``0},System.Func{NSubstitute.Core.CallInfo,``0},System.Func{NSubstitute.Core.CallInfo,``0}[])">
+            <summary>
+            Set a return value for this call made with any arguments, calculated by the provided function. The value(s) to be returned will be wrapped in Tasks.
             </summary>
             <typeparam name="T"></typeparam>
             <param name="value"></param>
@@ -552,6 +712,12 @@
             Perform this action when called.
             </summary>
             <param name="callbackWithArguments"></param>
+        </member>
+        <member name="M:NSubstitute.Core.WhenCalled`1.Do(NSubstitute.Callback)">
+            <summary>
+            Perform this configured callcback when called.
+            </summary>
+            <param name="callback"></param>
         </member>
         <member name="M:NSubstitute.Core.WhenCalled`1.DoNotCallBase">
             <summary>

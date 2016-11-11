@@ -7,6 +7,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
     public interface IMapGate
     {
+
+        string Name { get; }
         void Left(Entity player);
 
         void Join(Entity player);        

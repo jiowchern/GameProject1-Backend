@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
@@ -12,17 +13,14 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
     internal class Dungeon :Regulus.Utility.IUpdatable , IMapGate
     {
-        private readonly Zone _Zone;
-
-        private readonly Map _Map;
-
+        private readonly RealmInfomation _RealmInfomation;
 
         private readonly Dictionary<ENTITY, int> _EntityEnteranceResource;
         private readonly Dictionary<ENTITY, int> _EntityFieldResource;
         private readonly Dictionary<LEVEL_UNIT, EntityGroupBuilder> _LevelUnitToGroupBuilder;
         private readonly TimesharingUpdater _Updater;
 
-        private List<Aboriginal> _Aboriginals;
+        private readonly List<Aboriginal> _Aboriginals;
 
         private readonly IRandom _Random;
 
@@ -30,8 +28,18 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private readonly List<Entity> _Inorganics;
 
-        public Dungeon(Zone zone)
+        private readonly Map _Map;
+
+        private bool _Ready;
+
+        private readonly bool _Valid;
+
+        public Dungeon(RealmInfomation realm_infomation)
         {
+            _RealmInfomation = realm_infomation;
+            _Valid = true;
+            _Map = new Map();
+
             _EntityEnteranceResource = new Dictionary<ENTITY, int>
             {
                 { ENTITY.ACTOR1, 50},
@@ -50,36 +58,36 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                 { ENTITY.ACTOR5, 50},
             };
             _Inorganics = new List<Entity>();
-            _WaitingRoom = new List<Entity>();
-            _Map = new Map();
+            _WaitingRoom = new List<Entity>();            
 
             _LevelUnitToGroupBuilder = new Dictionary<LEVEL_UNIT, EntityGroupBuilder>
             {
                 {LEVEL_UNIT.WALL, new EntityGroupBuilder("wall", _AllInorganics )},
-                {LEVEL_UNIT.ENTERANCE1, new EntityGroupBuilder("enterance", new EnterancePostProduction(_Map , new [] {ENTITY.ACTOR1}).ProcessEnterance )},
-                {LEVEL_UNIT.ENTERANCE2, new EntityGroupBuilder("enterance", new EnterancePostProduction(_Map , new [] {ENTITY.ACTOR3, ENTITY.ACTOR2 }).ProcessStronghold )},
-                {LEVEL_UNIT.ENTERANCE3, new EntityGroupBuilder("enterance", new EnterancePostProduction(_Map , new [] {ENTITY.ACTOR4, ENTITY.ACTOR2 }).ProcessStronghold )}, 
-                {LEVEL_UNIT.ENTERANCE4, new EntityGroupBuilder("enterance", new EnterancePostProduction(_Map , new [] {ENTITY.ACTOR5, ENTITY.ACTOR2 }).ProcessStronghold )}, 
-                {LEVEL_UNIT.CHEST, new EntityGroupBuilder("chest", new EnterancePostProduction(_Map , new [] {ENTITY.ACTOR3 , ENTITY.ACTOR4 , ENTITY.ACTOR5 }).ProcessChest ) },
+                {LEVEL_UNIT.ENTERANCE1, new EntityGroupBuilder("enterance", new EnterancePostProduction(new [] {ENTITY.ACTOR1}).ProcessEnterance )},
+                {LEVEL_UNIT.ENTERANCE2, new EntityGroupBuilder("enterance", new EnterancePostProduction(new [] {ENTITY.ACTOR3, ENTITY.ACTOR2 }).ProcessStronghold )},
+                {LEVEL_UNIT.ENTERANCE3, new EntityGroupBuilder("enterance", new EnterancePostProduction(new [] {ENTITY.ACTOR4, ENTITY.ACTOR2 }).ProcessStronghold )}, 
+                {LEVEL_UNIT.ENTERANCE4, new EntityGroupBuilder("enterance", new EnterancePostProduction(new [] {ENTITY.ACTOR5, ENTITY.ACTOR2 }).ProcessStronghold )}, 
+                {LEVEL_UNIT.CHEST, new EntityGroupBuilder("chest", new EnterancePostProduction(new [] {ENTITY.ACTOR3 , ENTITY.ACTOR4 , ENTITY.ACTOR5 }).ProcessChest ) },
                 //{LEVEL_UNIT.CHEST, new EntityGroupBuilder("chest", _AllInorganics) },
-                {LEVEL_UNIT.FIELD, new EntityGroupBuilder("field", new EnterancePostProduction(_Map , new [] {ENTITY.ACTOR3 , ENTITY.ACTOR4 , ENTITY.ACTOR5 }).ProcessField ) },
+                {LEVEL_UNIT.FIELD, new EntityGroupBuilder("field", new EnterancePostProduction(new [] {ENTITY.ACTOR3 , ENTITY.ACTOR4 , ENTITY.ACTOR5 }).ProcessField ) },
                 {LEVEL_UNIT.GATE, new EntityGroupBuilder("thickwall", _AllInorganics )},
                 {LEVEL_UNIT.POOL, new EntityGroupBuilder("pool", _ResourcePostProduction )},                
             };
-            _Random = Regulus.Utility.Random.Instance;
-            this._Zone = zone;
+            _Random = Regulus.Utility.Random.Instance;            
             _Updater = new TimesharingUpdater(1.0f / 30.0f);
             _Aboriginals = new List<Aboriginal>();
 
         }
 
-        private IUpdatable _AllInorganics(Entity[] entitys, IMapGate gate)
+        public IMapFinder Map { get {return _Map;} }
+
+        private IUpdatable _AllInorganics(Entity[] entitys, IMapGate gate , IMapFinder finder)
         {
             _Inorganics.AddRange(entitys);
             return null;
         }
 
-        private IUpdatable _ResourcePostProduction(Entity[] entitys, IMapGate gate)
+        private IUpdatable _ResourcePostProduction(Entity[] entitys, IMapGate gate , IMapFinder finder)
         {
 
             foreach (var entity in entitys)
@@ -109,21 +117,64 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         void IBootable.Launch()
         {
-            var realm = _Zone.FindRealm("test");                        
-            var level = realm.CreateLevel(this,_Map);
             
-            foreach (var unit in level)
+            var map = _Map;
+
+            if (_RealmInfomation.IsMaze())
             {
-                var builder = _LevelUnitToGroupBuilder[unit.Type];                
-                var updater = builder.Create(unit.Direction, unit.Center , this );                
-                if(updater != null)
-                    _Updater.Add(updater);
+                _BuildMaze(map);
+            }
+            else
+            {
+                _BuildTown();
             }
             foreach (var inorganic in _Inorganics)
             {
-                _Map.JoinStaff(inorganic);
+                map.JoinStaff(inorganic);
             }
-            
+            _Ready = true;
+        }
+
+        private void _BuildTown()
+        {
+            var data = Resource.Instance.FindTown(_RealmInfomation.Town);
+            foreach (var staticEntity in data.Walls)
+            {
+                var entity = EntityProvider.CreateStatic(staticEntity.Mesh);                
+                _Inorganics.Add(entity);
+            }
+
+            foreach (var portalData in data.Portals)
+            {
+                var entity = EntityProvider.Create(ENTITY.PORTAL);
+                IIndividual individual = entity;
+                individual.SetPosition(portalData.Position);
+
+                _Updater.Add(new PortalWisdom(entity , portalData.TargetRealm , this , _Map));
+                
+            }
+        }
+
+        private void _BuildMaze(Map map)
+        {
+            var level = _CreateLevel(this, map);
+
+            foreach (var unit in level)
+            {
+                var builder = _LevelUnitToGroupBuilder[unit.Type];
+                var updater = builder.Create(unit.Direction, unit.Center, this, map);
+                if (updater != null)
+                {
+                    _Updater.Add(updater);
+                }
+            }
+        }
+
+        private Level _CreateLevel(IMapGate gate, Map map)
+        {            
+            var builder = new LevelGenerator(_RealmInfomation.Width, _RealmInfomation.Height);
+            var level = builder.Build(_RealmInfomation.Dimension);
+            return level;
         }
 
         private void _Join(Aboriginal aboriginal)
@@ -149,6 +200,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             return true;
         }
 
+        string IMapGate.Name { get { return _RealmInfomation.Name; } }
+        
 
         void IMapGate.Left(Entity player)
         {
@@ -290,6 +343,17 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         {
             add { this._WaitEvent += value; }
             remove { this._WaitEvent -= value; }
+        }
+
+        public bool IsReady()
+        {
+
+            return _Ready;
+        }
+
+        public bool IsValid()
+        {
+            return _Valid;
         }
     }
 }

@@ -8,7 +8,7 @@ using Regulus.Utility;
 
 namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
-    internal class ChestWisdom : Wisdom , ITicker
+    internal class ChestWisdom : Wisdom 
     {
         private enum MODE
         {
@@ -35,11 +35,11 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private Entity[] _Walls;
 
-        private Regulus.Utility.StageMachine _Machine;
+        
 
         public ChestWisdom(ENTITY[] types, Entity[] entitys, IMapGate gate, IMapFinder finder)
         {
-            _Machine = new StageMachine();
+            
             _Types = types;
             _Gate = gate;
             _Finder = finder;
@@ -79,7 +79,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             {
                 _Gate.Left(wall);
             }
-            _Machine.Termination();
+            
             
         }
 
@@ -102,14 +102,5 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         
 
-        void ITicker.Reset()
-        {
-            
-        }
-
-        TICKRESULT ITicker.Tick(float delta)
-        {
-            return TICKRESULT.SUCCESS;
-        }
     }
 }

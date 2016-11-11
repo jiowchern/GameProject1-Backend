@@ -14,10 +14,9 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         private readonly IGameRecorder _GameRecorder;
         private readonly Hall _Hall;
         private readonly Updater _Updater;
+        
 
-        private readonly Dungeon _Dungeon;
-
-        private Zone _Zone;
+        private readonly Zone _Zone;
         public Center(IAccountFinder account_finder, IGameRecorder game_recorder  )
         {
             
@@ -25,9 +24,13 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _GameRecorder = game_recorder;
             _Hall = new Hall();
             _Updater = new Updater();
-            _Zone = new Zone(new [] { new RealmInfomation { Name = "test", EntityDatas = new EntityData[0] , Dimension = 20} });
+            _Zone = new Zone(new []
+            {
+                new RealmInfomation { Name = "maze1", Dimension = 20 , Width = 15 , Height = 15},
+                new RealmInfomation { Name = "town1", Town = "town1"}
+            });
             
-            _Dungeon = new Dungeon(_Zone);
+            
 
         }
         public void Join(Remoting.ISoulBinder binder)
@@ -39,7 +42,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         {
             this._Updater.Add(this._Hall);
             this._Updater.Add(this._Zone);
-            _Updater.Add(_Dungeon);
+           
         }
 
         void IBootable.Shutdown()

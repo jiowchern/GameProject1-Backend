@@ -22,7 +22,7 @@ namespace Regulus.Project.ItIsNotAGame1.Storage.User
 		public Proxy(IUserFactoty<IUser> custom)
 		{
 		    this._UserFactory = custom;
-		    this._Client = new Client<IUser>(this, this);
+		    this._Client = new Client<IUser>(this, new Command());
 		    this._Updater = new Updater();
 
 		    this.Client_ModeSelectorEvent(this._Client.Selector);
@@ -31,7 +31,7 @@ namespace Regulus.Project.ItIsNotAGame1.Storage.User
 		public Proxy()
 		{
 		    this._UserFactory = new RemotingFactory();
-		    this._Client = new Client<IUser>(this, this);
+		    this._Client = new Client<IUser>(this, new Command());
 		    this._Updater = new Updater();
 
 		    this.Client_ModeSelectorEvent(this._Client.Selector);

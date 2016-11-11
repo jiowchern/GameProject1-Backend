@@ -29,7 +29,7 @@ namespace Regulus.Project.ItIsNotAGame1.Data
                 || e == Data.ENTITY.WALL_NORTH|| e == Data.ENTITY.WALL_NORTH_AISLE
                 || e == Data.ENTITY.WALL_SOUTH|| e == Data.ENTITY.WALL_SOUTH_AISLE
                 || e == Data.ENTITY.WALL_WESTERN|| e == Data.ENTITY.WALL_WESTERN_AISLE
-                || e == Data.ENTITY.WALL_GATE || e == Data.ENTITY.CHEST_GATE;
+                || e == Data.ENTITY.WALL_GATE || e == Data.ENTITY.CHEST_GATE || e == Data.ENTITY.STATIC;
         }
 
         public static bool IsResource(ENTITY entity_type)

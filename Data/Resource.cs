@@ -4,6 +4,7 @@ namespace Regulus.Project.ItIsNotAGame1.Data
 {
     public class Resource : Utility.Singleton<Resource>
     {
+        public TownData[] Towns;
         public EntityData[] Entitys;
         public SkillData[] SkillDatas;
 
@@ -15,6 +16,7 @@ namespace Regulus.Project.ItIsNotAGame1.Data
 
         public Resource()
         {
+            Towns = new TownData[0];
             EntityGroupLayouts = new EntityGroupLayout[0];
             Entitys = new EntityData[0];
             SkillDatas = new SkillData[0];
@@ -22,6 +24,10 @@ namespace Regulus.Project.ItIsNotAGame1.Data
             Formulas = new ItemFormula[0];
         }
 
+        public TownData FindTown(string name)
+        {
+            return (from e in this.Towns where e.Name == name select e).Single();
+        }
         public EntityData FindEntity(ENTITY name)
         {
             return (from e in this.Entitys where e.Name == name select e).Single();

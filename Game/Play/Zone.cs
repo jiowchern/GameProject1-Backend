@@ -16,17 +16,26 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private readonly Dictionary<string, Realm> _Realms;
 
+        private TimesharingUpdater _Updater;
+        
+
         public Zone(RealmInfomation[] realm_infomations)
         {
+            this._Realms = new Dictionary<string, Realm>();
+            _Updater = new TimesharingUpdater(1f/10f);
             if (realm_infomations == null)
                 throw new System.NullReferenceException();
 
-            this._Realms = new Dictionary<string, Realm>();
+            
 
-            foreach (var material in realm_infomations)
+
+            foreach (var realm_infomation in realm_infomations)
             {
-                this._Realms.Add(material.Name , new Realm(material.Dimension));
-            }            
+                var realm = new Realm(realm_infomation);
+                this._Realms.Add(realm_infomation.Name, realm);
+                _Updater.Add(realm);
+            }
+
         }
 
         public Realm FindRealm(string name)
@@ -45,11 +54,12 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         
         void IBootable.Shutdown()
         {
-            
+            _Updater.Shutdown();
         }
 
         bool IUpdatable.Update()
         {
+            _Updater.Working();
             return true;
         }
     }

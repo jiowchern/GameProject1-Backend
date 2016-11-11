@@ -96,12 +96,15 @@
     <Compile Include="IVersion.cs" />
     <Compile Include="IVisible.cs" />
     <Compile Include="Location.cs" />
+    <Compile Include="PortalData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RealmInfomation.cs" />
     <Compile Include="Resource.cs" />
     <Compile Include="SkillData.cs" />
+    <Compile Include="TownData.cs" />
     <Compile Include="Translate.cs" />
     <Compile Include="VisibleStatus.cs" />
+    <Compile Include="WallData.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
@@ -112,7 +115,9 @@ copy ..\..\..\Library\buildgpi.ini
 GhostProviderGenerator.exe buildgpi.ini
 
 del GhostProviderGenerator.exe
-del buildgpi.ini</PostBuildEvent>
+del buildgpi.ini
+
+copy  ItIsNotAGame1DataGPI.dll ..\..\..\Common</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

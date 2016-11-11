@@ -14,8 +14,7 @@ using Regulus.Utility;
 
 namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
-    internal class GameStage : IStage, IQuitable,        
-        IEmotion        
+    internal class GameStage : IStage, IPlayerProperys,IEmotion        
     {
         private readonly ISoulBinder _Binder;
 
@@ -41,9 +40,12 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private readonly Wisdom _Wisdom;
 
-        public event Action DoneEvent;
+        public event Action ExitEvent;
+        public event Action<string> TransmitEvent;
 
         private readonly IMapGate _Gate;
+
+        
 
         public GameStage(ISoulBinder binder, IMapFinder map , IMapGate gate, Entity entity)
         {
@@ -74,7 +76,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
             _Binder.Unbind<IEmotion>(this);
             _Binder.Unbind<IDevelopActor>(_Player);            
-            _Binder.Unbind<IPlayerProperys>(_Player);            
+            _Binder.Unbind<IPlayerProperys>(this);            
             _Gate.Left(_Player);
         }
 
@@ -84,7 +86,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             this._DifferenceNoticer.LeftEvent += this._BroadcastLeft;
 
             this._Gate.Join(this._Player);
-            this._Binder.Bind<IPlayerProperys>(_Player);                        
+            this._Binder.Bind<IPlayerProperys>(this);                        
             _Binder.Bind<IDevelopActor>(_Player);
             _Binder.Bind<IEmotion>(this);
             _ToSurvival();
@@ -108,6 +110,9 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _Broadcast(_Map.Find(_Player.GetView()));
             _Player.Equipment.UpdateEffect(lastDeltaTime);
 
+            var target = _Player.HaveTransmit();
+            if (target != null)
+                TransmitEvent(target);
         }
 
         private void _Move(float deltaTime)
@@ -183,10 +188,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             return second;
         }
 
-        public void Quit()
-        {
-            this.DoneEvent.Invoke();
-        }
+        
         
         
         private void _ToSurvival()
@@ -199,7 +201,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         private void _ToStun()
         {
             var status = new StunStatus(_Binder, _Player);
-            status.ExitEvent += DoneEvent;
+            status.ExitEvent += ExitEvent;
             status.WakeEvent += _ToSurvival;
 
             _Machine.Push(status);
@@ -208,6 +210,23 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         void IEmotion.Talk(string message)
         {
             _Player.Talk(message);
+        }
+
+        string IPlayerProperys.Realm { get { return _Gate.Name; } }
+
+        Guid IPlayerProperys.Id
+        {
+            get { return _Player.Id; }
+        }
+
+        float IPlayerProperys.Strength
+        {
+            get { return _Player.Strength(0); }
+        }
+
+        float IPlayerProperys.Health
+        {
+            get { return _Player.Health(0); }
         }
     }
 }

@@ -8,38 +8,39 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
     internal class EnterancePostProduction
     {
         
-
-        private readonly IMapFinder _Finder;
+        
 
         private readonly ENTITY[] _Types;
 
-        public EnterancePostProduction(IMapFinder finder, ENTITY[] types)
+        public EnterancePostProduction(ENTITY[] types)
         {        
-            _Finder = finder;
+            
             _Types = types;
         }
 
-        public IUpdatable ProcessStronghold(Entity[] entitys,IMapGate gate)
+        public IUpdatable ProcessStronghold(Entity[] entitys,IMapGate gate , IMapFinder finder)
         {
             var owner = (from e in entitys where e.Type == ENTITY.ENTRANCE select e).Single();
-            return new InorganicsOwner(entitys , gate , new StrongholdWisdom(_Types , owner , gate , _Finder));
+            return new InorganicsOwner(entitys , gate , new StrongholdWisdom(_Types , owner , gate , finder));
         }
 
-        public IUpdatable ProcessEnterance(Entity[] entitys, IMapGate gate)
+        public IUpdatable ProcessEnterance(Entity[] entitys, IMapGate gate, IMapFinder finder)
         {
             var owner = (from e in entitys where e.Type == ENTITY.ENTRANCE select e).Single();
             return new InorganicsOwner(entitys, gate, new EnteranceWisdom(_Types, owner, gate));
         }
 
-        public IUpdatable ProcessField(Entity[] entitys, IMapGate gate)
+        public IUpdatable ProcessField(Entity[] entitys, IMapGate gate, IMapFinder finder)
         {
             var owner = (from e in entitys where e.Type == ENTITY.FIELD select e).Single();
-            return new InorganicsOwner(entitys, gate, new FieldWisdom(_Types, owner, gate, _Finder));
+            return new InorganicsOwner(entitys, gate, new FieldWisdom(_Types, owner, gate, finder));
         }
 
-        public IUpdatable ProcessChest(Entity[] entitys, IMapGate gate)
+        public IUpdatable ProcessChest(Entity[] entitys, IMapGate gate, IMapFinder finder)
         {
-            return new ChestWisdom(_Types, entitys, gate, _Finder);
+            return new ChestWisdom(_Types, entitys, gate, finder);
         }
+
+        
     }
 }

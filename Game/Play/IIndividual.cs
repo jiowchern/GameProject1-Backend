@@ -29,5 +29,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         void SetPosition(Vector2 position);
 
         event Action<Guid,IEnumerable<Item>> TheftEvent;
+
+        void Transmit(string target_realm);
     }
 }

@@ -54,7 +54,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         private void _ToGame(IMapFinder map)
         {            
             var stage = new GameStage(_Wisdom.GetSoulBinder() ,  map , _Gate, _Actor , _Wisdom);
-            stage.DoneEvent += _ToDone ;
+            stage.ExitEvent += _ToDone ;
+            stage.TransmitEvent += (target) => { };
             _Machine.Push(stage);
         }
 
