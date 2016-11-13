@@ -95,13 +95,13 @@
     <Compile Include="IVerify.cs" />
     <Compile Include="IVersion.cs" />
     <Compile Include="IVisible.cs" />
+    <Compile Include="LEVEL_UNIT.cs" />
     <Compile Include="Location.cs" />
     <Compile Include="PortalData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RealmInfomation.cs" />
     <Compile Include="Resource.cs" />
     <Compile Include="SkillData.cs" />
-    <Compile Include="TownData.cs" />
     <Compile Include="Translate.cs" />
     <Compile Include="VisibleStatus.cs" />
     <Compile Include="WallData.cs" />

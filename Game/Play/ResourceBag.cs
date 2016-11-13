@@ -1,14 +1,17 @@
 using System;
 using System.Linq;
 
+using Regulus.Project.ItIsNotAGame1.Data;
+
 namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
     internal class ResourceBag : Bag
     {
-        
+        private readonly ResourceItem[] _Items;
 
-        public ResourceBag()
+        public ResourceBag(ResourceItem[] items)
         {
+            _Items = items;
             _Supplement();
             RemoveEvent += _Supplement;
         }
@@ -22,9 +25,12 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         {
             if ( this.Count() <= 1  )
             {
+                var idx = Regulus.Utility.Random.Instance.NextInt(0, _Items.Length);
                 var itemProvider = new ItemProvider();
-                Add(itemProvider.FromStolen());
+                Add(itemProvider.CreateItem(_Items[idx].Name));
             }
         }
+
+        
     }
 }

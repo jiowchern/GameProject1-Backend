@@ -1,4 +1,4 @@
-namespace Regulus.Project.ItIsNotAGame1.Game.Play
+namespace Regulus.Project.ItIsNotAGame1.Game.Data
 {
     public enum LEVEL_UNIT
     {

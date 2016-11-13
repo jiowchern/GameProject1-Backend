@@ -31,6 +31,7 @@ namespace Regulus.Project.ItIsNotAGame1.Data
         CHEST_EXIT,
 
         STATIC,
-        PORTAL
+        PORTAL,        
+
     }
 }

@@ -27,7 +27,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         
         public Level Build(int dimension)
         {
-            
+            if (dimension == 0)
+                return _Level;
             var mapCells = LevelGenerator._BuildMaze(dimension);
             var rooms = new List<MazeCell>();
             var aisles = new List<MazeCell>();
@@ -38,7 +39,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                 foreach (var wall in walls)
                 {
                     var dir = _WallToDirection(wall);
-                    _Level.Add(new LevelUnit(LEVEL_UNIT.WALL , center, dir));                    
+                    _Level.Add(new LevelUnit(Data.LEVEL_UNIT.WALL , center, dir));                    
                 }
 
                 if (cell.IsRoom())
@@ -82,26 +83,26 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             var enteranceEnd4 = (int)(roomCount * 0.2) + enteranceEnd3;
             var chestEnd = (int)(roomCount * 0.3) + enteranceEnd4;
 
-            _Build(LEVEL_UNIT.ENTERANCE1, rooms.ToArray().Skip(enteranceEnd0).Take(enteranceEnd1 - enteranceEnd0), _GetExitDirection);
-            _Build(LEVEL_UNIT.ENTERANCE2, rooms.ToArray().Skip(enteranceEnd1).Take(enteranceEnd2 - enteranceEnd1), _GetExitDirection);
-            _Build(LEVEL_UNIT.ENTERANCE3, rooms.ToArray().Skip(enteranceEnd2).Take(enteranceEnd3 - enteranceEnd2), _GetExitDirection);
-            _Build(LEVEL_UNIT.ENTERANCE4, rooms.ToArray().Skip(enteranceEnd3).Take(enteranceEnd4 - enteranceEnd3), _GetExitDirection);
-            _Build(LEVEL_UNIT.CHEST, rooms.ToArray().Skip(enteranceEnd4).Take(chestEnd), _GetExitDirection);
+            _Build(Data.LEVEL_UNIT.ENTERANCE1, rooms.ToArray().Skip(enteranceEnd0).Take(enteranceEnd1 - enteranceEnd0), _GetExitDirection);
+            _Build(Data.LEVEL_UNIT.ENTERANCE2, rooms.ToArray().Skip(enteranceEnd1).Take(enteranceEnd2 - enteranceEnd1), _GetExitDirection);
+            _Build(Data.LEVEL_UNIT.ENTERANCE3, rooms.ToArray().Skip(enteranceEnd2).Take(enteranceEnd3 - enteranceEnd2), _GetExitDirection);
+            _Build(Data.LEVEL_UNIT.ENTERANCE4, rooms.ToArray().Skip(enteranceEnd3).Take(enteranceEnd4 - enteranceEnd3), _GetExitDirection);
+            _Build(Data.LEVEL_UNIT.CHEST, rooms.ToArray().Skip(enteranceEnd4).Take(chestEnd), _GetExitDirection);
 
 
             var aisleCount = aisles.Count();
             
             var thickWallCount = (int)(aisleCount * 0.4f);
             var thickWallCells = aisles.ToArray().Skip(0).Take(thickWallCount);
-            _Build(LEVEL_UNIT.GATE, thickWallCells, _GetWallDirections);
+            _Build(Data.LEVEL_UNIT.GATE, thickWallCells, _GetWallDirections);
 
             var poolCount = (int)(aisleCount * 0.2f);
             var poolCells = aisles.ToArray().Skip(thickWallCount).Take(poolCount);
-            _Build(LEVEL_UNIT.POOL, poolCells, _GetWallDirection);
+            _Build(Data.LEVEL_UNIT.POOL, poolCells, _GetWallDirection);
 
             var fieldsCount = (int)(aisleCount * 0.4f);
             var fieldsCells = aisles.ToArray().Skip(thickWallCount+ poolCount).Take(fieldsCount);
-            _Build(LEVEL_UNIT.FIELD, fieldsCells, _GetWallDirection);
+            _Build(Data.LEVEL_UNIT.FIELD, fieldsCells, _GetWallDirection);
 
         }
 
@@ -113,7 +114,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             }            
         }
 
-        private void _Build(LEVEL_UNIT unit, IEnumerable<MazeCell> cells , Func<Flag<MAZEWALL>,IEnumerable<float>> get_directions )
+        private void _Build(Data.LEVEL_UNIT unit, IEnumerable<MazeCell> cells , Func<Flag<MAZEWALL>,IEnumerable<float>> get_directions )
         {
             foreach (var mazeCell in cells)
             {

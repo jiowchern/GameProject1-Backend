@@ -4,20 +4,22 @@
 
 namespace Regulus.Project.ItIsNotAGame1.Game
 {
-	public class Verify : Data.IVerify
+    
+    public class Verify : Regulus.Project.ItIsNotAGame1.Data.IVerify
 	{
-		public delegate void DoneCallback(Data.Account account);
+        
+        public delegate void DoneCallback(Regulus.Project.ItIsNotAGame1.Data.Account account);
 
 		public event DoneCallback OnDoneEvent;
 
-		private readonly Data.IAccountFinder _Storage;
+		private readonly Regulus.Project.ItIsNotAGame1.Data.IAccountFinder _Storage;
 
-		public Verify(Data.IAccountFinder storage)
+		public Verify(Regulus.Project.ItIsNotAGame1.Data.IAccountFinder storage)
 		{
 			this._Storage = storage;
 		}
 
-		Value<bool> Data.IVerify.Login(string id, string password)
+		Value<bool> Regulus.Project.ItIsNotAGame1.Data.IVerify.Login(string id, string password)
 		{
 			var returnValue = new Value<bool>();
 			var val = this._Storage.FindAccountByName(id);

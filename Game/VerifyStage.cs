@@ -23,12 +23,12 @@ namespace Regulus.Project.ItIsNotAGame1.Game
 		{
 		    this._Verify.OnDoneEvent += this.DoneEvent;
 
-		    this._Binder.Bind<Data.IVerify>(this._Verify);
+		    this._Binder.Bind<Regulus.Project.ItIsNotAGame1.Data.IVerify>(this._Verify);
 		}
 
 		void Utility.IStage.Leave()
 		{
-		    this._Binder.Unbind<Data.IVerify>(this._Verify);
+		    this._Binder.Unbind<Regulus.Project.ItIsNotAGame1.Data.IVerify>(this._Verify);
 		    this._Verify.OnDoneEvent -= this.DoneEvent;
 		}
 

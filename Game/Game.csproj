@@ -64,9 +64,9 @@
     <Compile Include="Play\ChestExcludeAction.cs" />
     <Compile Include="Play\ChestIdleAction.cs" />
     <Compile Include="Play\ChestWisdom.cs" />
-    <Compile Include="Play\EnterancePostProduction.cs" />
     <Compile Include="Play\EnteranceWisdom.cs" />
     <Compile Include="Play\FieldWisdom.cs" />
+    <Compile Include="Play\InorganicsWisdom.cs" />
     <Compile Include="Play\PortalWisdom.cs" />
     <Compile Include="Play\StrongholdWisdom.cs" />
     <Compile Include="Play\EntityCreateParameter.cs" />
@@ -80,7 +80,6 @@
     <Compile Include="Play\Level.cs" />
     <Compile Include="Play\LevelGenerator.cs" />
     <Compile Include="Play\LevelUnit.cs" />
-    <Compile Include="Play\LEVEL_UNIT.cs" />
     <Compile Include="Play\ResourceBag.cs" />
     <Compile Include="Play\SignRoster.cs" />
     <Compile Include="Play\StandardWisdom.cs" />

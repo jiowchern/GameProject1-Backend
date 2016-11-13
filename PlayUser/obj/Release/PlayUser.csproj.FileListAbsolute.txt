@@ -79,4 +79,3 @@ D:\Develop\ItIsNotAGame1-Backend\PlayUser\bin\Release\RegulusRemotingGhostNative
 D:\Develop\ItIsNotAGame1-Backend\PlayUser\obj\Release\PlayUser.csprojResolveAssemblyReference.cache
 D:\Develop\ItIsNotAGame1-Backend\PlayUser\obj\Release\ItIsNotAGame1PlayUser.dll
 D:\Develop\ItIsNotAGame1-Backend\PlayUser\obj\Release\ItIsNotAGame1PlayUser.pdb
-D:\Develop\ItIsNotAGame1-Backend\PlayUser\bin\Release\ItIsNotAGame1DataGPI.dll

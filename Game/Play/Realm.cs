@@ -20,11 +20,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             public IMapGate Gate;
         }
 
-        public enum TYPE
-        {
-            TOWN,
-            MAZE,
-        };
+        
 
 
         

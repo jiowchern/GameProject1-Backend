@@ -147,7 +147,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         private void _ToRequestMap(GamePlayerRecord record)
         {
             this._GamePlayerRecord = record;
-            _GetRealm("town1");
+            _GetRealm("maze1");
            
         }
 
@@ -156,7 +156,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             var val = realm.QueryMap();
             val.OnValue += map =>
             {
-                var player = EntityProvider.Create(record);
+                var player = EntityProvider.Create(record.Entity);
 
                 foreach (var item in record.Items)
                 {

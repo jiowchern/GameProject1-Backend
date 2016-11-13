@@ -52,7 +52,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                 var entitys = _Finder.Find(_Owner.GetView());                
 
                 var races = from e in entitys
-                            where EntityData.IsActor(e.EntityType)                            
+                            where EntityData.IsActor(e.EntityType) && e.EntityType != ENTITY.ACTOR2
                             group e by e.EntityType;
 
                 var aliveCount = (from r in races where r.Any() select r).Count();

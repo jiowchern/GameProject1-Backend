@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
+
 using Regulus.CustomType;
-using Regulus.Framework;
 using Regulus.Project.ItIsNotAGame1.Data;
 using Regulus.Utility;
 
@@ -22,7 +23,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _Gate = gate;
         }
 
-        internal IEnumerable<IUpdatable> Create(float degree, Vector2 center , IMapGate gate, IMapFinder finder)
+        internal IEnumerable<IUpdatable> Create(float degree, Vector2 center )
         {            
             return _CreateFromGroup(_Id, degree, center);            
         }        
@@ -31,33 +32,98 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         {
             
             var layout = Resource.Instance.FindEntityGroupLayout(id);
-            var buildInfos = from e in layout.Entitys
+            var buildInfos = (from e in layout.Entitys
                         let radians = degree * (float) System.Math.PI/180f
                         let position = Polygon.RotatePoint(e.Position, new Vector2(), radians)
                         select new EntityCreateParameter
                         {
                             Id = e.Id,
                             Entity = EntityProvider.Create(e.Type , position + center , e.Direction + degree)                            
-                        };
-
+                        }).ToArray();
+            
             foreach (var updatable in _CreateChests(layout.Chests, buildInfos))
             {
                 yield return updatable;
             }
 
-            foreach (var updatable in _StaticChests(layout.Statics, buildInfos))
+            foreach (var updatable in _CreateEnterances(layout.Enterances, buildInfos))
             {
                 yield return updatable;
             }
+            
+            foreach (var updatable in _CreateStrongholds(layout.Strongholds, buildInfos))
+            {
+                yield return updatable;
+            }
+
+            foreach (var updatable in _CreateFields(layout.Fields, buildInfos))
+            {
+                yield return updatable;
+            }
+
+            var inorganics = new List<Entity>();
+            inorganics.AddRange(_CreateResources(layout.Resources, buildInfos));
+            inorganics.AddRange(_StaticChests(layout.Statics, buildInfos));
+            inorganics.AddRange(_WallChests(layout.Walls, buildInfos));
+            yield return new InorganicsWisdom(  inorganics , _Gate);
+
         }
 
-        private IEnumerable<IUpdatable> _StaticChests(StaticLayout[] statics, IEnumerable<EntityCreateParameter> build_infos)
+        private IEnumerable<Entity> _WallChests(WallLayout[] walls, EntityCreateParameter[] build_infos)
+        {
+            foreach (var layout in walls)
+            {
+                var owner = _Find(build_infos, layout.Owner);                
+                yield return owner;
+            }
+        }
+
+        private IEnumerable<IUpdatable> _CreateFields(FieldLayout[] fields, EntityCreateParameter[] build_infos)
+        {
+            foreach (var layout in fields)
+            {
+                var owner = _Find(build_infos, layout.Owner);
+                yield return new FieldWisdom(layout.Kinds, owner, _Gate, _Finder);
+            }
+        }
+
+        private IEnumerable<IUpdatable> _CreateStrongholds(StrongholdLayout[] strongholds, EntityCreateParameter[] build_infos)
+        {
+            foreach (var layout in strongholds)
+            {
+                var owner = _Find(build_infos, layout.Owner);
+                yield return new StrongholdWisdom(layout.Kinds, owner, _Gate , _Finder);
+            }
+        }
+
+        private IEnumerable<IUpdatable> _CreateEnterances(EnteranceLayout[] enterances, EntityCreateParameter[] build_infos)
+        {
+            foreach (var layout in enterances)
+            {
+                var owner = _Find(build_infos, layout.Owner);
+                yield return new EnteranceWisdom(layout.Kinds , owner , _Gate);
+            }
+        }
+
+        private IEnumerable<Entity> _CreateResources(ResourceLayout[] resources, IEnumerable<EntityCreateParameter> build_infos)
+        {
+            foreach (var layout in resources)
+            {
+                var owner = _Find(build_infos, layout.Owner);
+                var bag = new ResourceBag(layout.Items);
+                owner.SetBag(bag);
+                yield return owner;
+            }
+        }
+
+        private IEnumerable<Entity> _StaticChests(StaticLayout[] statics, IEnumerable<EntityCreateParameter> build_infos)
         {
             foreach (var layout in statics)
             {
                 var owner = _Find(build_infos, layout.Owner);
-                var chest = new StaticWisdom(owner);
-                yield return chest;
+                owner.SetBody(layout.Body);
+
+                yield return owner;
             }
         }
 
@@ -80,27 +146,6 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             return (from build_info in build_infos where build_info.Id == owner select build_info.Entity).Single();
         }
     }
-
-    internal class StaticWisdom : IUpdatable
-    {
-        public StaticWisdom(Entity owner)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IBootable.Launch()
-        {
-            throw new NotImplementedException();
-        }
-
-        void IBootable.Shutdown()
-        {
-            throw new NotImplementedException();
-        }
-
-        bool IUpdatable.Update()
-        {
-            throw new NotImplementedException();
-        }
-    }
 }
+
+

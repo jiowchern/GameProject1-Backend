@@ -14,7 +14,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         private readonly ENTITY _EntityType;
         private readonly string _Name;
         Rect _Bound;
-        private readonly Polygon _Mesh;
+        private Polygon _Mesh;
         private readonly Guid _Id;
 
         private float _Speed;
@@ -80,6 +80,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         public Entity(Polygon mesh) 
         {
             _Mesh = mesh.Clone();
+            _Bound = this._BuildBound(this._Mesh);
+            _DetectionRange = 1.0f + _Mesh.Points.ToRect().Width;
         }
 
         private Entity(EntityData data, string name ,Bag bag )
@@ -87,16 +89,18 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         {
             _Name = name;
             Bag = bag;
+            
+            _RotationMesh = data.CollisionRotation;
+            _EntityType = data.Name;
+
 
             _Mesh = data.Mesh.Clone();
-            _RotationMesh = data.CollisionRotation;
-            _EntityType = data.Name;            
+            _Bound = this._BuildBound(this._Mesh);
+            _DetectionRange = 1.0f + _Mesh.Points.ToRect().Width;
         }
 
         private Entity()
-        {
-            _Bound = this._BuildBound(this._Mesh);
-            _DetectionRange = 1.0f + _Mesh.Points.ToRect().Width;
+        {                        
 
 
             _Datas = Resource.Instance.SkillDatas;
@@ -771,6 +775,11 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         public Rect GetBound()
         {
             return _Bound;
+        }
+
+        public void SetBody(Polygon body)
+        {
+            _Mesh = body.Clone();
         }
     }
 }

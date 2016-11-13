@@ -17,16 +17,13 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private readonly Dictionary<ENTITY, int> _EntityEnteranceResource;
         private readonly Dictionary<ENTITY, int> _EntityFieldResource;
-        private readonly Dictionary<LEVEL_UNIT, EntityGroupBuilder> _LevelUnitToGroupBuilder;
+        private readonly Dictionary<Data.LEVEL_UNIT, EntityGroupBuilder> _LevelUnitToGroupBuilder;
         private readonly TimesharingUpdater _Updater;
 
         private readonly List<Aboriginal> _Aboriginals;
+        
 
-        private readonly IRandom _Random;
-
-        private readonly List<Entity> _WaitingRoom;
-
-        private readonly List<Entity> _Inorganics;
+        private readonly List<Entity> _WaitingRoom;        
 
         private readonly Map _Map;
 
@@ -39,6 +36,9 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _RealmInfomation = realm_infomation;
             _Valid = true;
             _Map = new Map();
+            _WaitingRoom = new List<Entity>();            
+            _Updater = new TimesharingUpdater(1.0f / 30.0f);
+            _Aboriginals = new List<Aboriginal>();
 
             _EntityEnteranceResource = new Dictionary<ENTITY, int>
             {
@@ -57,49 +57,15 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                 { ENTITY.ACTOR4, 50},
                 { ENTITY.ACTOR5, 50},
             };
-            _Inorganics = new List<Entity>();
-            _WaitingRoom = new List<Entity>();            
 
-            _LevelUnitToGroupBuilder = new Dictionary<LEVEL_UNIT, EntityGroupBuilder>
+            _LevelUnitToGroupBuilder = new Dictionary<Data.LEVEL_UNIT, EntityGroupBuilder>();
+            foreach (var mazeUnitInfomation in _RealmInfomation.Maze.MazeUnits)
             {
-                {LEVEL_UNIT.WALL, new EntityGroupBuilder("wall", _AllInorganics )},
-                {LEVEL_UNIT.ENTERANCE1, new EntityGroupBuilder("enterance", new EnterancePostProduction(new [] {ENTITY.ACTOR1}).ProcessEnterance )},
-                {LEVEL_UNIT.ENTERANCE2, new EntityGroupBuilder("enterance", new EnterancePostProduction(new [] {ENTITY.ACTOR3, ENTITY.ACTOR2 }).ProcessStronghold )},
-                {LEVEL_UNIT.ENTERANCE3, new EntityGroupBuilder("enterance", new EnterancePostProduction(new [] {ENTITY.ACTOR4, ENTITY.ACTOR2 }).ProcessStronghold )}, 
-                {LEVEL_UNIT.ENTERANCE4, new EntityGroupBuilder("enterance", new EnterancePostProduction(new [] {ENTITY.ACTOR5, ENTITY.ACTOR2 }).ProcessStronghold )}, 
-                {LEVEL_UNIT.CHEST, new EntityGroupBuilder("chest", new EnterancePostProduction(new [] {ENTITY.ACTOR3 , ENTITY.ACTOR4 , ENTITY.ACTOR5 }).ProcessChest ) },
-                //{LEVEL_UNIT.CHEST, new EntityGroupBuilder("chest", _AllInorganics) },
-                {LEVEL_UNIT.FIELD, new EntityGroupBuilder("field", new EnterancePostProduction(new [] {ENTITY.ACTOR3 , ENTITY.ACTOR4 , ENTITY.ACTOR5 }).ProcessField ) },
-                {LEVEL_UNIT.GATE, new EntityGroupBuilder("thickwall", _AllInorganics )},
-                {LEVEL_UNIT.POOL, new EntityGroupBuilder("pool", _ResourcePostProduction )},                
-            };
-            _Random = Regulus.Utility.Random.Instance;            
-            _Updater = new TimesharingUpdater(1.0f / 30.0f);
-            _Aboriginals = new List<Aboriginal>();
-
-        }
-
-        public IMapFinder Map { get {return _Map;} }
-
-        private IUpdatable _AllInorganics(Entity[] entitys, IMapGate gate , IMapFinder finder)
-        {
-            _Inorganics.AddRange(entitys);
-            return null;
-        }
-
-        private IUpdatable _ResourcePostProduction(Entity[] entitys, IMapGate gate , IMapFinder finder)
-        {
-
-            foreach (var entity in entitys)
-            {
-                entity.SetBag( new ResourceBag());
+                _LevelUnitToGroupBuilder.Add(mazeUnitInfomation.Type , new EntityGroupBuilder(mazeUnitInfomation.Name, _Map, this));
             }
-            _Inorganics.AddRange(entitys);
-
-            return null;
         }
 
-        
+        public IMapFinder Map { get { return _Map;} }
 
         private Aboriginal _Create(Map map,ENTITY type, ItemProvider item_provider)
         {
@@ -120,60 +86,45 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             
             var map = _Map;
 
-            if (_RealmInfomation.IsMaze())
-            {
-                _BuildMaze(map);
-            }
-            else
-            {
-                _BuildTown();
-            }
-            foreach (var inorganic in _Inorganics)
-            {
-                map.JoinStaff(inorganic);
-            }
+            _BuildMaze(map);
+            _BuildTown(map);
+
             _Ready = true;
         }
 
-        private void _BuildTown()
+        private void _BuildTown(Map map)
         {
-            var data = Resource.Instance.FindTown(_RealmInfomation.Town);
-            foreach (var staticEntity in data.Walls)
-            {
-                var entity = EntityProvider.CreateStatic(staticEntity.Mesh);                
-                _Inorganics.Add(entity);
-            }
+            if (_RealmInfomation.HaveTown() == false)
+                return;
 
-            foreach (var portalData in data.Portals)
-            {
-                var entity = EntityProvider.Create(ENTITY.PORTAL);
-                IIndividual individual = entity;
-                individual.SetPosition(portalData.Position);
 
-                _Updater.Add(new PortalWisdom(entity , portalData.TargetRealm , this , _Map));
-                
+            var layout = new EntityGroupBuilder(_RealmInfomation.Town.Name, map, this);
+            foreach (var updatable in layout.Create(0, new Vector2()))
+            {
+                _Updater.Add(updatable);
             }
         }
 
         private void _BuildMaze(Map map)
         {
-            var level = _CreateLevel(this, map);
+            var level = _CreateLevel();
 
             foreach (var unit in level)
             {
                 var builder = _LevelUnitToGroupBuilder[unit.Type];
-                var updater = builder.Create(unit.Direction, unit.Center, this, map);
-                if (updater != null)
+                var updaters = builder.Create(unit.Direction, unit.Center);
+
+                foreach (var updatable in updaters)
                 {
-                    _Updater.Add(updater);
-                }
+                    _Updater.Add(updatable);
+                }                   
             }
         }
 
-        private Level _CreateLevel(IMapGate gate, Map map)
+        private Level _CreateLevel()
         {            
-            var builder = new LevelGenerator(_RealmInfomation.Width, _RealmInfomation.Height);
-            var level = builder.Build(_RealmInfomation.Dimension);
+            var builder = new LevelGenerator(_RealmInfomation.Maze.Width, _RealmInfomation.Maze.Height);
+            var level = builder.Build(_RealmInfomation.Maze.Dimension);
             return level;
         }
 
@@ -185,11 +136,6 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         void IBootable.Shutdown()
         {
-
-            foreach (var inorganic in _Inorganics)
-            {
-                _Map.Left(inorganic);
-            }
 
             _Updater.Shutdown();
         }
@@ -239,12 +185,10 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             if (entity != null)
             {
                 _Join(position, entity);
-            }
-                
+            }                
         }
 
         
-
         void IMapGate.Pass(Vector2 position, Guid id)
         {
             var entity = (from e in _WaitingRoom where e.Id == id select e).FirstOrDefault();

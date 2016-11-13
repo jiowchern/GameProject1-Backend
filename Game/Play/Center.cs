@@ -4,6 +4,7 @@ using System.Security.Policy;
 using Regulus.Framework;
 using Regulus.Game;
 using Regulus.Project.ItIsNotAGame1.Data;
+using Regulus.Project.ItIsNotAGame1.Game.Data;
 using Regulus.Utility;
 
 namespace Regulus.Project.ItIsNotAGame1.Game.Play
@@ -26,8 +27,39 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _Updater = new Updater();
             _Zone = new Zone(new []
             {
-                new RealmInfomation { Name = "maze1", Dimension = 20 , Width = 15 , Height = 15},
-                new RealmInfomation { Name = "town1", Town = "town1"}
+                new RealmInfomation
+                {
+                    Name = "maze1",
+                    Maze = new MazeInfomation()
+                    {
+                        Dimension = 20 , Width = 15 , Height = 15 ,
+                        MazeUnits = new []
+                        {
+                            new MazeUnitInfomation { Name = "enterance1" , Type = LEVEL_UNIT.ENTERANCE1 },
+                            new MazeUnitInfomation { Name = "enterance2" , Type = LEVEL_UNIT.ENTERANCE2 },
+                            new MazeUnitInfomation { Name = "enterance3" , Type = LEVEL_UNIT.ENTERANCE3 },
+                            new MazeUnitInfomation { Name = "enterance4" , Type = LEVEL_UNIT.ENTERANCE4 },
+                            new MazeUnitInfomation { Name = "wall" , Type = LEVEL_UNIT.WALL},
+                            new MazeUnitInfomation { Name = "pool" , Type = LEVEL_UNIT.POOL},
+                            new MazeUnitInfomation { Name = "field" , Type = LEVEL_UNIT.FIELD},
+                            new MazeUnitInfomation { Name = "thickwall" , Type = LEVEL_UNIT.GATE},
+                            new MazeUnitInfomation { Name = "chest" , Type = LEVEL_UNIT.CHEST}
+                        }
+                    },
+                    Town = new TownInfomation() {Name = ""}
+                    
+                },
+
+                /*new RealmInfomation
+                {
+                    Name = "town1",
+                    Maze = new MazeInfomation()
+                    {
+                        Dimension = 0 , Width = 0 , Height = 0 ,
+                        MazeUnits = new MazeUnitInfomation[0],                        
+                    },
+                    Town = new TownInfomation() {Name = "town1"}
+                }*/
             });
             
             
