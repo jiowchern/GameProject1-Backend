@@ -104,6 +104,7 @@ namespace Regulus.Project.ItIsNotAGame1
             binder.Bind<string , int>((gpi, name , count) => gpi.CreateItem(name , count));
             binder.Bind<string, float>((gpi, name, quality) => gpi.MakeItem(name, quality));
             binder.Bind<float, float>((gpi, x, y) => gpi.SetPosition(x,y));
+            binder.Bind<string>((gpi, realm) => gpi.SetRealm(realm));
         }
 
         private void _VerifyResult(bool result)

@@ -16,5 +16,7 @@ namespace Regulus.Project.ItIsNotAGame1.Data
         void CreateItem(string name, int count);
 
         void SetPosition(float x , float y);
+
+        void SetRealm(string realm);
     }
 }

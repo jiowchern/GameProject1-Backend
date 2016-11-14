@@ -61,15 +61,29 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                 yield return updatable;
             }
 
+            foreach (var updatable in _CreateProtals(layout.Protals, buildInfos))
+            {
+                yield return updatable;
+            }
+
             var inorganics = new List<Entity>();
             inorganics.AddRange(_CreateResources(layout.Resources, buildInfos));
-            inorganics.AddRange(_StaticChests(layout.Statics, buildInfos));
-            inorganics.AddRange(_WallChests(layout.Walls, buildInfos));
+            inorganics.AddRange(_CreateStatic(layout.Statics, buildInfos));
+            inorganics.AddRange(_CreateWall(layout.Walls, buildInfos));
             yield return new InorganicsWisdom(  inorganics , _Gate);
 
         }
 
-        private IEnumerable<Entity> _WallChests(WallLayout[] walls, EntityCreateParameter[] build_infos)
+        private IEnumerable<IUpdatable> _CreateProtals(ProtalLayout[] protals, EntityCreateParameter[] build_infos)
+        {
+            foreach (var layout in protals)
+            {
+                var owner = _Find(build_infos, layout.Owner);
+                yield return new PortalWisdom(owner , layout.TargetRealm , layout.PassEntity , _Gate ,_Finder);
+            }
+        }
+
+        private IEnumerable<Entity> _CreateWall(WallLayout[] walls, EntityCreateParameter[] build_infos)
         {
             foreach (var layout in walls)
             {
@@ -116,7 +130,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             }
         }
 
-        private IEnumerable<Entity> _StaticChests(StaticLayout[] statics, IEnumerable<EntityCreateParameter> build_infos)
+        private IEnumerable<Entity> _CreateStatic(StaticLayout[] statics, IEnumerable<EntityCreateParameter> build_infos)
         {
             foreach (var layout in statics)
             {

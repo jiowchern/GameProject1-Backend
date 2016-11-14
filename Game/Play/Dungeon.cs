@@ -42,20 +42,20 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
             _EntityEnteranceResource = new Dictionary<ENTITY, int>
             {
-                { ENTITY.ACTOR1, 50},
-                { ENTITY.ACTOR2, 50},
-                { ENTITY.ACTOR3, 50},
-                { ENTITY.ACTOR4, 50},
-                { ENTITY.ACTOR5, 50},
+                { ENTITY.ACTOR1, 10},
+                { ENTITY.ACTOR2, 10},
+                { ENTITY.ACTOR3, 10},
+                { ENTITY.ACTOR4, 10},
+                { ENTITY.ACTOR5, 10},
             };
 
             _EntityFieldResource = new Dictionary<ENTITY, int>
             {
-                { ENTITY.ACTOR1, 50},
-                { ENTITY.ACTOR2, 50},
-                { ENTITY.ACTOR3, 50},
-                { ENTITY.ACTOR4, 50},
-                { ENTITY.ACTOR5, 50},
+                { ENTITY.ACTOR1, 10},
+                { ENTITY.ACTOR2, 10},
+                { ENTITY.ACTOR3, 10},
+                { ENTITY.ACTOR4, 10},
+                { ENTITY.ACTOR5, 10},
             };
 
             _LevelUnitToGroupBuilder = new Dictionary<Data.LEVEL_UNIT, EntityGroupBuilder>();

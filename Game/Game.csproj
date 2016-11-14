@@ -68,6 +68,7 @@
     <Compile Include="Play\FieldWisdom.cs" />
     <Compile Include="Play\InorganicsWisdom.cs" />
     <Compile Include="Play\PortalWisdom.cs" />
+    <Compile Include="Play\RealmReadyStage.cs" />
     <Compile Include="Play\StrongholdWisdom.cs" />
     <Compile Include="Play\EntityCreateParameter.cs" />
     <Compile Include="Play\EntityGroupBuilder.cs" />

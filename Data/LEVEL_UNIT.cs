@@ -18,6 +18,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Data
 
         ENTERANCE4,
 
-        ENTERANCE3
+        ENTERANCE3,
+
+        EXIT
     }
 }

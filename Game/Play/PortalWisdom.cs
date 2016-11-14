@@ -1,4 +1,6 @@
-﻿using Regulus.BehaviourTree;
+﻿using System.Linq;
+
+using Regulus.BehaviourTree;
 using Regulus.Framework;
 using Regulus.Project.ItIsNotAGame1.Data;
 using Regulus.Utility;
@@ -11,14 +13,17 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private readonly string _TargetRealm;
 
+        private readonly ENTITY[] _PassEntity;
+
         private readonly IMapGate _Gate;
 
         private readonly IMapFinder _Finder;
 
-        public PortalWisdom(Entity entity, string target_realm , IMapGate gate, IMapFinder finder)
+        public PortalWisdom(Entity entity, string target_realm, ENTITY[] pass_entity, IMapGate gate, IMapFinder finder)
         {
             _Entity = entity;
             _TargetRealm = target_realm;
+            _PassEntity = pass_entity;
             _Gate = gate;
             _Finder = finder;
         }
@@ -48,7 +53,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             var targets = _Finder.Find(_Entity.GetBound());
             foreach (var individual in targets)
             {
-                if(individual.EntityType == ENTITY.ACTOR1)
+                
+                if (_PassEntity.Any( e => e == individual.EntityType))
                     individual.Transmit(_TargetRealm);
             }
             return TICKRESULT.SUCCESS;

@@ -1,6 +1,7 @@
 ﻿using Regulus.Project.ItIsNotAGame1.Game.Play;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection.Emit;
 
 using Regulus.Project.ItIsNotAGame1.Data;
@@ -83,10 +84,7 @@ namespace Regulus.Project.ItIsNotAGame1.Play
 
         private void _LoadData()
         {
-            var entityGroupLayoutBuffer = System.IO.File.ReadAllBytes("entityGroupLayout.txt");
-            var entityGroupLayouts = Utility.Serialization.Read<EntityGroupLayout[]>(entityGroupLayoutBuffer);
-            Singleton<Resource>.Instance.EntityGroupLayouts = entityGroupLayouts;
-            
+            Server._BuildGroup();
 
             var buffer = System.IO.File.ReadAllBytes("entitys.txt");
             var entitys = Utility.Serialization.Read<EntityData[]>(buffer);
@@ -103,6 +101,20 @@ namespace Regulus.Project.ItIsNotAGame1.Play
             var itemFormulasBuffer = System.IO.File.ReadAllBytes("itemFormulas.txt");
             var itemFormulas = Utility.Serialization.Read<ItemFormula[]>(itemFormulasBuffer);
             Singleton<Resource>.Instance.Formulas = itemFormulas;
+        }
+
+        private static void _BuildGroup()
+        {
+            var entityGroupLayoutBuffer1 = System.IO.File.ReadAllBytes("entityGroupLayout.txt");
+            var entityGroupLayouts = Utility.Serialization.Read<EntityGroupLayout[]>(entityGroupLayoutBuffer1);
+
+            var entityGroupLayoutBuffer2 = System.IO.File.ReadAllBytes("town1.txt");
+            var town1 = Utility.Serialization.Read<EntityGroupLayout[]>(entityGroupLayoutBuffer2);
+
+            var entityGroupLayoutBuffer3 = System.IO.File.ReadAllBytes("town2.txt");
+            var town2 = Utility.Serialization.Read<EntityGroupLayout[]>(entityGroupLayoutBuffer3);
+
+            Singleton<Resource>.Instance.EntityGroupLayouts = entityGroupLayouts.Union(town1).Union(town2).ToArray();
         }
 
         private void _BuildParams()

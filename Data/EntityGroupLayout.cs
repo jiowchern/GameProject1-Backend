@@ -9,7 +9,7 @@ namespace Regulus.Project.ItIsNotAGame1.Data
 {
     [Serializable]
     public class EntityGroupLayout
-    {
+    {        
         public string Id;
         public EntityLayout[] Entitys;
         public ChestLayout[] Chests;
@@ -17,12 +17,22 @@ namespace Regulus.Project.ItIsNotAGame1.Data
         public WallLayout[] Walls;
         public ResourceLayout[] Resources;
 
-        public EnteranceLayout[] Enterances;
-        
+        public EnteranceLayout[] Enterances;        
 
         public StrongholdLayout[] Strongholds;
 
-        public FieldLayout[] Fields { get; set; }
+        public ProtalLayout[] Protals;
+
+
+        public FieldLayout[] Fields;
+    }
+
+    public struct ProtalLayout
+    {
+        public Guid Owner;
+
+        public string TargetRealm;
+        public ENTITY[] PassEntity;
     }
 
     public struct WallLayout 

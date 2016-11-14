@@ -79,9 +79,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         
         public Entity(Polygon mesh) 
         {
-            _Mesh = mesh.Clone();
-            _Bound = this._BuildBound(this._Mesh);
-            _DetectionRange = 1.0f + _Mesh.Points.ToRect().Width;
+            SetBody(mesh.Clone());
+            
         }
 
         private Entity(EntityData data, string name ,Bag bag )
@@ -94,9 +93,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _EntityType = data.Name;
 
 
-            _Mesh = data.Mesh.Clone();
-            _Bound = this._BuildBound(this._Mesh);
-            _DetectionRange = 1.0f + _Mesh.Points.ToRect().Width;
+            _SetBody(data.Mesh);
+           
         }
 
         private Entity()
@@ -307,12 +305,22 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         void IIndividual.Transmit(string target_realm)
         {
+            _Transmit(target_realm);
+        }
+
+        void _Transmit(string target_realm)
+        {
             _TransmitRealm = target_realm;
         }
 
         void IIndividual.SetPosition(float x, float y)
         {
             _SetPosition(x, y);
+        }
+
+        public void SetRealm(string realm)
+        {
+            _Transmit(realm);
         }
 
         private void _SetPosition(float x, float y)
@@ -779,7 +787,14 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         public void SetBody(Polygon body)
         {
+            _SetBody(body.Clone());
+        }
+
+        public void _SetBody(Polygon body)
+        {
             _Mesh = body.Clone();
+            _Bound = this._BuildBound(this._Mesh);
+            _DetectionRange = 1.0f + _Mesh.Points.ToRect().Width;
         }
     }
 }

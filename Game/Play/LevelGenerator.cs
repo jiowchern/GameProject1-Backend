@@ -75,6 +75,42 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private void _BuildScene(IEnumerable<MazeCell> rooms, IEnumerable<MazeCell> aisles)
         {
+            var ensures = rooms.Take(2).ToArray();
+
+            _Build(
+                Data.LEVEL_UNIT.ENTERANCE1,
+                new [] { ensures[0]},
+                _GetExitDirection);
+
+            _Build(
+                Data.LEVEL_UNIT.EXIT,
+                new[] { ensures[1] },
+                _GetExitDirection);
+
+            BuildRoom(rooms.Skip(2).ToArray());
+
+            BuildAisle(aisles);
+        }
+
+        private void BuildAisle(IEnumerable<MazeCell> aisles)
+        {
+            var aisleCount = aisles.Count();
+
+            var thickWallCount = (int)(aisleCount * 0.2f);
+            var thickWallCells = aisles.ToArray().Skip(0).Take(thickWallCount);
+            _Build(Data.LEVEL_UNIT.GATE, thickWallCells, _GetWallDirections);
+
+            var poolCount = (int)(aisleCount * 0.1f);
+            var poolCells = aisles.ToArray().Skip(thickWallCount).Take(poolCount);
+            _Build(Data.LEVEL_UNIT.POOL, poolCells, _GetWallDirection);
+
+            var fieldsCount = (int)(aisleCount * 0.2f);
+            var fieldsCells = aisles.ToArray().Skip(thickWallCount + poolCount).Take(fieldsCount);
+            _Build(Data.LEVEL_UNIT.FIELD, fieldsCells, _GetWallDirection);
+        }
+
+        private void BuildRoom(IEnumerable<MazeCell> rooms)
+        {
             var roomCount = rooms.Count();
             var enteranceEnd0 = 0;
             var enteranceEnd1 = (int)(roomCount * 0.1);
@@ -83,27 +119,23 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             var enteranceEnd4 = (int)(roomCount * 0.2) + enteranceEnd3;
             var chestEnd = (int)(roomCount * 0.3) + enteranceEnd4;
 
-            _Build(Data.LEVEL_UNIT.ENTERANCE1, rooms.ToArray().Skip(enteranceEnd0).Take(enteranceEnd1 - enteranceEnd0), _GetExitDirection);
-            _Build(Data.LEVEL_UNIT.ENTERANCE2, rooms.ToArray().Skip(enteranceEnd1).Take(enteranceEnd2 - enteranceEnd1), _GetExitDirection);
-            _Build(Data.LEVEL_UNIT.ENTERANCE3, rooms.ToArray().Skip(enteranceEnd2).Take(enteranceEnd3 - enteranceEnd2), _GetExitDirection);
-            _Build(Data.LEVEL_UNIT.ENTERANCE4, rooms.ToArray().Skip(enteranceEnd3).Take(enteranceEnd4 - enteranceEnd3), _GetExitDirection);
+            _Build(
+                Data.LEVEL_UNIT.ENTERANCE1,
+                rooms.ToArray().Skip(enteranceEnd0).Take(enteranceEnd1 - enteranceEnd0),
+                _GetExitDirection);
+            _Build(
+                Data.LEVEL_UNIT.ENTERANCE2,
+                rooms.ToArray().Skip(enteranceEnd1).Take(enteranceEnd2 - enteranceEnd1),
+                _GetExitDirection);
+            _Build(
+                Data.LEVEL_UNIT.ENTERANCE3,
+                rooms.ToArray().Skip(enteranceEnd2).Take(enteranceEnd3 - enteranceEnd2),
+                _GetExitDirection);
+            _Build(
+                Data.LEVEL_UNIT.ENTERANCE4,
+                rooms.ToArray().Skip(enteranceEnd3).Take(enteranceEnd4 - enteranceEnd3),
+                _GetExitDirection);
             _Build(Data.LEVEL_UNIT.CHEST, rooms.ToArray().Skip(enteranceEnd4).Take(chestEnd), _GetExitDirection);
-
-
-            var aisleCount = aisles.Count();
-            
-            var thickWallCount = (int)(aisleCount * 0.4f);
-            var thickWallCells = aisles.ToArray().Skip(0).Take(thickWallCount);
-            _Build(Data.LEVEL_UNIT.GATE, thickWallCells, _GetWallDirections);
-
-            var poolCount = (int)(aisleCount * 0.2f);
-            var poolCells = aisles.ToArray().Skip(thickWallCount).Take(poolCount);
-            _Build(Data.LEVEL_UNIT.POOL, poolCells, _GetWallDirection);
-
-            var fieldsCount = (int)(aisleCount * 0.4f);
-            var fieldsCells = aisles.ToArray().Skip(thickWallCount+ poolCount).Take(fieldsCount);
-            _Build(Data.LEVEL_UNIT.FIELD, fieldsCells, _GetWallDirection);
-
         }
 
         private IEnumerable<float> _GetWallDirections(Flag<MAZEWALL> walls)

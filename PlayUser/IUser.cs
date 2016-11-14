@@ -36,8 +36,10 @@ namespace Regulus.Project.ItIsNotAGame1
 
 		INotifier<Data.IDevelopActor> DevelopActorProvider { get; }
 
-		
+        INotifier<Data.IJumpMap> JumpMapProvider { get; }
 
 
-	}
+
+
+    }
 }

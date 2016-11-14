@@ -147,34 +147,32 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         private void _ToRequestMap(GamePlayerRecord record)
         {
             this._GamePlayerRecord = record;
-            _GetRealm("maze1");
+            _ToRealm("town1");
            
         }
 
-        private void _ToGame(GamePlayerRecord record , Realm realm)
+        private void _ToGame(GamePlayerRecord record , Realm.Map map)
         {
-            var val = realm.QueryMap();
-            val.OnValue += map =>
+            var player = EntityProvider.Create(record.Entity);
+
+            foreach (var item in record.Items)
             {
-                var player = EntityProvider.Create(record.Entity);
+                player.Bag.Add(item);
+            }
 
-                foreach (var item in record.Items)
-                {
-                    player.Bag.Add(item);
-                }
+            var stage = new GameStage(this._Binder, map.Finder, map.Gate, player);
+            stage.ExitEvent += () => { };
+            stage.TransmitEvent += _ToRealm;
+            _Machine.Push(stage);
 
-                var stage = new GameStage(this._Binder, map.Finder, map.Gate, player);
-                stage.ExitEvent += () => {  };
-                stage.TransmitEvent += _GetRealm;
-                _Machine.Push(stage);
-            };
-            
         }
 
-        private void _GetRealm(string target)
+        private void _ToRealm(string target)
         {
-            var realm = this._Zone.FindRealm(target);
-            this._ToGame(_GamePlayerRecord, realm);
+            var stage = new RealmReadyStage(_Binder , _Zone, target);
+            stage.GameEvent += (map) => { _ToGame(_GamePlayerRecord, map); };
+            stage.ErrorEvent += _ToVerify;
+            _Machine.Push(stage);            
         }
 
         string IVersion.Number {
