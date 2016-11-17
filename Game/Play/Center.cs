@@ -32,7 +32,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                     Name = "maze1",
                     Maze = new MazeInfomation()
                     {
-                        Dimension = 5 , Width = 15 , Height = 15 ,
+                        Dimension = 10 , Width = 15 , Height = 15 ,
                         MazeUnits = new []
                         {
                             new MazeUnitInfomation { Name = "enterance1" , Type = LEVEL_UNIT.ENTERANCE1 },

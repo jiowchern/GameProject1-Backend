@@ -348,7 +348,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             }
             if (_EntityType == ENTITY.DEBIRS)
             {
-                var unlockSuccess = Regulus.Utility.Random.Instance.NextFloat() > 0.9f;
+                var unlockSuccess = Regulus.Utility.Random.Instance.NextFloat() > 0.3f;
                 if(UnlockEvent != null)
                     UnlockEvent(unlockSuccess);
 

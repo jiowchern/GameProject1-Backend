@@ -114,10 +114,10 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             var roomCount = rooms.Count();
             var enteranceEnd0 = 0;
             var enteranceEnd1 = (int)(roomCount * 0.1);
-            var enteranceEnd2 = (int)(roomCount * 0.2) + enteranceEnd1;
-            var enteranceEnd3 = (int)(roomCount * 0.2) + enteranceEnd2;
-            var enteranceEnd4 = (int)(roomCount * 0.2) + enteranceEnd3;
-            var chestEnd = (int)(roomCount * 0.3) + enteranceEnd4;
+            var enteranceEnd2 = (int)(roomCount * 0.1) + enteranceEnd1;
+            var enteranceEnd3 = (int)(roomCount * 0.1) + enteranceEnd2;
+            var enteranceEnd4 = (int)(roomCount * 0.1) + enteranceEnd3;
+            var chestEnd = (int)(roomCount * 0.6) + enteranceEnd4;
 
             _Build(
                 Data.LEVEL_UNIT.ENTERANCE1,
