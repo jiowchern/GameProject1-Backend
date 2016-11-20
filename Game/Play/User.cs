@@ -155,6 +155,11 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         {
             var player = EntityProvider.Create(record.Entity);
 
+            var itemProvider = new ItemProvider();
+            var itemAxe = itemProvider.CreateItem("Axe");
+
+            player.Bag.Add(itemAxe);
+
             foreach (var item in record.Items)
             {
                 player.Bag.Add(item);
