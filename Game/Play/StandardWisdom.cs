@@ -107,7 +107,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             {                
                 return new Dictionary<ENTITY, float>
                 {
-                    {ENTITY.ACTOR2, -30},
+                    {ENTITY.ACTOR2, -5},
                     {ENTITY.ACTOR3, 0},
                     {ENTITY.ACTOR4, 0},
                     {ENTITY.ACTOR5, 0}
@@ -117,16 +117,18 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             {
                 return new Dictionary<ENTITY, float>
                 {
+                    {ENTITY.ACTOR1, 2},
                     {ENTITY.ACTOR3, -10},
                     {ENTITY.ACTOR4, 1},
-                    {ENTITY.ACTOR5, 2}
+                    {ENTITY.ACTOR5, 3}
                 };
             }
             else if (type == ENTITY.ACTOR4)
             {
                 return new Dictionary<ENTITY, float>
                 {
-                    {ENTITY.ACTOR3, 2},
+                    {ENTITY.ACTOR1, 2},
+                    {ENTITY.ACTOR3, 3},
                     {ENTITY.ACTOR4, -10},
                     {ENTITY.ACTOR5, 1}
                 };
@@ -135,8 +137,9 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             {
                 return new Dictionary<ENTITY, float>
                 {
+                    {ENTITY.ACTOR1, 2},
                     {ENTITY.ACTOR3, 1},
-                    {ENTITY.ACTOR4, 2},
+                    {ENTITY.ACTOR4, 3},
                     {ENTITY.ACTOR5, -10}
                 };
             }
@@ -466,7 +469,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             {
                 return TICKRESULT.RUNNING;
             }
-            var formula = _Formulas.FirstOrDefault((f) => f.Name == item_name);
+            var formula = _Formulas.FirstOrDefault((f) => f.Id == item_name);
             if (formula != null)
             {
                 bool enough = true;

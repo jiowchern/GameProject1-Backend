@@ -6,14 +6,16 @@ using System.Text;
 namespace Regulus.Project.ItIsNotAGame1.Data
 {
     [Serializable]
-    public class ItemPrototype
+    public struct ItemPrototype
     {
-        public string Name;
+        public string Id;
+
+        //public string Id;
 
         public ITEM_FEATURES Features;
 
         public string Description;
 
-        public EQUIP_PART EquipPart { get; set; }
+        public EQUIP_PART EquipPart;
     }
 }

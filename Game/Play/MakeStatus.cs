@@ -51,7 +51,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                     select new ItemFormulaLite
                     {
                         Item = f.Item,
-                        Name = f.Name,
+                        Id = f.Id,
                         NeedLimit =  f.NeedLimit,
                         NeedItems = (from need in f.NeedItems
                                      select new ItemFormulaNeedLite
@@ -64,7 +64,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         void IMakeSkill.Create(string name, int[] amounts)
         {
-            var formula = (from f in _Formulas where f.Name == name select f).FirstOrDefault();
+            var formula = (from f in _Formulas where f.Id == name select f).FirstOrDefault();
             if (formula == null)
                 return;
             var needItems = formula.NeedItems;

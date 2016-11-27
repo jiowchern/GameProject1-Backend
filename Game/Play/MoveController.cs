@@ -18,8 +18,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             Forward = 1;
             RunForward = 3;
 
-            TurnLeft = 300.0f;
-            TurnRight = 300.0f;
+            TurnLeft = 500  ;
+            TurnRight = 500;
         }
 
         void IMoveController.Forward()

@@ -10,9 +10,11 @@ namespace Regulus.Project.ItIsNotAGame1.Data
     {
         WEAPON_AXE,
         MATERIAL,
-
+        WEAPON_SWORD,
+        WEAPON_PIKE,
         WEAPON_TWOHANDSWORD,
         ILLUMINATION,
-        USABLE
+        USABLE,
+        ARMOR
     }
 }

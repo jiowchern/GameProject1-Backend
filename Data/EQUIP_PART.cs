@@ -4,6 +4,7 @@ namespace Regulus.Project.ItIsNotAGame1.Data
     {
         NONE,
         RIGHT_HAND,
-        FIXTURES
+        FIXTURES,
+        HAT
     }
 }

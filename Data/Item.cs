@@ -56,18 +56,13 @@ namespace Regulus.Project.ItIsNotAGame1.Data
         public bool IsEquipable()
         {
             var i = GetPrototype();
-            if(i != null)
-                return i.EquipPart != EQUIP_PART.NONE;
-
-            return false;
+            return i.EquipPart != EQUIP_PART.NONE;
         }
 
         public EQUIP_PART GetEquipPart()
         {
             var i = GetPrototype();
-            if (i != null)
-                return i.EquipPart  ;
-            return EQUIP_PART.NONE;
+            return i.EquipPart;
         }
 
         public bool UpdateLife(float last_delta_time)

@@ -676,7 +676,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         void IDevelopActor.MakeItem(string name, float quality)
         {
             var formulas = Resource.Instance.Formulas;
-            var formula = (from f in formulas where f.Name == name select f).FirstOrDefault();
+            var formula = (from f in formulas where f.Id == name select f).FirstOrDefault();
             if (formula == null)
                 return;
 

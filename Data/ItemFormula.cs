@@ -10,7 +10,7 @@ namespace Regulus.Project.ItIsNotAGame1.Data
         public ItemFormulaNeed[] NeedItems;
         public ItemEffect[] Effects;
 
-        public string Name;
+        public string Id;
         public string Item;
 
         public int NeedLimit;
@@ -26,7 +26,7 @@ namespace Regulus.Project.ItIsNotAGame1.Data
     public class ItemFormulaLite
     {
         [ProtoBuf.ProtoMember(1)]
-        public string Name;
+        public string Id;
         [ProtoBuf.ProtoMember(2)]
         public string Item;
 

@@ -36,7 +36,7 @@ namespace Regulus.Project.ItIsNotAGame1.Data
 
         public ItemPrototype FindItem(string name)
         {
-            return (from e in this.Items where e.Name == name select e).Single();
+            return (from e in this.Items where e.Id == name select e).Single();
         }
 
         public EntityGroupLayout FindEntityGroupLayout(string id)
