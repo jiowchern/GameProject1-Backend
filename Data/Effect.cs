@@ -28,6 +28,11 @@ namespace Regulus.Project.ItIsNotAGame1.Data
         MOVE_TURNRIGHT,
         MOVE_RUNFORWARD,
         DISARM,
-        AID
+        AID,
+        SKILL_AXE1,
+        SKILL_SWORD1,
+        SKILL_PIKE1,
+        SKILL_CLAYMORE1,
+        SKILL_MELEE1,
     }
 }

@@ -13,8 +13,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         {
             return (from i in Resource.Instance.Items
                    let winning = Regulus.Utility.Random.Instance.NextFloat(0.0f, 1.0f) > 0.5f
-                   where winning && i.Features == ITEM_FEATURES.MATERIAL
-                   select CreateItem(i.Id , 10) ).ToArray();
+                   where winning
+                   select CreateItem(i.Id , 2) ).ToArray();
         }
 
         public Item BuildItem(float quality, Item item, ItemEffect[] item_effects)
@@ -60,6 +60,54 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         public Item CreateItem(string name)
         {
             return CreateItem(name , 1);
+        }
+
+        public Item MakeItem(string item, float quality)
+        {
+            var formula = Resource.Instance.Formulas.FirstOrDefault(f => f.Id == item);
+
+            return BuildItem(quality, formula.Item, formula.Effects);
+        }
+
+        public static float GetQuality(ItemFormula key, int[] amounts)
+        {
+            var items = key.NeedItems;
+
+            var total1 = items.Sum(i => i.Max);
+            var itemScales1 = (from i in items
+                               select new
+                               {
+                                   Item = i,
+                                   Value = i.Max,
+                                   Scale = i.Max / (float)total1
+                               }).ToArray();
+
+            var total2 = amounts.Sum();
+            var itemScales2 = (from i in amounts
+                               select new
+                               {
+                                   Value = i,
+                                   Scale = i / (float)total2
+                               }).ToArray();
+
+            var maxScale = 0.0f;
+            for (int i = 0; i < itemScales2.Length && i < itemScales1.Length; i++)
+            {
+                var scale1 = itemScales1[i].Scale;
+                var scale2 = itemScales2[i].Scale;
+                var ms = scale2 / scale1;
+                if (ms > maxScale)
+                {
+                    maxScale = ms;
+                }
+            }
+
+            var quality = 0.0f;
+            for (int i = 0; i < itemScales2.Length && i < itemScales1.Length; i++)
+            {
+                quality += itemScales1[i].Scale * (itemScales2[i].Scale / itemScales1[i].Scale / maxScale);
+            }
+            return quality;
         }
     }
 }

@@ -9,10 +9,8 @@ namespace Regulus.Project.ItIsNotAGame1.Data
     public struct ItemPrototype
     {
         public string Id;
-
-        //public string Id;
-
-        public ITEM_FEATURES Features;
+        
+        //public ITEM_FEATURES Features;
 
         public string Description;
 

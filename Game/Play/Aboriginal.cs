@@ -37,13 +37,13 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         void IBootable.Launch()
         {
             var provider = new ItemProvider();            
-            _Actor.Bag.Add(provider.BuildItem(1 , "AidKit" , new [] {new ItemEffect()
+            _Actor.Bag.Add(provider.BuildItem(1 , "AidKit1" , new [] {new ItemEffect()
             {
                 Effects = new []{ new Effect() { Type =  EFFECT_TYPE.AID , Value = 10 } },
                 Quality = 0.5f                                 
             } }));
 
-            _Actor.Bag.Add(provider.BuildItem(1, "Axe", new[] {new ItemEffect()
+            _Actor.Bag.Add(provider.BuildItem(1, "Axe1", new[] {new ItemEffect()
             {
                 Effects = new []{ new Effect() { Type =  EFFECT_TYPE.ATTACK_ADD , Value = 1 } },
                 Quality = 0.5f

@@ -94,47 +94,14 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private void _Create(ItemFormula key , int[] amounts)
         {
-            var items = key.NeedItems;
-
-            var total1 = items.Sum(i => i.Max);
-            var itemScales1 = (from i in items
-                               select new
-                               {
-                                   Item = i,
-                                   Value = i.Max,
-                                   Scale = i.Max / (float)total1
-                               }).ToArray();
-
-            var total2 = amounts.Sum();
-            var itemScales2 = (from i in amounts
-                               select new
-                               {
-                                   Value = i,
-                                   Scale = i / (float)total2
-                               }).ToArray();
-
-            var maxScale = 0.0f;
-            for (int i = 0; i < itemScales2.Length && i < itemScales1.Length; i++)
-            {
-                var scale1 = itemScales1[i].Scale;
-                var scale2 = itemScales2[i].Scale;
-                var ms = scale2 / scale1;
-                if (ms > maxScale)
-                    maxScale = ms;
-            }
-
-           
-            var quality = 0.0f;
-            for (int i = 0; i < itemScales2.Length && i < itemScales1.Length; i++)
-            {
-                quality += itemScales1[i].Scale * (itemScales2[i].Scale / itemScales1[i].Scale / maxScale);
-            }
+            var quality = ItemProvider.GetQuality(key, amounts);
 
             var itemProvider = new ItemProvider();
             var item = itemProvider.BuildItem(quality , key.Item , key.Effects  );
             _Player.Bag.Add(item);
 
         }
+        
 
         void IMakeSkill.Exit()
         {

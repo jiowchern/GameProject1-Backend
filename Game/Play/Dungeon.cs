@@ -43,10 +43,10 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _EntityEnteranceResource = new Dictionary<ENTITY, int>
             {
                 { ENTITY.ACTOR1, 10},
-                { ENTITY.ACTOR2, 10},
-                { ENTITY.ACTOR3, 10},
-                { ENTITY.ACTOR4, 10},
-                { ENTITY.ACTOR5, 10},
+                { ENTITY.ACTOR2, 20},
+                { ENTITY.ACTOR3, 20},
+                { ENTITY.ACTOR4, 20},
+                { ENTITY.ACTOR5, 20},
             };
 
             _EntityFieldResource = new Dictionary<ENTITY, int>

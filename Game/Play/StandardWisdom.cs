@@ -917,7 +917,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             {
                 distance = 3f;
             }
-            else if (skill == ACTOR_STATUS_TYPE.TWO_HAND_SWORD_ATTACK1)
+            else if (skill == ACTOR_STATUS_TYPE.CLAYMORE_ATTACK1)
             {
                 distance = 3f;
             }

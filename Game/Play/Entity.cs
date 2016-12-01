@@ -49,7 +49,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private float _DetectionRange;
 
-        private SkillData[] _Datas;
+        private readonly SkillData[] _Datas;
 
 
         public Bag Bag { get; private set; }
@@ -528,18 +528,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _Status = ACTOR_STATUS_TYPE.NORMAL_EXPLORE;
             _InvokeStatusEvent();
         }
-        private ACTOR_STATUS_TYPE _GetWeaponIdle(ITEM_FEATURES features)
-        {
-            switch (features)
-            {
-                case ITEM_FEATURES.WEAPON_AXE:
-                    return ACTOR_STATUS_TYPE.BATTLE_AXE_IDLE;
-                case ITEM_FEATURES.WEAPON_TWOHANDSWORD:
-                    return ACTOR_STATUS_TYPE.TWO_HAND_SWORD_IDLE;
-                default:
-                    return ACTOR_STATUS_TYPE.MELEE_IDLE;
-            }
-        }
+        
 
 
 
@@ -700,14 +689,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         public SkillCaster GetBattleCaster()
         {
-
-            ACTOR_STATUS_TYPE status = ACTOR_STATUS_TYPE.MELEE_IDLE;
-            var item = this.Equipment.Find(EQUIP_PART.RIGHT_HAND);
-            if (item!=null)
-            {
-                status = _GetWeaponIdle(item.GetPrototype().Features);
-            }
-
+            ACTOR_STATUS_TYPE status = Equipment.GetSkill();
             var data = _Datas.First((s) => s.Id == status);
             return new SkillCaster(data, new Determination(data.Lefts, data.Rights, data.Total, data.Begin, data.End));
         }

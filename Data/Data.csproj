@@ -92,7 +92,6 @@
     <Compile Include="ItemFormula.cs" />
     <Compile Include="ItemFormulaNeed.cs" />
     <Compile Include="ItemPrototype.cs" />
-    <Compile Include="ITEM_FEATURES.cs" />
     <Compile Include="IVerify.cs" />
     <Compile Include="IVersion.cs" />
     <Compile Include="IVisible.cs" />
