@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 using Regulus.Project.ItIsNotAGame1.Game.Data;
 
 namespace Regulus.Project.ItIsNotAGame1.Data
@@ -21,6 +23,10 @@ namespace Regulus.Project.ItIsNotAGame1.Data
         public string Name;
         public MazeInfomation Maze;
         public TownInfomation Town;
+
+        public Dictionary<ENTITY, int> EntityEnteranceResource { get; set; }
+
+        public Dictionary<ENTITY, int> EntityFieldResource { get; set; }
 
         public bool HaveTown()
         {

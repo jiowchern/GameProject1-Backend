@@ -59,8 +59,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         void IStage.Enter()
         {
             _Binder.Bind<ICastSkill>(this);
-            
-            _Player.SetSkillVelocity(_Caster.GetShiftDirection()  , _Caster.GetShiftSpeed() );
+                        
             _Player.CastBegin(_Caster.Data.Id);
 
             _MoveController.Backward = _Caster.GetBackward();
@@ -147,8 +146,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
             var poly = _Caster.FindDetermination(_CurrentCastTime, nowTime);
             _CurrentCastTime = nowTime;
-
-
+            
             bool guardImpact = false;
             _Player.SetBlock(false);
             if (poly != null)

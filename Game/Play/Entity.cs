@@ -132,16 +132,11 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private void _BroadcastEquipEvent()
         {
-            var equipStatus = from item in this.Equipment.GetAll()
-                              select new EquipStatus()
-                              {
-                                  Item = item.Name,
-                                  Part = item.GetEquipPart()
-                              };
+            
 
             if (_EquipEvent != null)
             {
-                _EquipEvent(equipStatus.ToArray());
+                _EquipEvent(Equipment.GetStatus());
             }
         }
 

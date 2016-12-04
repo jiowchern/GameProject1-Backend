@@ -25,18 +25,18 @@ namespace Regulus.Project.ItIsNotAGame1.Data
         MELEE_ATTACK1,
         MELEE_ATTACK2,
         MELEE_ATTACK3,
-        MELEE_ATTACK4,
 
         CLAYMORE_IDLE,
         CLAYMORE_RUN,
         CLAYMORE_ATTACK1,
-        CLAYMORE_ATTACK2,
-        
-        
+
+        MELEE_ATTACK4,
+
+
         TIRED   ,
         STUN,
         AID,
-        
+        CLAYMORE_ATTACK2,
 
 
         SWORD_IDLE,
@@ -51,6 +51,9 @@ namespace Regulus.Project.ItIsNotAGame1.Data
         DUALSWORD_ATTACK2,
         DUALSWORD_ATTACK3,
 
-
+        SWORDSHIELD_IDLE,
+        SWORDSHIELD_ATTACK1,
+        SWORDSHIELD_ATTACK2,
+        SWORDSHIELD_ATTACK3,
     }
 }

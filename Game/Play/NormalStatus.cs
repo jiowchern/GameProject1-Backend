@@ -69,7 +69,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                 {
                     if (_EquipItemsEvent != null)
                     {
-                        _EquipItemsEvent(_Player.Equipment.GetAll());
+                        _EquipItemsEvent(_Player.Equipment.GetItems());
                     }
                     if (_BagItemsEvent != null)
                     {
@@ -129,8 +129,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         void IInventoryController.Unequip(Guid id)
         {
-            var item = _Player.Equipment.Unequip(id);
-            if (Item.IsValid(item))
+            var items = _Player.Equipment.Unequip(id);
+            foreach(var item in items)
             {
                 _Player.Bag.Add(item);
             }
@@ -146,17 +146,14 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         void IInventoryController.Equip(Guid id)
         {
             var item = _Player.Bag.Find(id);
+
             if (Item.IsValid(item) && item.IsEquipable())
             {
-
-                var equipItem = _Player.Equipment.Unequip(item.GetEquipPart());
-                if (Item.IsValid(equipItem))
+                if (_Player.Equipment.Equip(item))
                 {
-                    _Player.Bag.Add(equipItem);
+                    _Player.Bag.Remove(item.Id);
                 }
-                _Player.Bag.Remove(item.Id);
-
-                _Player.Equipment.Equip(item);
+                
             }
         }
 

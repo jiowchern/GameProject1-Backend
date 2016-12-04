@@ -159,10 +159,12 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             var itemAxe = itemProvider.MakeItem( "Axe1" , 0.5f );            
             var itemSword1 = itemProvider.MakeItem("Sword1" , 0.5f);
             var itemSword2 = itemProvider.MakeItem("Sword2" , 0.5f);
+            var itemShield1 = itemProvider.MakeItem("Shield1", 0.5f);
 
             player.Bag.Add(itemAxe);
             player.Bag.Add(itemSword1);
             player.Bag.Add(itemSword2);
+            player.Bag.Add(itemShield1);
 
             foreach (var item in record.Items)
             {

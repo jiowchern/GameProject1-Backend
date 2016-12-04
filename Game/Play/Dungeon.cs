@@ -40,23 +40,24 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _Updater = new TimesharingUpdater(1.0f / 30.0f);
             _Aboriginals = new List<Aboriginal>();
 
-            _EntityEnteranceResource = new Dictionary<ENTITY, int>
+            _EntityEnteranceResource = realm_infomation.EntityEnteranceResource;
+            /*_EntityEnteranceResource = new Dictionary<ENTITY, int>
             {
                 { ENTITY.ACTOR1, 10},
                 { ENTITY.ACTOR2, 20},
                 { ENTITY.ACTOR3, 20},
                 { ENTITY.ACTOR4, 20},
                 { ENTITY.ACTOR5, 20},
-            };
-
-            _EntityFieldResource = new Dictionary<ENTITY, int>
+            };*/
+            _EntityFieldResource = realm_infomation.EntityFieldResource;
+            /*_EntityFieldResource = new Dictionary<ENTITY, int>
             {
                 { ENTITY.ACTOR1, 10},
                 { ENTITY.ACTOR2, 10},
                 { ENTITY.ACTOR3, 10},
                 { ENTITY.ACTOR4, 10},
                 { ENTITY.ACTOR5, 10},
-            };
+            };*/
 
             _LevelUnitToGroupBuilder = new Dictionary<Data.LEVEL_UNIT, EntityGroupBuilder>();
             foreach (var mazeUnitInfomation in _RealmInfomation.Maze.MazeUnits)

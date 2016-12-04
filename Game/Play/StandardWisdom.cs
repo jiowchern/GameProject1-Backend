@@ -199,7 +199,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                             .Sub(_MakeItemStrategy())
                             .Sub(_EquipItemStrategy())
                             .Sub(_DiscardItemStrategy())
-                        .End()                        
+                        .End()
+                        
                     .End()
 
                     .Sub(_DistanceWayfindingStrategy())

@@ -63,3 +63,4 @@ E:\Develop\ItIsNotAGame-Backend\Data\bin\Debug\RegulusRemoting.xml
 E:\Develop\ItIsNotAGame-Backend\Data\obj\Debug\Data.csprojResolveAssemblyReference.cache
 E:\Develop\ItIsNotAGame-Backend\Data\obj\Debug\ItIsNotAGame1Data.dll
 E:\Develop\ItIsNotAGame-Backend\Data\obj\Debug\ItIsNotAGame1Data.pdb
+D:\Develop\ItIsNotAGame1-Backend\Data\obj\Debug\Data.csprojResolveAssemblyReference.cache

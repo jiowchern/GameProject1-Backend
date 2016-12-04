@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Security.Policy;
 
 using Regulus.Framework;
@@ -47,8 +48,24 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                             new MazeUnitInfomation { Name = "exit1" , Type = LEVEL_UNIT.EXIT}
                         }
                     },
-                    Town = new TownInfomation() {Name = ""}
-                    
+                    Town = new TownInfomation() {Name = ""},
+                    EntityEnteranceResource = new Dictionary<ENTITY, int>
+                    {
+                        { ENTITY.ACTOR1, 10},
+                        { ENTITY.ACTOR2, 20},
+                        { ENTITY.ACTOR3, 20},
+                        { ENTITY.ACTOR4, 20},
+                        { ENTITY.ACTOR5, 20},
+                    },
+                    EntityFieldResource = new Dictionary<ENTITY, int>
+                    {
+                        { ENTITY.ACTOR1, 10},
+                        { ENTITY.ACTOR2, 10},
+                        { ENTITY.ACTOR3, 10},
+                        { ENTITY.ACTOR4, 10},
+                        { ENTITY.ACTOR5, 10},
+                    }
+
                 },
                 new RealmInfomation
                 {
@@ -70,7 +87,23 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                             new MazeUnitInfomation { Name = "exit2" , Type = LEVEL_UNIT.EXIT}
                         }
                     },
-                    Town = new TownInfomation() {Name = ""}
+                    Town = new TownInfomation() {Name = ""},
+                    EntityEnteranceResource = new Dictionary<ENTITY, int>
+                    {
+                        { ENTITY.ACTOR1, 10},
+                        { ENTITY.ACTOR2, 10},
+                        { ENTITY.ACTOR3, 10},
+                        { ENTITY.ACTOR4, 10},
+                        { ENTITY.ACTOR5, 10},
+                    },
+                    EntityFieldResource = new Dictionary<ENTITY, int>
+                    {
+                        { ENTITY.ACTOR1, 10},
+                        { ENTITY.ACTOR2, 10},
+                        { ENTITY.ACTOR3, 10},
+                        { ENTITY.ACTOR4, 10},
+                        { ENTITY.ACTOR5, 10},
+                    }
 
                 },
                 new RealmInfomation
@@ -81,7 +114,23 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                         Dimension = 0 , Width = 0 , Height = 0 ,
                         MazeUnits = new MazeUnitInfomation[0],                        
                     },
-                    Town = new TownInfomation() {Name = "town1"}
+                    Town = new TownInfomation() {Name = "town1"},
+                    EntityEnteranceResource = new Dictionary<ENTITY, int>
+                    {
+                        { ENTITY.ACTOR1, 0},
+                        { ENTITY.ACTOR2, 20},
+                        { ENTITY.ACTOR3, 0},
+                        { ENTITY.ACTOR4, 0},
+                        { ENTITY.ACTOR5, 0},
+                    },
+                    EntityFieldResource = new Dictionary<ENTITY, int>
+                    {
+                        { ENTITY.ACTOR1, 0},
+                        { ENTITY.ACTOR2, 0},
+                        { ENTITY.ACTOR3, 0},
+                        { ENTITY.ACTOR4, 0},
+                        { ENTITY.ACTOR5, 0},
+                    }
                 },
 
                 new RealmInfomation
@@ -92,8 +141,27 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                         Dimension = 0 , Width = 0 , Height = 0 ,
                         MazeUnits = new MazeUnitInfomation[0],
                     },
-                    Town = new TownInfomation() {Name = "town2"}
-                }
+                    Town = new TownInfomation() {Name = "town2"},
+                    EntityEnteranceResource = new Dictionary<ENTITY, int>
+                    {
+                        { ENTITY.ACTOR1, 0},
+                        { ENTITY.ACTOR2, 0},
+                        { ENTITY.ACTOR3, 0},
+                        { ENTITY.ACTOR4, 0},
+                        { ENTITY.ACTOR5, 0},
+                    },
+                    EntityFieldResource = new Dictionary<ENTITY, int>
+                    {
+                        { ENTITY.ACTOR1, 0},
+                        { ENTITY.ACTOR2, 0},
+                        { ENTITY.ACTOR3, 0},
+                        { ENTITY.ACTOR4, 0},
+                        { ENTITY.ACTOR5, 0},
+                    }
+                },
+
+
+
             });
             
             

@@ -13,6 +13,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game
 
 		private readonly Verify _Verify;
 
+
+	    
 		public VerifyStage(Remoting.ISoulBinder binder, Verify verify)
 		{
 		    this._Verify = verify;

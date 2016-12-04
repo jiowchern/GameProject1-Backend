@@ -34,5 +34,9 @@ namespace Regulus.Project.ItIsNotAGame1.Data
         SKILL_PIKE1,
         SKILL_CLAYMORE1,
         SKILL_MELEE1,
+
+        SKILL_DUALSWORD1,
+
+        SKILL_SWORDSHIELD1,
     }
 }
