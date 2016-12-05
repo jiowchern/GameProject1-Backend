@@ -164,9 +164,18 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         public float Health(float val)
         {
 
+            
             _Health += val;
             if (_Health > _MaxHealth)
                 _Health = _MaxHealth;
+
+            if (_EnergyEvent != null)
+            {
+                if(val < 0)
+                    _EnergyEvent(new Energy() { Type = Energy.TYPE.HEALTH_DECREASE, Value = val });
+            }
+            
+                
 
             return _Health;
         }
@@ -198,6 +207,14 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         {
             add { this._StatusEvent += value; }
             remove { this._StatusEvent -= value; }
+        }
+
+        private event Action<Energy> _EnergyEvent;
+
+        event Action<Energy> IVisible.EnergyEvent
+        {
+            add { this._EnergyEvent += value; }
+            remove { this._EnergyEvent -= value; }
         }
 
         Vector2 IVisible.Position { get { return this._Mesh.Center; } }

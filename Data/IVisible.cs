@@ -19,9 +19,11 @@ namespace Regulus.Project.ItIsNotAGame1.Data
 
         event Action<EquipStatus[]> EquipEvent;
 
-        //狀態 , 起始位置 , 速度 ,方向, 位移
-        event Action<VisibleStatus> StatusEvent;
         
+        event Action<VisibleStatus> StatusEvent;
+
+        event Action<Energy> EnergyEvent;
+
         Vector2 Position { get; }
 
         void QueryStatus();

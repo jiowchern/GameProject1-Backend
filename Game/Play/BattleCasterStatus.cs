@@ -59,7 +59,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         void IStage.Enter()
         {
             _Binder.Bind<ICastSkill>(this);
-                        
+            _Player.SetSkillVelocity(_Caster.GetShiftDirection(), _Caster.GetShiftSpeed());
             _Player.CastBegin(_Caster.Data.Id);
 
             _MoveController.Backward = _Caster.GetBackward();
@@ -80,8 +80,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _DatumPosition = _Player.GetPosition();
             var strength = _Player.Strength(-_Caster.Data.StrengthCost);
             _Overdraft = strength < 0.0f;
-
             
+
         }
 
         void IStage.Leave()

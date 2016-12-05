@@ -25,8 +25,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _Skills = new List<Skill>();
             _Skills.Add(new Skill(EFFECT_TYPE.SKILL_MELEE1, ACTOR_STATUS_TYPE.MELEE_IDLE, ITEM_FEATURES.NONE, ITEM_FEATURES.NONE));
             _Skills.Add(new Skill(EFFECT_TYPE.SKILL_AXE1 , ACTOR_STATUS_TYPE.BATTLE_AXE_IDLE ,ITEM_FEATURES.AXE , ITEM_FEATURES.NONE ));
-            _Skills.Add(new Skill(EFFECT_TYPE.SKILL_CLAYMORE1, ACTOR_STATUS_TYPE.CLAYMORE_IDLE, ITEM_FEATURES.CLAYMORE, ITEM_FEATURES.NONE));
-            _Skills.Add(new Skill(EFFECT_TYPE.SKILL_DUALSWORD1, ACTOR_STATUS_TYPE.DUALSWORD_IDLE, ITEM_FEATURES.SWORD, ITEM_FEATURES.SWORD));
+            _Skills.Add(new Skill(EFFECT_TYPE.SKILL_CLAYMORE1, ACTOR_STATUS_TYPE.SWORD_IDLE, ITEM_FEATURES.CLAYMORE, ITEM_FEATURES.NONE));
+            _Skills.Add(new Skill(EFFECT_TYPE.SKILL_DUALSWORD1, ACTOR_STATUS_TYPE.SWORD_IDLE, ITEM_FEATURES.SWORD, ITEM_FEATURES.SWORD));
             _Skills.Add(new Skill(EFFECT_TYPE.SKILL_SWORD1, ACTOR_STATUS_TYPE.SWORD_IDLE, ITEM_FEATURES.SWORD, ITEM_FEATURES.NONE));
             _Skills.Add(new Skill(EFFECT_TYPE.SKILL_SWORDSHIELD1, ACTOR_STATUS_TYPE.SWORD_IDLE, ITEM_FEATURES.SHIELD, ITEM_FEATURES.SWORD));
 
@@ -147,7 +147,9 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                     leftFeatures = leftItem.GetPrototype().Features;
                 var effect = rightItem.Effects.FirstOrDefault( e=> _Skills.Any( s => s.Effect == e.Type));
 
-                return (from skill in _Skills where skill.Conform(effect.Type , rightFeatures , leftFeatures) select skill.Status).First();
+                var val = (from skill in _Skills where skill.Conform(effect.Type, rightFeatures, leftFeatures) select skill.Status).FirstOrDefault();
+                if (val != default(ACTOR_STATUS_TYPE))
+                    return val;                
             }
             return ACTOR_STATUS_TYPE.MELEE_IDLE;
         }

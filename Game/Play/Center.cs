@@ -118,7 +118,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                     EntityEnteranceResource = new Dictionary<ENTITY, int>
                     {
                         { ENTITY.ACTOR1, 0},
-                        { ENTITY.ACTOR2, 20},
+                        { ENTITY.ACTOR2, 0},
                         { ENTITY.ACTOR3, 0},
                         { ENTITY.ACTOR4, 0},
                         { ENTITY.ACTOR5, 0},
