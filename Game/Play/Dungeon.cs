@@ -77,7 +77,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             {
                 entiry.Bag.Add(item);
             }            
-            var wisdom = new StandardWisdom(entiry);
+            var wisdom = new StandardBehavior(entiry);
             var aboriginal = new Aboriginal(map, this, entiry, wisdom);            
             return aboriginal;
         }

@@ -17,15 +17,15 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private readonly Regulus.Utility.Updater _Updater;
 
-        private readonly Wisdom _Wisdom;
+        private readonly Behavior _Behavior;
 
         private readonly IMapGate _Gate;
 
         public event Action DoneEvent;
-        public Aboriginal(IMapFinder map,IMapGate gate, Entity actor ,  Wisdom wisdom)
+        public Aboriginal(IMapFinder map,IMapGate gate, Entity actor ,  Behavior behavior)
         {
             _Gate = gate;
-            _Wisdom = wisdom;
+            _Behavior = behavior;
             _Updater = new Updater();
             _Map = map;
             _Actor = actor;
@@ -53,7 +53,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private void _ToGame(IMapFinder map)
         {            
-            var stage = new GameStage(_Wisdom.GetSoulBinder() ,  map , _Gate, _Actor , _Wisdom);
+            var stage = new GameStage(_Behavior.GetSoulBinder() ,  map , _Gate, _Actor , _Behavior);
             stage.ExitEvent += _ToDone ;
             stage.TransmitEvent += (target) => { };
             _Machine.Push(stage);

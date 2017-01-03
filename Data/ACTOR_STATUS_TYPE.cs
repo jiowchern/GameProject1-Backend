@@ -55,5 +55,8 @@ namespace Regulus.Project.ItIsNotAGame1.Data
         SWORDSHIELD_ATTACK1,
         SWORDSHIELD_ATTACK2,
         SWORDSHIELD_ATTACK3,
+
+        SWORD_INJURY,
+        SWORD_ATTACK4
     }
 }

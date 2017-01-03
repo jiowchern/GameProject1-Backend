@@ -60,16 +60,16 @@
     <Compile Include="Play\Aboriginal.cs" />
     <Compile Include="Play\ActorMind.cs" />
     <Compile Include="Play\AidStatus.cs" />
+    <Compile Include="Play\Behavior.cs" />
     <Compile Include="Play\BehaviourTreeBuilder.cs" />
+    <Compile Include="Play\ChestBehavior.cs" />
     <Compile Include="Play\ChestExcludeAction.cs" />
     <Compile Include="Play\ChestIdleAction.cs" />
-    <Compile Include="Play\ChestWisdom.cs" />
-    <Compile Include="Play\EnteranceWisdom.cs" />
-    <Compile Include="Play\FieldWisdom.cs" />
+    <Compile Include="Play\EnteranceBehavior.cs" />
+    <Compile Include="Play\FieldBehavior.cs" />
     <Compile Include="Play\InorganicsWisdom.cs" />
-    <Compile Include="Play\PortalWisdom.cs" />
+    <Compile Include="Play\PortalBehavior.cs" />
     <Compile Include="Play\RealmReadyStage.cs" />
-    <Compile Include="Play\StrongholdWisdom.cs" />
     <Compile Include="Play\EntityCreateParameter.cs" />
     <Compile Include="Play\EntityGroupBuilder.cs" />
     <Compile Include="Play\EquipmentProxy.cs" />
@@ -83,7 +83,6 @@
     <Compile Include="Play\LevelUnit.cs" />
     <Compile Include="Play\ResourceBag.cs" />
     <Compile Include="Play\SignRoster.cs" />
-    <Compile Include="Play\StandardWisdom.cs" />
     <Compile Include="Play\GpiTransponder.cs" />
     <Compile Include="Play\HitForce.cs" />
     <Compile Include="Play\ObstacleDetector.cs" />
@@ -113,6 +112,8 @@
     <Compile Include="Play\NormalStatus.cs" />
     <Compile Include="Play\Realm.cs" />
     <Compile Include="Play\SkillCaster.cs" />
+    <Compile Include="Play\StandardBehavior.cs" />
+    <Compile Include="Play\StrongholdBehavior.cs" />
     <Compile Include="Play\StunStatus.cs" />
     <Compile Include="Play\TimesharingUpdater.cs" />
     <Compile Include="Play\TimeTriggerStrategy.cs" />
@@ -128,7 +129,6 @@
     <Compile Include="Storage\User.cs" />
     <Compile Include="Verify.cs" />
     <Compile Include="VerifyStage.cs" />
-    <Compile Include="Wisdom.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Data\Data.csproj">

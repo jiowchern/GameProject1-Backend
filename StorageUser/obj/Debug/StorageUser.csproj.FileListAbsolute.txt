@@ -98,3 +98,5 @@ E:\Develop\ItIsNotAGame-Backend\StorageUser\bin\Debug\RegulusRemotingGhostNative
 E:\Develop\ItIsNotAGame-Backend\StorageUser\obj\Debug\StorageUser.csprojResolveAssemblyReference.cache
 E:\Develop\ItIsNotAGame-Backend\StorageUser\obj\Debug\ItIsNotAGame1StorageUser.dll
 E:\Develop\ItIsNotAGame-Backend\StorageUser\obj\Debug\ItIsNotAGame1StorageUser.pdb
+D:\Develop\ItIsNotAGame1-Backend\StorageUser\bin\Debug\RegulusRemotingGhostNative.pdb
+D:\Develop\ItIsNotAGame1-Backend\StorageUser\bin\Debug\RegulusRemotingStandalone.pdb

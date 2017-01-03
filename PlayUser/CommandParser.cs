@@ -1,4 +1,5 @@
 ﻿using Regulus.Framework;
+using Regulus.Project.ItIsNotAGame1.Data;
 using Regulus.Remoting;
 using Regulus.Utility;
 
@@ -49,9 +50,10 @@ namespace Regulus.Project.ItIsNotAGame1
 
 		}
 
-		private void _ConnectResult(bool result)
+		private void _ConnectResult(Regulus.Remoting.Value<bool> val)
 		{
-		    this._View.WriteLine(string.Format("Connect result {0}", result));
+		    val.OnValue += (result) => { this._View.WriteLine(string.Format("Connect result {0}", result)); };
+
 		}
 
 		
@@ -74,26 +76,29 @@ namespace Regulus.Project.ItIsNotAGame1
         private void _CreateVerify(IGPIBinderFactory factory)
 		{
 			var verify = factory.Create(this._User.VerifyProvider);
-			verify.Bind(
-				"Login[result,id,password]", 
-				gpi => { return new CommandParamBuilder().BuildRemoting<string, string, bool>(gpi.Login, this._VerifyResult); });
+            verify.Bind<string,string, Regulus.Remoting.Value<bool>>( (gpi ,account , password) => gpi.Login(account , password) , _VerifyResult);
+            
 		}
 
 		private void _CreateOnline(IGPIBinderFactory factory)
 		{
 			var online = factory.Create(this._User.Remoting.OnlineProvider);
-			online.Bind(
-				"Ping", 
-				gpi => { return new CommandParamBuilder().Build(() => { this._View.WriteLine("Ping : " + gpi.Ping); }); });
+		    online.Bind(gpi => gpi.Ping , _ShowPing ) ;
+            
 			online.Bind(gpi => gpi.Disconnect());
 		}
 
-		private void _CreateConnect(IGPIBinderFactory factory)
+	    private void _ShowPing(double obj)
+	    {
+	        _View.WriteLine("Ping " + obj);
+	    }
+
+	    private void _CreateConnect(IGPIBinderFactory factory)
 		{
 			var connect = factory.Create(this._User.Remoting.ConnectProvider);
-			connect.Bind(
-				"Connect[result , ipaddr ,port]", 
-				gpi => { return new CommandParamBuilder().BuildRemoting<string, int, bool>(gpi.Connect, this._ConnectResult); });
+
+            connect.Bind<string,int,Regulus.Remoting.Value<bool>>( (gpi , ip , port)=> gpi.Connect(ip,port) , _ConnectResult);
+
 		}
 
         private void _CreateDevelopActor(IGPIBinderFactory factory)
@@ -107,9 +112,12 @@ namespace Regulus.Project.ItIsNotAGame1
             binder.Bind<string>((gpi, realm) => gpi.SetRealm(realm));
         }
 
-        private void _VerifyResult(bool result)
+        private void _VerifyResult(Regulus.Remoting.Value<bool> val)
 		{
-		    this._View.WriteLine(string.Format("Verify result {0}", result));
+            val.OnValue += (result)=>
+            {
+                this._View.WriteLine(string.Format("Verify result {0}", result));
+            };
 		}
 	}
 }

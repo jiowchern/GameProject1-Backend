@@ -7,7 +7,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
     internal class TurnHandler 
     {
-        private readonly StandardWisdom _StandardWisdom;
+        private readonly StandardBehavior _StandardBehavior;
 
         private float _Angle;
 
@@ -17,9 +17,9 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private IEnumerator<TICKRESULT> _Iterator;
 
-        public TurnHandler(StandardWisdom standard_wisdom )
+        public TurnHandler(StandardBehavior standard_behavior )
         {
-            _StandardWisdom = standard_wisdom;            
+            _StandardBehavior = standard_behavior;            
         }
 
         public void Input(float angle)
@@ -38,14 +38,14 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 #if UNITY_EDITOR
             //UnityEngine.Debug.Log("Done TurnTimeCounter = " + _TimeCounter);
 #endif
-            _StandardWisdom.StopTrun();
+            _StandardBehavior.StopTrun();
             return TICKRESULT.SUCCESS;
         }
 
         void _Start()
         {
 
-            var turnSpeed = _StandardWisdom.GetTrunSpeed();
+            var turnSpeed = _StandardBehavior.GetTrunSpeed();
             if (turnSpeed <= 0)
                 return ;
             var angle = _Angle;
@@ -62,9 +62,9 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
 
             if (angle > 180)
-                _StandardWisdom.MoveLeft();
+                _StandardBehavior.MoveLeft();
             else if (angle <= 180)
-                _StandardWisdom.MoveRight();
+                _StandardBehavior.MoveRight();
 
 #if UNITY_EDITOR
             // UnityEngine.Debug.Log("TurnTimeCounter = " + _TimeCounter);

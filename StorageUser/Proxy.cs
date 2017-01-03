@@ -28,14 +28,7 @@ namespace Regulus.Project.ItIsNotAGame1.Storage.User
 		    this.Client_ModeSelectorEvent(this._Client.Selector);
 		}
 
-		public Proxy()
-		{
-		    this._UserFactory = new RemotingFactory();
-		    this._Client = new Client<IUser>(this, new Command());
-		    this._Updater = new Updater();
-
-		    this.Client_ModeSelectorEvent(this._Client.Selector);
-		}
+		
 
 		event Console.OnOutput Console.IInput.OutputEvent
 		{

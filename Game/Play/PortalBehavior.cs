@@ -7,7 +7,7 @@ using Regulus.Utility;
 
 namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
-    internal class PortalWisdom : Wisdom 
+    internal class PortalBehavior : Behavior 
     {
         private readonly Entity _Entity;
 
@@ -19,7 +19,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private readonly IMapFinder _Finder;
 
-        public PortalWisdom(Entity entity, string target_realm, ENTITY[] pass_entity, IMapGate gate, IMapFinder finder)
+        public PortalBehavior(Entity entity, string target_realm, ENTITY[] pass_entity, IMapGate gate, IMapFinder finder)
         {
             _Entity = entity;
             _TargetRealm = target_realm;

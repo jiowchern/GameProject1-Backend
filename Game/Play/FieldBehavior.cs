@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
-    internal class FieldWisdom : Wisdom
+    internal class FieldBehavior : Behavior
     {
         private readonly ENTITY[] _Types;
 
@@ -19,7 +19,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private Queue<Guid> _Ids;
 
-        public FieldWisdom(ENTITY[] types, Entity owner, IMapGate gate, IMapFinder finder)
+        public FieldBehavior(ENTITY[] types, Entity owner, IMapGate gate, IMapFinder finder)
         {
             _Ids = new Queue<Guid>();
             _Types = types;

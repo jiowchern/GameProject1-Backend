@@ -47,7 +47,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 #endif
         
 
-        public TICKRESULT Detect(float delta, float decision_time, Entity entiry, StandardWisdom standard_wisdom, float view_distance, int scan_angle)
+        public TICKRESULT Detect(float delta, float decision_time, Entity entiry, StandardBehavior standard_behavior, float view_distance, int scan_angle)
         {
             var decisionTime = decision_time;
             var _Entiry = entiry;
@@ -55,7 +55,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             {
                 throw new ArgumentNullException("_Entiry");
             }
-            var goblinWisdom = standard_wisdom;
+            var goblinWisdom = standard_behavior;
             var distance = view_distance;
             var scanAngle = scan_angle;
 
@@ -111,7 +111,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             var trunForce = Vector2.AngleToVector(first.Direction);
             var forcePos = pos + trunForce * (distance);
             UnityEngine.Debug.DrawLine(new UnityEngine.Vector3(pos.X, 0, pos.Y), new UnityEngine.Vector3(forcePos.X, 0, forcePos.Y), UnityEngine.Color.yellow, decisionTime);
-            //UnityEngine.Debug.Log("TurnDirection = " + _StandardWisdom.TurnDirection);
+            //UnityEngine.Debug.Log("TurnDirection = " + _StandardBehavior.TurnDirection);
 
 #endif
             return TICKRESULT.SUCCESS;

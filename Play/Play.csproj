@@ -78,8 +78,11 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy ..\..\..\Library\Server.exe
-copy ..\..\..\..\Data\*.txt</PostBuildEvent>
+    <PostBuildEvent>copy ..\..\..\Library\ItIsNotAGame1DataGPI.dll
+copy ..\..\..\Library\Server.exe
+copy ..\..\..\..\Data\*.txt
+
+</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

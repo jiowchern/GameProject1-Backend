@@ -10,7 +10,7 @@ using Regulus.Project.ItIsNotAGame1.Data;
 
 namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
-    internal class StrongholdWisdom : Wisdom
+    internal class StrongholdBehavior : Behavior
     {
         private readonly ENTITY[] _Entitys;
 
@@ -20,7 +20,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         private readonly IIndividual _Player;
 
         private Queue<Guid> _Ids;
-        public StrongholdWisdom(ENTITY[] entitys, IIndividual player, IMapGate gate, IMapFinder finder)
+        public StrongholdBehavior(ENTITY[] entitys, IIndividual player, IMapGate gate, IMapFinder finder)
         {
             _Ids = new Queue<Guid>();
             _Entitys = entitys;

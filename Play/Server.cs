@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Reflection.Emit;
 
 using Regulus.Project.ItIsNotAGame1.Data;
@@ -131,18 +132,19 @@ namespace Regulus.Project.ItIsNotAGame1.Play
 
         private void _BuildUser()
         {
-            
-
+            var stream = System.IO.File.ReadAllBytes("ItIsNotAGame1DataGPI.dll");
+            var assembly = Assembly.Load(stream);
+            var provider = assembly.CreateInstance("Regulus.Project.ItIsNotAGame1.GPIProvider") as IGhostProvider;
             if (this._IsIpAddress(this._StorageVerifyData.IPAddress))
             {
-                this._Storage = new Storage.User.Proxy(new Storage.User.RemotingFactory());
+                this._Storage = new Storage.User.Proxy(new Storage.User.RemotingFactory(provider));
                 this._StorageUser = this._Storage.SpawnUser("user");
             }
             else
             {
                 var center = new Game.Storage.Center(new Game.DummyFrature());
                 this._Updater.Add(center);
-                var factory = new Storage.User.StandaloneFactory(center);
+                var factory = new Storage.User.StandaloneFactory(center, provider);
                 this._Storage = new Storage.User.Proxy(factory);
                 this._StorageUser = this._Storage.SpawnUser("user");
             }

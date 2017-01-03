@@ -9,13 +9,13 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private readonly IMapGate _Gate;
 
-        private readonly Wisdom _Wisdom;
+        private readonly Behavior _Behavior;
 
         private readonly Regulus.Utility.Updater _Updater;
 
-        public InorganicsOwner(Entity[] entitys, IMapGate gate , Wisdom wisdom)
+        public InorganicsOwner(Entity[] entitys, IMapGate gate , Behavior behavior)
         {
-            _Wisdom = wisdom;
+            _Behavior = behavior;
             _Entitys = entitys;
             _Gate = gate;
             _Updater = new Updater();
@@ -23,7 +23,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         void IBootable.Launch()
         {
-            _Updater.Add(_Wisdom);
+            _Updater.Add(_Behavior);
             foreach (var entity in _Entitys)
                 _Gate.Join(entity);
         }

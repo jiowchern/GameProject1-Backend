@@ -18,7 +18,7 @@ using Vector2 = Regulus.CustomType.Vector2;
 
 namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
-    internal class StandardWisdom : Wisdom
+    internal class StandardBehavior : Behavior
     {
         private readonly Entity _Entiry;
 
@@ -73,7 +73,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private IInventoryController _InventoryController;
 
-        public StandardWisdom(Entity entiry)
+        public StandardBehavior(Entity entiry)
         {
             _Equipment = new InventoryProxy();
             _Bag = new InventoryProxy();
@@ -117,7 +117,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             {
                 return new Dictionary<ENTITY, float>
                 {
-                    {ENTITY.ACTOR1, 2},
+                    {ENTITY.ACTOR1, 0},
                     {ENTITY.ACTOR3, -10},
                     {ENTITY.ACTOR4, 1},
                     {ENTITY.ACTOR5, 3}
@@ -127,7 +127,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             {
                 return new Dictionary<ENTITY, float>
                 {
-                    {ENTITY.ACTOR1, 2},
+                    {ENTITY.ACTOR1, 0},
                     {ENTITY.ACTOR3, 3},
                     {ENTITY.ACTOR4, -10},
                     {ENTITY.ACTOR5, 1}
@@ -137,7 +137,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             {
                 return new Dictionary<ENTITY, float>
                 {
-                    {ENTITY.ACTOR1, 2},
+                    {ENTITY.ACTOR1, 0},
                     {ENTITY.ACTOR3, 1},
                     {ENTITY.ACTOR4, 3},
                     {ENTITY.ACTOR5, -10}
@@ -298,8 +298,12 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private TICKRESULT _Equip(EQUIP_PART part)
         {
-            if(_InventoryController == null)
+            
+            if (_InventoryController == null)
                 return TICKRESULT.FAILURE;
+
+            _Unequip(part);
+
             var items = _Bag.FindByPart(part);
             var item = items.Concat(new Item[] {null}).Shuffle().FirstOrDefault();
             if (item != null)
@@ -308,7 +312,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                 return TICKRESULT.SUCCESS;
             }
 
-            return _Unequip(part);
+            return TICKRESULT.FAILURE;
         }
 
         private TICKRESULT _Unequip(EQUIP_PART part)
@@ -344,13 +348,13 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                         .Action((delta) => timeTrigger.Reset(10f))                        
                         .Selector()
                             .Sequence()
-                                .Action((delta) => _CheckItemAmount("Axe", (count) => count >= 2))
-                                .Action((delta) => _DiscardItem("Axe" , 1))
+                                .Action((delta) => _CheckItemAmount("Axe1", (count) => count >= 2))
+                                .Action((delta) => _DiscardItem("Axe1" , 1))
                                 .Action((delta) => _Talk("Discard axe."))
                             .End()
                             .Sequence()
-                                .Action((delta) => _CheckItemAmount("Sword", (count) => count >= 2))
-                                .Action((delta) => _DiscardItem("Sword", 1))
+                                .Action((delta) => _CheckItemAmount("Sword1", (count) => count >= 2))
+                                .Action((delta) => _DiscardItem("Sword1", 1))
                                 .Action((delta) => _Talk("Discard sword."))
                             .End()
 
@@ -400,14 +404,14 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                         .Selector()
                             .Sequence()
                                 .Action((delta) => _If( index == 0) )
-                                .Action((delta) => _CheckItemAmount("Axe" , (count) => count < 2 ))
-                                .Action((delta) => _MakeItem("Axe"))
+                                .Action((delta) => _CheckItemAmount("Axe1" , (count) => count < 2 ))
+                                .Action((delta) => _MakeItem("Axe1"))
                                 .Action((delta) => _Talk("Produced axe."))
                             .End()
                             .Sequence()
                                 .Action((delta) => _If(index == 1))
-                                .Action((delta) => _CheckItemAmount("Sword", (count) => count < 2))
-                                .Action((delta) => _MakeItem("Sword"))
+                                .Action((delta) => _CheckItemAmount("Sword1", (count) => count < 2))
+                                .Action((delta) => _MakeItem("Sword1"))
                                 .Action((delta) => _Talk("Produced sword."))
                             .End()
 
@@ -1373,7 +1377,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             hit.Distance = max_distance;
             foreach (var visible in _FieldOfVision)
             {
-                var mesh = StandardWisdom._BuildMesh(visible);
+                var mesh = StandardBehavior._BuildMesh(visible);
                 float dis;
                 Vector2 normal;
                 Vector2 point;

@@ -10,7 +10,7 @@ using Regulus.Utility;
 
 namespace Regulus.Project.ItIsNotAGame1.Game
 {
-    public abstract class Wisdom : IUpdatable
+    public abstract class Behavior : IUpdatable
     {
         
 
@@ -26,7 +26,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game
 
         public float LastDelta { get { return _LastDelta;} }
 
-        protected Wisdom()
+        protected Behavior()
         {
             
            
@@ -57,8 +57,9 @@ namespace Regulus.Project.ItIsNotAGame1.Game
         bool IUpdatable.Update()
         {
             var second = _DeltaTimeCounter.Second;
-            _LastDelta = second;
             _DeltaTimeCounter.Reset();
+            _LastDelta = second;
+            
 
             _Tree.Tick(second);
             _Update(second);

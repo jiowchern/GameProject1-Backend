@@ -50,6 +50,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         private float _DetectionRange;
 
         private readonly SkillData[] _Datas;
+        
 
 
         public Bag Bag { get; private set; }
@@ -58,17 +59,9 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         {
             Bag = bag;
         }
-
-        
-
-        
-        
-
         
         public Entity(EntityData data) : this(data , "" , new Bag() )
         {
-            
-            
         }
 
 
@@ -91,7 +84,6 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             
             _RotationMesh = data.CollisionRotation;
             _EntityType = data.Name;
-
 
             _SetBody(data.Mesh);
            
@@ -121,6 +113,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             Equipment.RemoveEvent += _BroadcastEquipEvent;
 
             _Status = ACTOR_STATUS_TYPE.NORMAL_IDLE;
+
+            
         }
 
        
@@ -589,14 +583,18 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         {
             _Speed = 0.0f;
             _Trun = 0.0f;
-            _Status = ACTOR_STATUS_TYPE.DAMAGE1;
+
+            var skill = Equipment.GetSkill();
+            _Status = skill.Injury;
             _InvokeStatusEvent();
 
         }
 
         public SkillCaster GetDamagrCaster()
         {
-            var data = _Datas.First((s) => s.Id == ACTOR_STATUS_TYPE.DAMAGE1);
+            var skill = Equipment.GetSkill();            
+
+            var data = _Datas.First((s) => s.Id == skill.Injury);
             return new SkillCaster(data, new Determination(data.Lefts, data.Rights, data.Total, data.Begin, data.End));
         }
 
@@ -701,7 +699,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         public SkillCaster GetBattleCaster()
         {
-            ACTOR_STATUS_TYPE status = Equipment.GetSkill();
+            var skill = Equipment.GetSkill();
+            ACTOR_STATUS_TYPE status = skill.Idle;
             var data = _Datas.First((s) => s.Id == status);
             return new SkillCaster(data, new Determination(data.Lefts, data.Rights, data.Total, data.Begin, data.End));
         }
@@ -738,6 +737,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         {
             _Speed = 0.0f;
             _Trun = 0.0f;
+
+            
             _Status = ACTOR_STATUS_TYPE.STUN;
             _InvokeStatusEvent();
         }

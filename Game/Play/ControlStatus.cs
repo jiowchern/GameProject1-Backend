@@ -22,7 +22,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         private Regulus.Utility.TimeCounter _TimeCounter;
 
 
-        public ControlStatus(ISoulBinder binder, Entity player, Mover mover , IMapFinder map)
+        public ControlStatus(ISoulBinder binder, Entity player, IMapFinder map)
         {
             _Binder = binder;
             _Player = player;            
@@ -127,8 +127,10 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private void _ToKnockout()
         {
-            var skill = Resource.Instance.FindSkill(ACTOR_STATUS_TYPE.KNOCKOUT1);
-            var caster = new SkillCaster(skill, new Determination(skill));
+
+            var skill = _Player.Equipment.GetSkill();
+            var skillData = Resource.Instance.FindSkill(skill.Knockout);
+            var caster = new SkillCaster(skillData, new Determination(skillData));
             var stage = new BattleCasterStatus(_Binder, _Player, _Map, caster);
             stage.BattleIdleEvent += _ToBattle;
             stage.NextEvent += _ToCast;
@@ -145,10 +147,12 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         }
 
         private void _ToDamage()
-        {            
+        {
 
-            var skill = Resource.Instance.FindSkill(ACTOR_STATUS_TYPE.DAMAGE1);
-            var caster = new SkillCaster(skill , new Determination(skill));
+            var skill = _Player.Equipment.GetSkill();
+            var skillData = Resource.Instance.FindSkill(skill.Injury);
+            
+            var caster = new SkillCaster(skillData, new Determination(skillData));
             var stage = new BattleCasterStatus(_Binder , _Player , _Map , caster);
             stage.BattleIdleEvent += _ToBattle;
             stage.NextEvent += _ToCast;            

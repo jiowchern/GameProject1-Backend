@@ -8,7 +8,7 @@ using Regulus.Utility;
 
 namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
-    internal class ChestWisdom : Wisdom 
+    internal class ChestBehavior : Behavior 
     {
 
         
@@ -32,7 +32,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         
         
 
-        public ChestWisdom(Entity owner, Entity exit, Entity debirs, Entity door, IMapFinder finder, IMapGate gate)
+        public ChestBehavior(Entity owner, Entity exit, Entity debirs, Entity door, IMapFinder finder, IMapGate gate)
         {
             _Owner = owner;
             _Exit = exit;

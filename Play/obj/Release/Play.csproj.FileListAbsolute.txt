@@ -111,3 +111,5 @@ D:\Develop\ItIsNotAGame1-Backend\Play\bin\Release\RegulusRemotingGhostNative.xml
 D:\Develop\ItIsNotAGame1-Backend\Play\obj\Release\Play.csprojResolveAssemblyReference.cache
 D:\Develop\ItIsNotAGame1-Backend\Play\obj\Release\ItIsNotAGame1Play.dll
 D:\Develop\ItIsNotAGame1-Backend\Play\obj\Release\ItIsNotAGame1Play.pdb
+D:\Develop\ItIsNotAGame1-Backend\Play\bin\Release\RegulusRemotingStandalone.pdb
+D:\Develop\ItIsNotAGame1-Backend\Play\bin\Release\RegulusRemotingGhostNative.pdb

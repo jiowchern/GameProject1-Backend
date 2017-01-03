@@ -19,14 +19,17 @@ namespace Regulus.Project.ItIsNotAGame1.Storage.User
 	{
 		private readonly ICore _Core;
 
-		public StandaloneFactory(ICore core)
-		{
-		    this._Core = core;
-		}
+	    private readonly IGhostProvider _Provider;
 
-		IUser IUserFactoty<IUser>.SpawnUser()
+	    public StandaloneFactory(ICore core,IGhostProvider provider)
+	    {
+	        this._Core = core;
+	        _Provider = provider;
+	    }
+
+	    IUser IUserFactoty<IUser>.SpawnUser()
 		{
-			var agent = new Agent();
+			var agent = new Agent(_Provider);
 			agent.ConnectedEvent += () => { this._Core.AssignBinder(agent); };
 			return new User(agent);
 		}

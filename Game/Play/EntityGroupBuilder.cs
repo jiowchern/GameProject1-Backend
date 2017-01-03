@@ -79,7 +79,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             foreach (var layout in protals)
             {
                 var owner = _Find(build_infos, layout.Owner);
-                yield return new PortalWisdom(owner , layout.TargetRealm , layout.PassEntity , _Gate ,_Finder);
+                yield return new PortalBehavior(owner , layout.TargetRealm , layout.PassEntity , _Gate ,_Finder);
             }
         }
 
@@ -97,7 +97,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             foreach (var layout in fields)
             {
                 var owner = _Find(build_infos, layout.Owner);
-                yield return new FieldWisdom(layout.Kinds, owner, _Gate, _Finder);
+                yield return new FieldBehavior(layout.Kinds, owner, _Gate, _Finder);
             }
         }
 
@@ -106,7 +106,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             foreach (var layout in strongholds)
             {
                 var owner = _Find(build_infos, layout.Owner);
-                yield return new StrongholdWisdom(layout.Kinds, owner, _Gate , _Finder);
+                yield return new StrongholdBehavior(layout.Kinds, owner, _Gate , _Finder);
             }
         }
 
@@ -115,7 +115,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             foreach (var layout in enterances)
             {
                 var owner = _Find(build_infos, layout.Owner);
-                yield return new EnteranceWisdom(layout.Kinds , owner , _Gate);
+                yield return new EnteranceBehavior(layout.Kinds , owner , _Gate);
             }
         }
 
@@ -150,7 +150,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                 var debirs = _Find(build_infos, chestLayout.Debirs);
                 var gate = _Find(build_infos, chestLayout.Gate);
 
-                var chest = new ChestWisdom(owner , exit , debirs , gate , _Finder , _Gate);
+                var chest = new ChestBehavior(owner , exit , debirs , gate , _Finder , _Gate);
                 yield return chest;
             }
         }

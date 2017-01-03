@@ -119,7 +119,7 @@ GhostProviderGenerator.exe buildgpi.ini
 del GhostProviderGenerator.exe
 del buildgpi.ini
 
-copy  ItIsNotAGame1DataGPI.dll ..\..\..\Common</PostBuildEvent>
+copy  ItIsNotAGame1DataGPI.dll ..\..\..\Library</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

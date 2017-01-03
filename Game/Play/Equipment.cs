@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using Regulus.CustomType;
 using Regulus.Project.ItIsNotAGame1.Data;
 
 
@@ -23,12 +24,12 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             this._Items = new Dictionary<EQUIP_PART, Item>();
 
             _Skills = new List<Skill>();
-            _Skills.Add(new Skill(EFFECT_TYPE.SKILL_MELEE1, ACTOR_STATUS_TYPE.MELEE_IDLE, ITEM_FEATURES.NONE, ITEM_FEATURES.NONE));
-            _Skills.Add(new Skill(EFFECT_TYPE.SKILL_AXE1 , ACTOR_STATUS_TYPE.BATTLE_AXE_IDLE ,ITEM_FEATURES.AXE , ITEM_FEATURES.NONE ));
-            _Skills.Add(new Skill(EFFECT_TYPE.SKILL_CLAYMORE1, ACTOR_STATUS_TYPE.SWORD_IDLE, ITEM_FEATURES.CLAYMORE, ITEM_FEATURES.NONE));
-            _Skills.Add(new Skill(EFFECT_TYPE.SKILL_DUALSWORD1, ACTOR_STATUS_TYPE.SWORD_IDLE, ITEM_FEATURES.SWORD, ITEM_FEATURES.SWORD));
-            _Skills.Add(new Skill(EFFECT_TYPE.SKILL_SWORD1, ACTOR_STATUS_TYPE.SWORD_IDLE, ITEM_FEATURES.SWORD, ITEM_FEATURES.NONE));
-            _Skills.Add(new Skill(EFFECT_TYPE.SKILL_SWORDSHIELD1, ACTOR_STATUS_TYPE.SWORD_IDLE, ITEM_FEATURES.SHIELD, ITEM_FEATURES.SWORD));
+            _Skills.Add(new Skill(EFFECT_TYPE.SKILL_MELEE1, ITEM_FEATURES.NONE, ITEM_FEATURES.NONE, ACTOR_STATUS_TYPE.MELEE_IDLE , ACTOR_STATUS_TYPE.DAMAGE1 , ACTOR_STATUS_TYPE.KNOCKOUT1));
+            _Skills.Add(new Skill(EFFECT_TYPE.SKILL_AXE1 ,ITEM_FEATURES.AXE , ITEM_FEATURES.NONE, ACTOR_STATUS_TYPE.BATTLE_AXE_IDLE, ACTOR_STATUS_TYPE.DAMAGE1, ACTOR_STATUS_TYPE.KNOCKOUT1));
+            _Skills.Add(new Skill(EFFECT_TYPE.SKILL_CLAYMORE1, ITEM_FEATURES.CLAYMORE, ITEM_FEATURES.NONE, ACTOR_STATUS_TYPE.SWORD_IDLE, ACTOR_STATUS_TYPE.DAMAGE1, ACTOR_STATUS_TYPE.KNOCKOUT1));
+            _Skills.Add(new Skill(EFFECT_TYPE.SKILL_DUALSWORD1, ITEM_FEATURES.SWORD, ITEM_FEATURES.SWORD, ACTOR_STATUS_TYPE.SWORD_IDLE, ACTOR_STATUS_TYPE.DAMAGE1, ACTOR_STATUS_TYPE.KNOCKOUT1));
+            _Skills.Add(new Skill(EFFECT_TYPE.SKILL_SWORD1, ITEM_FEATURES.SWORD, ITEM_FEATURES.NONE, ACTOR_STATUS_TYPE.SWORD_IDLE, ACTOR_STATUS_TYPE.SWORD_INJURY, ACTOR_STATUS_TYPE.KNOCKOUT1));
+            _Skills.Add(new Skill(EFFECT_TYPE.SKILL_SWORDSHIELD1, ITEM_FEATURES.SHIELD, ITEM_FEATURES.SWORD, ACTOR_STATUS_TYPE.SWORD_IDLE, ACTOR_STATUS_TYPE.DAMAGE1, ACTOR_STATUS_TYPE.KNOCKOUT1));
 
 
 
@@ -135,7 +136,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _Entity.SetEquipView(view);
         }
 
-        public ACTOR_STATUS_TYPE GetSkill()
+        public Skill GetSkill()
         {
             var rightItem = Find(EQUIP_PART.RIGHT_HAND);
             var leftItem = Find(EQUIP_PART.LEFT_HAND);
@@ -147,11 +148,11 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                     leftFeatures = leftItem.GetPrototype().Features;
                 var effect = rightItem.Effects.FirstOrDefault( e=> _Skills.Any( s => s.Effect == e.Type));
 
-                var val = (from skill in _Skills where skill.Conform(effect.Type, rightFeatures, leftFeatures) select skill.Status).FirstOrDefault();
-                if (val != default(ACTOR_STATUS_TYPE))
+                var val = (from skill in _Skills where skill.Conform(effect.Type, rightFeatures, leftFeatures) select skill).FirstOrDefault();
+                if (val != default(Skill))
                     return val;                
             }
-            return ACTOR_STATUS_TYPE.MELEE_IDLE;
+            return _Skills[0];
         }
 
         public EquipStatus[] GetStatus()
@@ -171,23 +172,34 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
     {
         private readonly EFFECT_TYPE _SkillEffect;
 
-        private readonly ACTOR_STATUS_TYPE _StatusIdle;
+        private readonly ACTOR_STATUS_TYPE _Idle;
+
+        private readonly ACTOR_STATUS_TYPE _Injury;
+
+        private readonly ACTOR_STATUS_TYPE _Knockout; 
 
         private readonly ITEM_FEATURES _Right;
 
         private readonly ITEM_FEATURES _Left;
 
-        public Skill(EFFECT_TYPE skill_effect, ACTOR_STATUS_TYPE status_idle, ITEM_FEATURES right, ITEM_FEATURES left)
+        public Skill(EFFECT_TYPE skill_effect, ITEM_FEATURES right, ITEM_FEATURES left , ACTOR_STATUS_TYPE idle , ACTOR_STATUS_TYPE injury, ACTOR_STATUS_TYPE knockout)
         {
+
             _SkillEffect = skill_effect;
-            _StatusIdle = status_idle;
+            _Idle = idle;
             _Right = right;
-            _Left = left;            
+            _Left = left;
+            _Knockout = knockout;
+            _Injury = injury;
         }
 
-        public ACTOR_STATUS_TYPE Status { get {return _StatusIdle;} }
+        public ACTOR_STATUS_TYPE Idle { get {return _Idle;} }
 
         public EFFECT_TYPE Effect { get { return _SkillEffect; } }
+
+        public ACTOR_STATUS_TYPE Injury { get { return _Injury; } }
+
+        public ACTOR_STATUS_TYPE Knockout { get { return _Knockout; } }
 
         public bool Conform(EFFECT_TYPE effect, ITEM_FEATURES right_features, ITEM_FEATURES left_features)
         {

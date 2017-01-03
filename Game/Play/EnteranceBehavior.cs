@@ -3,7 +3,7 @@ using Regulus.Project.ItIsNotAGame1.Data;
 
 namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
-    internal class EnteranceWisdom : Wisdom
+    internal class EnteranceBehavior : Behavior
     {
         private readonly ENTITY[] _Types;
 
@@ -11,7 +11,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private readonly IMapGate _Gate;
 
-        public EnteranceWisdom(ENTITY[] types, Entity owner, IMapGate gate)
+        public EnteranceBehavior(ENTITY[] types, Entity owner, IMapGate gate)
         {
             _Types = types;
             _Owner = owner;

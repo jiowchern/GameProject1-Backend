@@ -38,7 +38,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private readonly Regulus.Utility.StageMachine _Machine;
 
-        private readonly Wisdom _Wisdom;
+        private readonly Behavior _Behavior;
 
         public event Action ExitEvent;
         public event Action<string> TransmitEvent;
@@ -61,9 +61,9 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _Player = entity;
             _Mover = new Mover(this._Player);            
         }
-        public GameStage(ISoulBinder binder, IMapFinder map, IMapGate gate, Entity entity, Wisdom wisdom) : this(binder, map, gate, entity)
+        public GameStage(ISoulBinder binder, IMapFinder map, IMapGate gate, Entity entity, Behavior behavior) : this(binder, map, gate, entity)
         {
-            _Wisdom = wisdom;
+            _Behavior = behavior;
         }
         void IStage.Leave()
         {
@@ -91,8 +91,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _Binder.Bind<IEmotion>(this);
             _ToSurvival();
 
-            if (_Wisdom != null)
-                _Updater.Add(_Wisdom);
+            if (_Behavior != null)
+                _Updater.Add(_Behavior);
         }
 
         
@@ -151,7 +151,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                 float distance;
                 Vector2 hitPoint;
                 Vector2 normal;
-                if (StandardWisdom.RayPolygonIntersect(
+                if (StandardBehavior.RayPolygonIntersect(
                     center,
                     ray,
                     individual.Mesh.Points,
@@ -193,7 +193,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
         
         private void _ToSurvival()
         {
-            var status = new ControlStatus(_Binder, _Player, _Mover, _Map);
+            var status = new ControlStatus(_Binder, _Player, _Map);
             status.StunEvent += _ToStun;
             _Machine.Push(status);
         }

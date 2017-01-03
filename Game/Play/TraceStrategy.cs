@@ -7,16 +7,16 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
     internal class TraceStrategy
     {        
 
-        private readonly StandardWisdom _Wisdom;
+        private readonly StandardBehavior _Behavior;
         private Regulus.BehaviourTree.ITicker _Node;
 
         private Guid _Target;
 
         private float _Distance;
 
-        public TraceStrategy(StandardWisdom wisdom)
+        public TraceStrategy(StandardBehavior behavior)
         {
-            _Wisdom = wisdom;
+            _Behavior = behavior;
 
             _BuildNode();
         }
@@ -31,7 +31,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private void _BuildNode()
         {
-            var th = new TurnHandler(_Wisdom);
+            var th = new TurnHandler(_Behavior);
 
             float angle = 0.0f;
             var builder = new Regulus.BehaviourTree.Builder();
@@ -39,20 +39,20 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                                .Action(
                                    (delta) =>
                                    {
-                                       var result = _Wisdom.GetTargetAngle(_Target, ref angle);
+                                       var result = _Behavior.GetTargetAngle(_Target, ref angle);
                                        th.Input(angle);
                                        return result;
                                    })
                                .Action((delta) => th.Run(delta))
                                .Not()
                                    .Sequence()
-                                       .Action((delta) => _Not(_Wisdom.CheckDistance(_Target, _Distance)))
-                                       .Action(_Wisdom.MoveForward)
+                                       .Action((delta) => _Not(_Behavior.CheckDistance(_Target, _Distance)))
+                                       .Action(_Behavior.MoveForward)
                                    .End()
                                .End()
-                               .Action((delta) => _Wisdom.GetTargetAngle(_Target, ref angle))
-                               .Action((delta) => _Wisdom.CheckAngle(angle))
-                               .Action(_Wisdom.StopMove)
+                               .Action((delta) => _Behavior.GetTargetAngle(_Target, ref angle))
+                               .Action((delta) => _Behavior.CheckAngle(angle))
+                               .Action(_Behavior.StopMove)
                            .End().Build();
         }
 
