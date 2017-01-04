@@ -22,7 +22,7 @@ namespace Regulus.Project.ItIsNotAGame1.Data
         }
     }
 
-    [ProtoBuf.ProtoContract]
+    [ProtoBuf.ProtoContract][Serializable]
     public class ItemFormulaLite
     {
         [ProtoBuf.ProtoMember(1)]

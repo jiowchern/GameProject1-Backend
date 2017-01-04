@@ -2,8 +2,8 @@
 
 namespace Regulus.Project.ItIsNotAGame1.Data
 {
-    [Serializable]
-    [ProtoBuf.ProtoContract]
+    
+    [ProtoBuf.ProtoContract][Serializable]
     public struct Effect
     {
         [ProtoBuf.ProtoMember(1)]

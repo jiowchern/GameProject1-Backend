@@ -10,7 +10,7 @@ using Regulus.Utility;
 
 namespace Regulus.Project.ItIsNotAGame1.Data
 {
-    [ProtoContract]
+    [ProtoContract][Serializable]
     public class Account
     {
         public enum COMPETENCE

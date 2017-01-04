@@ -1,8 +1,10 @@
+using System;
+
 using Regulus.CustomType;
 
 namespace Regulus.Project.ItIsNotAGame1.Data
 {
-    [ProtoBuf.ProtoContract]
+    [ProtoBuf.ProtoContract][Serializable]
     public struct VisibleStatus
     {
         [ProtoBuf.ProtoMember(1)]

@@ -1,6 +1,8 @@
+using System;
+
 namespace Regulus.Project.ItIsNotAGame1.Data
 {
-    [ProtoBuf.ProtoContract]
+    [ProtoBuf.ProtoContract][Serializable]
     public class Energy
     {
         public enum TYPE

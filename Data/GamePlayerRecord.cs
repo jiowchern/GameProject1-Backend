@@ -8,7 +8,7 @@ namespace Regulus.Project.ItIsNotAGame1.Data
 	/// <summary>
 	///     game player記錄資料
 	/// </summary>
-	[ProtoContract]
+	[ProtoContract][Serializable]
 	public class GamePlayerRecord
 	{
 		[ProtoMember(1)]

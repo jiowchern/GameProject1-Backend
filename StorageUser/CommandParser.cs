@@ -14,7 +14,7 @@ namespace Regulus.Project.ItIsNotAGame1.Storage.User
 
 		public CommandParser(Command command, Console.IViewer view, IUser user)
 		{
-			// TODO: Complete member initialization
+		
 			this.command = command;
 			this.view = view;
 			this.user = user;

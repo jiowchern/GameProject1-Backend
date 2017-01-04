@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Regulus.Project.ItIsNotAGame1.Data
 {
-    [ProtoBuf.ProtoContract]
+    [ProtoBuf.ProtoContract][Serializable]
     public class Item
     {
         public int RefCount;
