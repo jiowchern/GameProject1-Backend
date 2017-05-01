@@ -107,7 +107,6 @@ D:\Develop\ItIsNotAGame1-Backend\Play\bin\Debug\ItIsNotAGame1Play.pdb
 D:\Develop\ItIsNotAGame1-Backend\Play\bin\Debug\ItIsNotAGame1Data.dll
 D:\Develop\ItIsNotAGame1-Backend\Play\bin\Debug\ItIsNotAGame1Game.dll
 D:\Develop\ItIsNotAGame1-Backend\Play\bin\Debug\ItIsNotAGame1StorageUser.dll
-D:\Develop\ItIsNotAGame1-Backend\Play\bin\Debug\protobuf-net.dll
 D:\Develop\ItIsNotAGame1-Backend\Play\bin\Debug\RegulusLibrary.dll
 D:\Develop\ItIsNotAGame1-Backend\Play\bin\Debug\RegulusRemoting.dll
 D:\Develop\ItIsNotAGame1-Backend\Play\bin\Debug\RegulusRemotingSoulNative.dll
@@ -117,13 +116,8 @@ D:\Develop\ItIsNotAGame1-Backend\Play\bin\Debug\RegulusRemotingGhostNative.dll
 D:\Develop\ItIsNotAGame1-Backend\Play\bin\Debug\ItIsNotAGame1Data.pdb
 D:\Develop\ItIsNotAGame1-Backend\Play\bin\Debug\ItIsNotAGame1Game.pdb
 D:\Develop\ItIsNotAGame1-Backend\Play\bin\Debug\ItIsNotAGame1StorageUser.pdb
-D:\Develop\ItIsNotAGame1-Backend\Play\bin\Debug\protobuf-net.xml
 D:\Develop\ItIsNotAGame1-Backend\Play\bin\Debug\RegulusLibrary.pdb
-D:\Develop\ItIsNotAGame1-Backend\Play\bin\Debug\RegulusLibrary.xml
-D:\Develop\ItIsNotAGame1-Backend\Play\bin\Debug\RegulusRemoting.xml
-D:\Develop\ItIsNotAGame1-Backend\Play\bin\Debug\RegulusRemotingSoulNative.xml
 D:\Develop\ItIsNotAGame1-Backend\Play\bin\Debug\RegulusBehaviourTree.pdb
-D:\Develop\ItIsNotAGame1-Backend\Play\bin\Debug\RegulusRemotingGhostNative.xml
 D:\Develop\ItIsNotAGame1-Backend\Play\obj\Debug\ItIsNotAGame1Play.dll
 D:\Develop\ItIsNotAGame1-Backend\Play\obj\Debug\ItIsNotAGame1Play.pdb
 D:\Develop\ItIsNotAGame1-Backend\Play\bin\Debug\RegulusRemoting.pdb
@@ -157,3 +151,7 @@ E:\Develop\ItIsNotAGame-Backend\Play\obj\Debug\ItIsNotAGame1Play.dll
 E:\Develop\ItIsNotAGame-Backend\Play\obj\Debug\ItIsNotAGame1Play.pdb
 D:\Develop\ItIsNotAGame1-Backend\Play\bin\Debug\RegulusRemotingStandalone.pdb
 D:\Develop\ItIsNotAGame1-Backend\Play\bin\Debug\RegulusRemotingGhostNative.pdb
+D:\Develop\ItIsNotAGame1-Backend\Play\bin\Debug\Regulus.Protocol.dll
+D:\Develop\ItIsNotAGame1-Backend\Play\bin\Debug\Regulus.Serialization.dll
+D:\Develop\ItIsNotAGame1-Backend\Play\bin\Debug\Regulus.Serialization.pdb
+D:\Develop\ItIsNotAGame1-Backend\Play\bin\Debug\Regulus.Protocol.pdb

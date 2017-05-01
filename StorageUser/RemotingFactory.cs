@@ -9,16 +9,16 @@ namespace Regulus.Project.ItIsNotAGame1.Storage.User
 
 
 	{
-	    private readonly IGhostProvider _Provider;
+	    private readonly IProtocol _Protocol;
 
-	    public RemotingFactory(IGhostProvider provider)
+	    public RemotingFactory(IProtocol provider)
 	    {
-	        _Provider = provider;
+            _Protocol = provider;
 	    }
 
 	    IUser IUserFactoty<IUser>.SpawnUser()
 		{
-			return new User(Agent.Create(_Provider));
+			return new User(Agent.Create(_Protocol.GetGPIProvider() , _Protocol.GetSerialize()));
 		}
 
 		ICommandParsable<IUser> IUserFactoty<IUser>.SpawnParser(Command command, Console.IViewer view, IUser user)

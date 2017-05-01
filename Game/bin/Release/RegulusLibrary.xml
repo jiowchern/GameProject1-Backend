@@ -25,7 +25,7 @@
              Oriented bounding box 
         </member>
         <member name="M:Regulus.Utility.OBB.#ctor">
-            Create default OBB
+            CreateInstnace default OBB
             
             @param x Top left x
             @param y Top left y

@@ -17,19 +17,19 @@ namespace Regulus.Project.ItIsNotAGame1.Storage.User
 {
 	public class StandaloneFactory : IUserFactoty<IUser>
 	{
-		private readonly ICore _Core;
+		private readonly IBinderProvider _Core;
 
-	    private readonly IGhostProvider _Provider;
+        private readonly IProtocol _Protocol;
 
-	    public StandaloneFactory(ICore core,IGhostProvider provider)
+        public StandaloneFactory(IBinderProvider core, IProtocol provider)
 	    {
 	        this._Core = core;
-	        _Provider = provider;
+            _Protocol = provider;
 	    }
 
 	    IUser IUserFactoty<IUser>.SpawnUser()
 		{
-			var agent = new Agent(_Provider);
+			var agent = new Agent(_Protocol);
 			agent.ConnectedEvent += () => { this._Core.AssignBinder(agent); };
 			return new User(agent);
 		}

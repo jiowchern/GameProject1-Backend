@@ -2,7 +2,7 @@
 using System.Linq;
 
 
-using ProtoBuf;
+
 
 
 using Regulus.CustomType;
@@ -10,7 +10,7 @@ using Regulus.Utility;
 
 namespace Regulus.Project.ItIsNotAGame1.Data
 {
-    [ProtoContract][Serializable]
+
     public class Account
     {
         public enum COMPETENCE
@@ -25,16 +25,16 @@ namespace Regulus.Project.ItIsNotAGame1.Data
             ACCOUNT_FINDER
         };
 
-        [ProtoMember(1)]
-        public Guid Id { get; set; }
 
-        [ProtoMember(2)]
-        public string Name { get; set; }
+        public Guid Id;
 
-        [ProtoMember(3)]
-        public string Password { get; set; }
 
-        [ProtoMember(4)]
+        public string Name;
+
+
+        public string Password;
+
+
         public Flag<COMPETENCE> Competnces { get; set; }
 
         public Account()

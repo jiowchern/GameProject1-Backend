@@ -10,7 +10,7 @@ using Regulus.Utility;
 
 namespace Regulus.Project.ItIsNotAGame1.Game.Storage
 {
-    public class Center : ICore
+    public class Center : IUpdatable , IBinderProvider
     {
         private readonly Hall _Hall;
 
@@ -25,7 +25,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Storage
             this._Update = new Updater();
         }
 
-        void ICore.AssignBinder(ISoulBinder binder)
+        void IBinderProvider.AssignBinder(ISoulBinder binder)
         {
             this._Hall.PushUser(new User(binder, this._Stroage));
         }

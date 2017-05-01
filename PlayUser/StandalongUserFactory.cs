@@ -20,14 +20,17 @@ namespace Regulus.Project.ItIsNotAGame1
 	{
 		private readonly ICore _Standalone;
 
-		public StandaloneUserFactory(ICore core)
-		{
-		    this._Standalone = core;
-		}
+	    private readonly IProtocol _Protocol;
 
-		IUser IUserFactoty<IUser>.SpawnUser()
+	    public StandaloneUserFactory(ICore core , IProtocol protocol)
+	    {
+	        this._Standalone = core;
+	        _Protocol = protocol;
+	    }
+
+	    IUser IUserFactoty<IUser>.SpawnUser()
 		{
-			var agent = new Agent(new GPIProvider());
+			var agent = new Agent(_Protocol);
 			agent.ConnectedEvent += () => { this._Standalone.AssignBinder(agent); };
 
 			return new User(agent);

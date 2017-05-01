@@ -2,7 +2,7 @@ using System;
 
 namespace Regulus.Project.ItIsNotAGame1.Data
 {
-    [ProtoBuf.ProtoContract][Serializable]
+    
     public enum ACTOR_STATUS_TYPE
     {
         NORMAL_IDLE,

@@ -1,4 +1,5 @@
 ﻿using Regulus.Framework;
+using Regulus.Remoting;
 using Regulus.Remoting.Ghost.Native;
 using Regulus.Utility;
 
@@ -6,10 +7,17 @@ namespace Regulus.Project.ItIsNotAGame1
 {
 	public class RemotingUserFactory : IUserFactoty<IUser>
 	{
-		IUser IUserFactoty<IUser>.SpawnUser()
+	    private readonly IProtocol _Protocol;
+
+	    public RemotingUserFactory(IProtocol protocol)
+	    {
+	        _Protocol = protocol;
+	    }
+
+	    IUser IUserFactoty<IUser>.SpawnUser()
 		{
-			var gpiProvider = new Regulus.Project.ItIsNotAGame1.GPIProvider();
-			return new User(Agent.Create(gpiProvider));
+			
+			return new User(Agent.Create(_Protocol.GetGPIProvider() , _Protocol.GetSerialize()));
 		}
 
 		ICommandParsable<IUser> IUserFactoty<IUser>.SpawnParser(Command command, Console.IViewer view, IUser user)

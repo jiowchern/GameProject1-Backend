@@ -71,13 +71,19 @@
             </summary>
             <param name="binder"></param>
         </member>
-        <member name="M:Regulus.Remoting.PackageWriter.#ctor(System.Int32)">
+        <member name="T:Regulus.Remoting.GPIProvider">
             <summary>
-                Initializes a new instance of the <see cref="T:Regulus.Remoting.PackageWriter" /> class.
+            
+            </summary>
+        </member>
+        <member name="M:Regulus.Remoting.PackageWriter`1.#ctor(System.Int32,Regulus.Serialization.ISerializer)">
+            <summary>
+                Initializes a new instance of the <see cref="!:PackageWriter" /> class.
             </summary>
             <param name="low_fps">
                 保證最低fps
             </param>
+            <param name="serializer">序列化物件</param>
         </member>
         <member name="T:Regulus.Remoting.ISoulBinder">
             <summary>

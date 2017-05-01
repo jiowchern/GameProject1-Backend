@@ -43,22 +43,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\protobuf-net.dll</HintPath>
     </Reference>
-    <Reference Include="RegulusLibrary, Version=0.1.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Library\RegulusLibrary.dll</HintPath>
-    </Reference>
-    <Reference Include="RegulusRemoting, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Library\RegulusRemoting.dll</HintPath>
-    </Reference>
-    <Reference Include="RegulusRemotingGhostNative, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Library\RegulusRemotingGhostNative.dll</HintPath>
-    </Reference>
-    <Reference Include="RegulusRemotingStandalone, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Library\RegulusRemotingStandalone.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -78,6 +62,22 @@
     <ProjectReference Include="..\Data\Data.csproj">
       <Project>{dd0daee5-5f0f-4a40-9a0a-3533077cb553}</Project>
       <Name>Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Regulus\Library\PureLib\RegulusLibrary.csproj">
+      <Project>{2f28aa04-316d-4c20-bf46-987d4a59691d}</Project>
+      <Name>RegulusLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Regulus\Library\RemotingNativeGhost\RemotingGhostNative.csproj">
+      <Project>{6cb4cde6-4405-40e6-8bdf-5a2e9185cc04}</Project>
+      <Name>RemotingGhostNative</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Regulus\Library\RemotingStandalong\RemotingStandalone.csproj">
+      <Project>{485f551d-9155-4982-b653-f8d4eac2fca1}</Project>
+      <Name>RemotingStandalone</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Regulus\Library\Remoting\Remoting.csproj">
+      <Project>{a4cfce46-bda8-4416-a1bb-77bd80514019}</Project>
+      <Name>Remoting</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

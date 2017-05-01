@@ -92,11 +92,7 @@ D:\Develop\ItIsNotAGame1-Backend\Storage\bin\Release\MongoDB.Bson.dll
 D:\Develop\ItIsNotAGame1-Backend\Storage\bin\Release\MongoDB.Driver.Core.dll
 D:\Develop\ItIsNotAGame1-Backend\Storage\bin\Release\MongoDB.Driver.dll
 D:\Develop\ItIsNotAGame1-Backend\Storage\bin\Release\MySql.Data.dll
-D:\Develop\ItIsNotAGame1-Backend\Storage\bin\Release\protobuf-net.dll
 D:\Develop\ItIsNotAGame1-Backend\Storage\bin\Release\RegulusDatabase.dll
-D:\Develop\ItIsNotAGame1-Backend\Storage\bin\Release\RegulusLibrary.dll
-D:\Develop\ItIsNotAGame1-Backend\Storage\bin\Release\RegulusRemoting.dll
-D:\Develop\ItIsNotAGame1-Backend\Storage\bin\Release\RegulusRemotingSoulNative.dll
 D:\Develop\ItIsNotAGame1-Backend\Storage\bin\Release\RegulusBehaviourTree.dll
 D:\Develop\ItIsNotAGame1-Backend\Storage\bin\Release\ItIsNotAGame1Data.pdb
 D:\Develop\ItIsNotAGame1-Backend\Storage\bin\Release\ItIsNotAGame1Game.pdb

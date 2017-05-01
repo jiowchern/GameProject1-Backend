@@ -27,7 +27,7 @@ namespace Regulus.Project.ItIsNotAGame1.Play
 
         private CustomType.Verify _StorageVerifyData;
 
-        
+        private IProtocol _Protocol;
 
         public Server()
         {
@@ -39,11 +39,10 @@ namespace Regulus.Project.ItIsNotAGame1.Play
             this._Machine = new Utility.StageMachine();
             this._Updater = new Utility.Updater();
 
-            this._BuildParams();
-            this._BuildUser();
+            
         }
 
-        void Remoting.ICore.AssignBinder(Remoting.ISoulBinder binder)
+        void Remoting.IBinderProvider.AssignBinder(Remoting.ISoulBinder binder)
         {
             if (_Center != null)
             {
@@ -57,7 +56,7 @@ namespace Regulus.Project.ItIsNotAGame1.Play
             this._Center.Join(binder);
         }
 
-        bool Utility.IUpdatable.Update()
+        bool Remoting.ICore.Update()
         {
             
             this._Updater.Working();
@@ -67,16 +66,28 @@ namespace Regulus.Project.ItIsNotAGame1.Play
 
         
 
-        void Framework.IBootable.Shutdown()
+        void Remoting.ICore.Shutdown()
         {
             this._Updater.Shutdown();
             Utility.Singleton<Utility.Log>.Instance.RecordEvent -= this._LogRecorder.Record;
             AppDomain.CurrentDomain.UnhandledException -= this.CurrentDomain_UnhandledException;
         }
 
-        void Framework.IBootable.Launch()
+        void Remoting.ICore.Launch(IProtocol protocol,ICommand command)
         {
+            if (protocol == null)
+            {
+                throw new ArgumentNullException(nameof(protocol));
+            }
+            _Protocol = protocol;
+
+            
+
+
             AppDomain.CurrentDomain.UnhandledException += this.CurrentDomain_UnhandledException;
+
+            this._BuildParams();
+            this._BuildUser();
             this._LoadData();
             Utility.Singleton<Utility.Log>.Instance.RecordEvent += this._LogRecorder.Record;
             this._Updater.Add(this._Storage);
@@ -134,17 +145,18 @@ namespace Regulus.Project.ItIsNotAGame1.Play
         {
             var stream = System.IO.File.ReadAllBytes("ItIsNotAGame1DataGPI.dll");
             var assembly = Assembly.Load(stream);
-            var provider = assembly.CreateInstance("Regulus.Project.ItIsNotAGame1.GPIProvider") as IGhostProvider;
+            
             if (this._IsIpAddress(this._StorageVerifyData.IPAddress))
             {
-                this._Storage = new Storage.User.Proxy(new Storage.User.RemotingFactory(provider));
+                
+                this._Storage = new Storage.User.Proxy(new Storage.User.RemotingFactory(_Protocol));
                 this._StorageUser = this._Storage.SpawnUser("user");
             }
             else
             {
                 var center = new Game.Storage.Center(new Game.DummyFrature());
                 this._Updater.Add(center);
-                var factory = new Storage.User.StandaloneFactory(center, provider);
+                var factory = new Storage.User.StandaloneFactory(center, _Protocol);
                 this._Storage = new Storage.User.Proxy(factory);
                 this._StorageUser = this._Storage.SpawnUser("user");
             }

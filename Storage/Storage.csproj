@@ -57,18 +57,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\RegulusDatabase.dll</HintPath>
     </Reference>
-    <Reference Include="RegulusLibrary, Version=0.1.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Library\RegulusLibrary.dll</HintPath>
-    </Reference>
-    <Reference Include="RegulusRemoting, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Library\RegulusRemoting.dll</HintPath>
-    </Reference>
-    <Reference Include="RegulusRemotingSoulNative, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Library\RegulusRemotingSoulNative.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -90,10 +78,23 @@
       <Project>{b5ac9d12-3098-4037-932a-7dfce967f03c}</Project>
       <Name>Game</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Regulus\Library\PureLib\RegulusLibrary.csproj">
+      <Project>{2f28aa04-316d-4c20-bf46-987d4a59691d}</Project>
+      <Name>RegulusLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Regulus\Library\RemotingNativeSoul\RemotingSoulNative.csproj">
+      <Project>{d4580866-2273-4e9b-be70-4fa2ab11434a}</Project>
+      <Name>RemotingSoulNative</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Regulus\Library\Remoting\Remoting.csproj">
+      <Project>{a4cfce46-bda8-4416-a1bb-77bd80514019}</Project>
+      <Name>Remoting</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy ..\..\..\Library\server.exe</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

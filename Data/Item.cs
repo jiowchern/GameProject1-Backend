@@ -3,27 +3,27 @@ using System.Linq;
 
 namespace Regulus.Project.ItIsNotAGame1.Data
 {
-    [ProtoBuf.ProtoContract][Serializable]
+    
     public class Item
     {
         public int RefCount;
-       [ProtoBuf.ProtoMember(1)]
-        public Guid Id { get; set; }
-        
-        [ProtoBuf.ProtoMember(2)]
-        public string Name { get; set; }
 
-        [ProtoBuf.ProtoMember(3)]
-        public int Weight { get; set; }
-        [ProtoBuf.ProtoMember(4)]
+        public Guid Id;
 
-        public Effect[] Effects { get; set; }
 
-        [ProtoBuf.ProtoMember(5)]
-        public int Count { get; set; }
+        public string Name;
 
-        [ProtoBuf.ProtoMember(6)]
-        public float Life { get; set; }
+
+        public int Weight;
+
+
+        public Effect[] Effects;
+
+
+        public int Count;
+
+
+        public float Life;
 
         public Item()
         {
