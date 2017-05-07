@@ -111,3 +111,7 @@ D:\Develop\ItIsNotAGame1-Backend\Play\bin\Release\RegulusRemotingGhostNative.pdb
 D:\Develop\ItIsNotAGame1-Backend\Play\bin\Release\RegulusLibrary.dll
 D:\Develop\ItIsNotAGame1-Backend\Play\bin\Release\RegulusRemoting.dll
 D:\Develop\ItIsNotAGame1-Backend\Play\bin\Release\RegulusRemotingSoulNative.dll
+D:\Develop\ItIsNotAGame1-Backend\Play\bin\Release\Regulus.Protocol.dll
+D:\Develop\ItIsNotAGame1-Backend\Play\bin\Release\Regulus.Serialization.dll
+D:\Develop\ItIsNotAGame1-Backend\Play\bin\Release\Regulus.Serialization.pdb
+D:\Develop\ItIsNotAGame1-Backend\Play\bin\Release\Regulus.Protocol.pdb

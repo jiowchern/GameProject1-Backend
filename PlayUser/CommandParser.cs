@@ -4,7 +4,7 @@ using Regulus.Remoting;
 using Regulus.Utility;
 
 
-
+using Regulus.Project.ItIsNotAGame1.Play.User;
 
 namespace Regulus.Project.ItIsNotAGame1
 {
@@ -42,8 +42,89 @@ namespace Regulus.Project.ItIsNotAGame1
 
             this._CreateDevelopActor(factory);
 
+            this._CreateVisible(factory);
+
+
+            this._CreateJumpMap(factory);
+
+            this._CreatePlayerPropertys(factory);
+
+            this._CreateInventoryController(factory);
+            
+
         }
-	    
+
+	    private void _CreateInventoryController(IGPIBinderFactory factory)
+	    {
+	        
+            
+            var binder = factory.Create(this._User.InventoryControllerProvider);
+            binder.Bind( (IInventoryController gpi ,string id) => gpi.Equip(id));
+            binder.Bind(gpi=> gpi.Refresh() );
+	        binder.SupplyEvent += _InventoryControllerSupply;
+            binder.UnsupplyEvent += _InventoryControllerUnsupply;
+
+        }
+
+	    private void _InventoryControllerUnsupply(IInventoryController source)
+	    {
+            source.BagItemsEvent -= _ShowItem;
+        }
+
+	    private void _InventoryControllerSupply(IInventoryController source)
+	    {
+	        source.BagItemsEvent += _ShowItem;
+	    }
+
+	    private void _ShowItem(Item[] items)
+	    {
+	        foreach (var item in items)
+	        {
+	            _View.WriteLine(string.Format("item : {0}" , item.Id));
+	        }
+	    }
+
+	    private void _CreatePlayerPropertys(IGPIBinderFactory factory)
+	    {
+            var binder = factory.Create(this._User.PlayerProperysProvider);
+	        binder.SupplyEvent += _PlayerProperysSupply;
+            binder.UnsupplyEvent += _PlayerProperysUnsupply;
+        }
+
+	    private void _PlayerProperysUnsupply(IPlayerProperys source)
+	    {
+	        _View.WriteLine(string.Format("Unsupply  Player Property {0}", source.Id));
+	    }
+
+	    private void _PlayerProperysSupply(IPlayerProperys source)
+	    {
+            _View.WriteLine(string.Format("Supply Player Property {0}", source.Id));
+        }
+
+	    private void _CreateJumpMap(IGPIBinderFactory factory)
+	    {
+            var binder = factory.Create(this._User.JumpMapProvider);
+            binder.Bind( gpi=>gpi.Ready());
+        }
+
+	    private void _CreateVisible(IGPIBinderFactory factory)
+	    {
+            var binder = factory.Create(this._User.VisibleProvider);
+
+	        binder.SupplyEvent += _VisibleSupply;
+            binder.UnsupplyEvent += _VisibleUnsupply;
+            
+        }
+
+	    private void _VisibleUnsupply(IVisible source)
+	    {
+	        _View.WriteLine(string.Format("leave actor id:{0} name:{1}", source.Id , source.Name));    
+	    }
+
+	    private void _VisibleSupply(IVisible source)
+	    {
+            _View.WriteLine(string.Format("enter actor id:{0} name:{1}", source.Id, source.Name));
+        }
 
 	    private void _DestroySystem()
 		{
@@ -69,8 +150,7 @@ namespace Regulus.Project.ItIsNotAGame1
         {
             
             var controller = factory.Create(this._User.MoveControllerProvider);
-            //controller.Bind("Move[Angle]", gpi=> new CommandParamBuilder().Build<float>(gpi.Move));
-            //controller.Bind("Stop", gpi => new CommandParamBuilder().Build(gpi.Stop));
+            
         }
 
         private void _CreateVerify(IGPIBinderFactory factory)
@@ -121,3 +201,5 @@ namespace Regulus.Project.ItIsNotAGame1
 		}
 	}
 }
+
+

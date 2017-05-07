@@ -70,6 +70,7 @@ namespace Regulus.Project.ItIsNotAGame1.Play
         {
             this._Updater.Shutdown();
             Utility.Singleton<Utility.Log>.Instance.RecordEvent -= this._LogRecorder.Record;
+
             AppDomain.CurrentDomain.UnhandledException -= this.CurrentDomain_UnhandledException;
         }
 

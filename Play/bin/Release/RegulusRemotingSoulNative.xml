@@ -64,7 +64,7 @@
                 等待寫入的封包
             </summary>
         </member>
-        <member name="M:Regulus.Remoting.Soul.Native.Server.#ctor(Regulus.Remoting.ICore,Regulus.Remoting.IProtocol,System.Int32)">
+        <member name="M:Regulus.Remoting.Soul.Native.Server.#ctor(Regulus.Remoting.ICore,Regulus.Remoting.IProtocol,Regulus.Utility.ICommand,System.Int32)">
             <summary>
                 Initializes a new instance of the <see cref="T:Regulus.Remoting.Soul.Native.Server" /> class.
             </summary>

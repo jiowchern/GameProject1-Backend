@@ -98,3 +98,9 @@ D:\Develop\ItIsNotAGame1-Backend\Test\bin\Release\zh-Hant\Microsoft.VisualStudio
 D:\Develop\ItIsNotAGame1-Backend\Test\obj\Release\Test.csprojResolveAssemblyReference.cache
 D:\Develop\ItIsNotAGame1-Backend\Test\obj\Release\ItIsNotAGame1Test.dll
 D:\Develop\ItIsNotAGame1-Backend\Test\obj\Release\ItIsNotAGame1Test.pdb
+D:\Develop\ItIsNotAGame1-Backend\Test\bin\Release\RegulusLibrary.dll
+D:\Develop\ItIsNotAGame1-Backend\Test\bin\Release\RegulusRemoting.dll
+D:\Develop\ItIsNotAGame1-Backend\Test\bin\Release\RegulusLibrary.pdb
+D:\Develop\ItIsNotAGame1-Backend\Test\bin\Release\RegulusLibrary.xml
+D:\Develop\ItIsNotAGame1-Backend\Test\bin\Release\RegulusRemoting.pdb
+D:\Develop\ItIsNotAGame1-Backend\Test\bin\Release\RegulusRemoting.xml

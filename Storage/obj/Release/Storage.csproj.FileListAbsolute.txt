@@ -98,7 +98,6 @@ D:\Develop\ItIsNotAGame1-Backend\Storage\bin\Release\ItIsNotAGame1Data.pdb
 D:\Develop\ItIsNotAGame1-Backend\Storage\bin\Release\ItIsNotAGame1Game.pdb
 D:\Develop\ItIsNotAGame1-Backend\Storage\bin\Release\MongoDB.Bson.xml
 D:\Develop\ItIsNotAGame1-Backend\Storage\bin\Release\MongoDB.Driver.xml
-D:\Develop\ItIsNotAGame1-Backend\Storage\bin\Release\protobuf-net.xml
 D:\Develop\ItIsNotAGame1-Backend\Storage\bin\Release\RegulusLibrary.pdb
 D:\Develop\ItIsNotAGame1-Backend\Storage\bin\Release\RegulusLibrary.xml
 D:\Develop\ItIsNotAGame1-Backend\Storage\bin\Release\RegulusRemoting.pdb
@@ -109,3 +108,6 @@ D:\Develop\ItIsNotAGame1-Backend\Storage\bin\Release\RegulusBehaviourTree.pdb
 D:\Develop\ItIsNotAGame1-Backend\Storage\obj\Release\Storage.csprojResolveAssemblyReference.cache
 D:\Develop\ItIsNotAGame1-Backend\Storage\obj\Release\ItIsNotAGame1Storage.dll
 D:\Develop\ItIsNotAGame1-Backend\Storage\obj\Release\ItIsNotAGame1Storage.pdb
+D:\Develop\ItIsNotAGame1-Backend\Storage\bin\Release\RegulusLibrary.dll
+D:\Develop\ItIsNotAGame1-Backend\Storage\bin\Release\RegulusRemoting.dll
+D:\Develop\ItIsNotAGame1-Backend\Storage\bin\Release\RegulusRemotingSoulNative.dll

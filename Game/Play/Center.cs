@@ -21,8 +21,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         private readonly Zone _Zone;
         public Center(IAccountFinder account_finder, IGameRecorder game_recorder  )
-        {
-            
+        {            
             _AccountFinder = account_finder;
             _GameRecorder = game_recorder;
             _Hall = new Hall();
