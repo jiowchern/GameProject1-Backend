@@ -82,9 +82,6 @@ namespace Regulus.Project.ItIsNotAGame1.Play
             }
             _Protocol = protocol;
 
-            
-
-
             AppDomain.CurrentDomain.UnhandledException += this.CurrentDomain_UnhandledException;
 
             this._BuildParams();
@@ -143,13 +140,9 @@ namespace Regulus.Project.ItIsNotAGame1.Play
         }
 
         private void _BuildUser()
-        {
-            var stream = System.IO.File.ReadAllBytes("ItIsNotAGame1DataGPI.dll");
-            var assembly = Assembly.Load(stream);
-            
+        {                        
             if (this._IsIpAddress(this._StorageVerifyData.IPAddress))
-            {
-                
+            {                
                 this._Storage = new Storage.User.Proxy(new Storage.User.RemotingFactory(_Protocol));
                 this._StorageUser = this._Storage.SpawnUser("user");
             }

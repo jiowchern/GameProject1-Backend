@@ -17,7 +17,7 @@ namespace Regulus.Project.ItIsNotAGame1
 	    IUser IUserFactoty<IUser>.SpawnUser()
 		{
 			
-			return new User(Agent.Create(_Protocol.GetGPIProvider() , _Protocol.GetSerialize()));
+			return new User(Agent.Create(_Protocol));
 		}
 
 		ICommandParsable<IUser> IUserFactoty<IUser>.SpawnParser(Command command, Console.IViewer view, IUser user)

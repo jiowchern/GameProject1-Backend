@@ -11,14 +11,14 @@ namespace Regulus.Project.ItIsNotAGame1.Storage.User
 	{
 	    private readonly IProtocol _Protocol;
 
-	    public RemotingFactory(IProtocol provider)
+	    public RemotingFactory(IProtocol protocol)
 	    {
-            _Protocol = provider;
+            _Protocol = protocol;
 	    }
 
 	    IUser IUserFactoty<IUser>.SpawnUser()
 		{
-			return new User(Agent.Create(_Protocol.GetGPIProvider() , _Protocol.GetSerialize()));
+			return new User(Agent.Create(_Protocol));
 		}
 
 		ICommandParsable<IUser> IUserFactoty<IUser>.SpawnParser(Command command, Console.IViewer view, IUser user)
