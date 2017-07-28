@@ -4,7 +4,7 @@
         <name>RegulusRemotingGhostNative</name>
     </assembly>
     <members>
-        <member name="M:Regulus.Remoting.Ghost.Native.Agent.Create(Regulus.Remoting.GPIProvider,Regulus.Serialization.ISerializer)">
+        <member name="M:Regulus.Remoting.Ghost.Native.Agent.Create(Regulus.Remoting.IProtocol)">
             <summary>
                 建立代理器
             </summary>

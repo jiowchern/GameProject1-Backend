@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{DA0D71DC-EAC5-428F-AE2B-2E9D75B74DDF}"
 EndProject
@@ -41,7 +41,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Regulus\Tool\Serv
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameConsole", "GameConsole\GameConsole.csproj", "{FC86D80B-0108-421D-846E-01E0465C47B8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Regulus.Network", "Regulus\Library\Regulus.Network\Regulus.Network.csproj", "{A720964C-C3E0-4CB8-A81B-54A9CF7BC8DD}"
+EndProject
 Global
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug_Unity|Any CPU = Debug_Unity|Any CPU
 		Debug|Any CPU = Debug|Any CPU
@@ -150,6 +155,12 @@ Global
 		{FC86D80B-0108-421D-846E-01E0465C47B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FC86D80B-0108-421D-846E-01E0465C47B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FC86D80B-0108-421D-846E-01E0465C47B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A720964C-C3E0-4CB8-A81B-54A9CF7BC8DD}.Debug_Unity|Any CPU.ActiveCfg = Debug|Any CPU
+		{A720964C-C3E0-4CB8-A81B-54A9CF7BC8DD}.Debug_Unity|Any CPU.Build.0 = Debug|Any CPU
+		{A720964C-C3E0-4CB8-A81B-54A9CF7BC8DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A720964C-C3E0-4CB8-A81B-54A9CF7BC8DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A720964C-C3E0-4CB8-A81B-54A9CF7BC8DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A720964C-C3E0-4CB8-A81B-54A9CF7BC8DD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -164,5 +175,6 @@ Global
 		{9EBEBDBA-5815-45CE-A523-1C47A47D95A6} = {A0552C00-9EE4-435E-9A9A-DC44FD6F3AB9}
 		{00E8AFF8-E4D5-4327-86F1-D03379419431} = {A0552C00-9EE4-435E-9A9A-DC44FD6F3AB9}
 		{FAE04BC0-81CB-41C1-8B33-DDF0C6B5C318} = {3B94D50A-8F47-40C3-847D-458A669FD407}
+		{A720964C-C3E0-4CB8-A81B-54A9CF7BC8DD} = {A0552C00-9EE4-435E-9A9A-DC44FD6F3AB9}
 	EndGlobalSection
 EndGlobal

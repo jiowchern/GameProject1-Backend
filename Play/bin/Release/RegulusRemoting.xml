@@ -4,6 +4,22 @@
         <name>RegulusRemoting</name>
     </assembly>
     <members>
+        <member name="T:Regulus.Remoting.ICore">
+            <summary>
+                遠端物件提供的核心，欲提供給客戶端的物件主要進入點。
+            </summary>
+        </member>
+        <member name="M:Regulus.Remoting.IBinderProvider.AssignBinder(Regulus.Remoting.ISoulBinder)">
+            <summary>
+                如果客戶端連線成功系統會呼叫此方法並把SoulBinder傳入。
+            </summary>
+            <param name="binder"></param>
+        </member>
+        <member name="T:Regulus.Remoting.InterfaceProvider">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="T:Regulus.Remoting.IAgent">
             <summary>
                 代理器
@@ -60,29 +76,20 @@
             會發生此訊息通常是因為client與server版本不相容所致.
             </summary>
         </member>
-        <member name="T:Regulus.Remoting.ICore">
+        <member name="E:Regulus.Remoting.IAgent.ErrorVerifyEvent">
             <summary>
-                遠端物件提供的核心，欲提供給客戶端的物件主要進入點。
+            驗證錯誤
+            代表與伺服器端的驗證碼不符
+            事件參數:
+                1.伺服器驗證碼
+                2.本地驗證碼
+            會發生此訊息通常是因為client與server版本不相容所致.
             </summary>
         </member>
-        <member name="M:Regulus.Remoting.IBinderProvider.AssignBinder(Regulus.Remoting.ISoulBinder)">
-            <summary>
-                如果客戶端連線成功系統會呼叫此方法並把SoulBinder傳入。
-            </summary>
-            <param name="binder"></param>
-        </member>
-        <member name="T:Regulus.Remoting.GPIProvider">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="M:Regulus.Remoting.PackageWriter`1.#ctor(System.Int32,Regulus.Serialization.ISerializer)">
+        <member name="M:Regulus.Remoting.PackageWriter`1.#ctor(Regulus.Serialization.ISerializer)">
             <summary>
                 Initializes a new instance of the <see cref="!:PackageWriter" /> class.
             </summary>
-            <param name="low_fps">
-                保證最低fps
-            </param>
             <param name="serializer">序列化物件</param>
         </member>
         <member name="T:Regulus.Remoting.ISoulBinder">

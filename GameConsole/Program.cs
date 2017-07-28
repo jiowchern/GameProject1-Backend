@@ -42,7 +42,7 @@ namespace GameConsole
         }
         protected override void _Launch()
         {
-            var builder = new Regulus.Protocol.AssemblyBuilder();
+           /* var builder = new Regulus.Protocol.AssemblyBuilder();
 
             var dataAsm = Assembly.LoadFile(System.IO.Path.GetFullPath("ItIsNotAGame1Data.dll"));
 
@@ -52,7 +52,7 @@ namespace GameConsole
             var client = new Regulus.Framework.Client<IUser>(this.Viewer, this.Command);
             client.Selector.AddFactoty("online", new RemotingUserFactory(protocl));
 
-            _Updater.Add(client);
+            _Updater.Add(client);*/
         }
 
         protected override void _Update()
