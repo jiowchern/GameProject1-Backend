@@ -42,17 +42,17 @@ namespace GameConsole
         }
         protected override void _Launch()
         {
-           /* var builder = new Regulus.Protocol.AssemblyBuilder();
+            var builder = new Regulus.Protocol.AssemblyBuilder();
 
             var dataAsm = Assembly.LoadFile(System.IO.Path.GetFullPath("ItIsNotAGame1Data.dll"));
 
-            var asm = builder.Build(dataAsm, "Regulus.Project.ItIsNotAGame1.Protocol", new[] { "Regulus.Project.ItIsNotAGame1" });
+            var asm = builder.Build(dataAsm, "Regulus.Project.ItIsNotAGame1.Protocol");
 
             var protocl = asm.CreateInstance("Regulus.Project.ItIsNotAGame1.Protocol") as IProtocol;
             var client = new Regulus.Framework.Client<IUser>(this.Viewer, this.Command);
             client.Selector.AddFactoty("online", new RemotingUserFactory(protocl));
 
-            _Updater.Add(client);*/
+            _Updater.Add(client);
         }
 
         protected override void _Update()
