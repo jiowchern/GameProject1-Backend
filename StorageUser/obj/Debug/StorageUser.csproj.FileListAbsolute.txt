@@ -112,3 +112,4 @@ D:\Develop\ItIsNotAGame-Backend\StorageUser\obj\Debug\ItIsNotAGame1StorageUser.d
 D:\Develop\ItIsNotAGame-Backend\StorageUser\obj\Debug\ItIsNotAGame1StorageUser.pdb
 D:\Develop\ItIsNotAGame-Backend\StorageUser\bin\Debug\Regulus.Network.dll
 D:\Develop\ItIsNotAGame-Backend\StorageUser\bin\Debug\Regulus.Network.pdb
+D:\Develop\ItIsNotAGame-Backend\StorageUser\obj\Debug\StorageUser.csproj.CoreCompileInputs.cache

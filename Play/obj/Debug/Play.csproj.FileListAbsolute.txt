@@ -184,3 +184,4 @@ D:\Develop\ItIsNotAGame-Backend\Play\obj\Debug\ItIsNotAGame1Play.dll
 D:\Develop\ItIsNotAGame-Backend\Play\obj\Debug\ItIsNotAGame1Play.pdb
 D:\Develop\ItIsNotAGame-Backend\Play\bin\Debug\Regulus.Network.dll
 D:\Develop\ItIsNotAGame-Backend\Play\bin\Debug\Regulus.Network.pdb
+D:\Develop\ItIsNotAGame-Backend\Play\obj\Debug\Play.csproj.CoreCompileInputs.cache

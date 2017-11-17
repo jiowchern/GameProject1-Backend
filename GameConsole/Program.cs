@@ -46,11 +46,12 @@ namespace GameConsole
 
             var dataAsm = Assembly.LoadFile(System.IO.Path.GetFullPath("ItIsNotAGame1Data.dll"));
 
-            var asm = builder.Build(dataAsm, "Regulus.Project.ItIsNotAGame1.Protocol");
+            var asm = builder.BuildMemory(dataAsm, "Regulus.Project.ItIsNotAGame1.Protocol");
 
             var protocl = asm.CreateInstance("Regulus.Project.ItIsNotAGame1.Protocol") as IProtocol;
             var client = new Regulus.Framework.Client<IUser>(this.Viewer, this.Command);
-            client.Selector.AddFactoty("online", new RemotingUserFactory(protocl));
+            throw new NotImplementedException();
+            client.Selector.AddFactoty("online", new RemotingUserFactory(protocl,null));
 
             _Updater.Add(client);
         }

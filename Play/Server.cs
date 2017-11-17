@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
-
+using Regulus.Network.Rudp;
 using Regulus.Project.ItIsNotAGame1.Data;
 using Regulus.Remoting;
 using Regulus.Utility;
@@ -28,10 +28,11 @@ namespace Regulus.Project.ItIsNotAGame1.Play
         private CustomType.Verify _StorageVerifyData;
 
         private IProtocol _Protocol;
+        private readonly Regulus.Network.Rudp.Client _Client;
 
         public Server()
         {
-            
+            _Client = new Client(new UdpSocket());
             this._LogRecorder = new Utility.LogFileRecorder("Play");
 
             this._StorageVerifyData = new CustomType.Verify();
@@ -53,6 +54,7 @@ namespace Regulus.Project.ItIsNotAGame1.Play
 
         private void _Join(ISoulBinder binder)
         {
+            
             this._Center.Join(binder);
         }
 
@@ -68,9 +70,11 @@ namespace Regulus.Project.ItIsNotAGame1.Play
 
         void Remoting.ICore.Shutdown()
         {
+            
             this._Updater.Shutdown();
+            _Client.Shutdown();
             Utility.Singleton<Utility.Log>.Instance.RecordEvent -= this._LogRecorder.Record;
-
+            
             AppDomain.CurrentDomain.UnhandledException -= this.CurrentDomain_UnhandledException;
         }
 
@@ -80,6 +84,7 @@ namespace Regulus.Project.ItIsNotAGame1.Play
             {
                 throw new ArgumentNullException(nameof(protocol));
             }
+            _Client.Launch();
             _Protocol = protocol;
 
             AppDomain.CurrentDomain.UnhandledException += this.CurrentDomain_UnhandledException;
@@ -143,7 +148,7 @@ namespace Regulus.Project.ItIsNotAGame1.Play
         {                        
             if (this._IsIpAddress(this._StorageVerifyData.IPAddress))
             {                
-                this._Storage = new Storage.User.Proxy(new Storage.User.RemotingFactory(_Protocol));
+                this._Storage = new Storage.User.Proxy(new Storage.User.RemotingFactory(_Protocol,_Client));
                 this._StorageUser = this._Storage.SpawnUser("user");
             }
             else

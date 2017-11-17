@@ -1,23 +1,26 @@
 ﻿using Regulus.Framework;
+using Regulus.Network;
 using Regulus.Remoting;
-using Regulus.Remoting.Ghost.Native;
 using Regulus.Utility;
+
 
 namespace Regulus.Project.ItIsNotAGame1
 {
 	public class RemotingUserFactory : IUserFactoty<IUser>
 	{
-	    private readonly IProtocol _Protocol;
+	    private readonly IClient _Client;
+        private readonly IProtocol _Protocol;
 
-	    public RemotingUserFactory(IProtocol protocol)
+	    public RemotingUserFactory(IProtocol protocol, Regulus.Network.IClient client)
 	    {
-	        _Protocol = protocol;
+	        _Client = client;
+            _Protocol = protocol;
 	    }
 
 	    IUser IUserFactoty<IUser>.SpawnUser()
 		{
 			
-			return new User(Agent.Create(_Protocol));
+			return new User(Regulus.Remoting.Ghost.Native.Agent.Create(_Protocol, _Client));
 		}
 
 		ICommandParsable<IUser> IUserFactoty<IUser>.SpawnParser(Command command, Console.IViewer view, IUser user)

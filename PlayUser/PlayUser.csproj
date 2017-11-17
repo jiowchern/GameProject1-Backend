@@ -60,6 +60,10 @@
       <Project>{2f28aa04-316d-4c20-bf46-987d4a59691d}</Project>
       <Name>RegulusLibrary</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Regulus\Library\Regulus.Network\Regulus.Network.csproj">
+      <Project>{A720964C-C3E0-4CB8-A81B-54A9CF7BC8DD}</Project>
+      <Name>Regulus.Network</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Regulus\Library\RemotingNativeGhost\RemotingGhostNative.csproj">
       <Project>{6cb4cde6-4405-40e6-8bdf-5a2e9185cc04}</Project>
       <Name>RemotingGhostNative</Name>
