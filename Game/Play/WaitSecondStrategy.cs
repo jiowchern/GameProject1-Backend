@@ -2,7 +2,7 @@ using Regulus.BehaviourTree;
 
 namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
-    internal class WaitSecondStrategy : IAction
+    internal class WaitSecondStrategy 
     {
         private readonly float _Second;
 
@@ -12,12 +12,9 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _Second = second;            
         }
 
-        void ITicker.Reset()
-        {
-            _Count = 0.0f;
-        }
+        
 
-        TICKRESULT ITicker.Tick(float delta)
+        public TICKRESULT Tick(float delta)
         {
             _Count += delta;
             if (_Count > _Second)
@@ -26,12 +23,12 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             return TICKRESULT.RUNNING;
         }
 
-        void IAction.Start()
+        public void Start()
         {
             _Count = 0.0f;
         }
 
-        void IAction.End()
+        public void End()
         {            
         }
     }

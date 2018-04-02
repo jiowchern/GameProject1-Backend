@@ -7,7 +7,7 @@ using Regulus.Project.ItIsNotAGame1.Data;
 
 namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
-    internal class ChestExcludeAction : IAction
+    internal class ChestExcludeAction 
     {
         private readonly Entity _Exit;
 
@@ -36,12 +36,9 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _Exit = exit;
         }
 
-        void ITicker.Reset()
-        {
-            
-        }
+        
 
-        TICKRESULT ITicker.Tick(float delta)
+        public TICKRESULT Tick(float delta)
         {
             _Interval += delta;
 
@@ -76,7 +73,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             }
         }
 
-        void IAction.Start()
+        public void Start()
         {
             _Gate.WaitEvent += _OnWaitEntity;
             var entitys = _Finder.Find(_Owner.GetView());
@@ -97,7 +94,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             }
         }
 
-        void IAction.End()
+        public void End()
         {
             _Gate.Left(_Door);
 

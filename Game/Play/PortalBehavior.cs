@@ -36,7 +36,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             var builder = new Regulus.BehaviourTree.Builder();
             var ticker = builder
                     .Sequence()
-                        .Action(()=>new WaitSecondStrategy(0.1f) )
+                        .Action(()=>new WaitSecondStrategy(0.1f), t => t.Tick, t => t.Start, t => t.End)
                         .Action(_HandlePassing)
                     .End()
                 .Build();

@@ -57,8 +57,8 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             var builder = new Regulus.BehaviourTree.Builder();
             var ticker = builder
                     .Sequence()
-                        .Action(() => new ChestIdleAction(_Chest, _Gate))
-                        .Action(() => new ChestExcludeAction(_Gate , _Finder, _Owner , _Door  , _Exit ))
+                        .Action(() => new ChestIdleAction(_Chest, _Gate) , t=>t.Tick , t=>t.Start , t=> t.End)
+                        .Action(() => new ChestExcludeAction(_Gate , _Finder, _Owner , _Door  , _Exit ) , t=> t.Tick , t=>t.Start , t=>t.End)
                     .End()
                 .Build();
             return ticker;

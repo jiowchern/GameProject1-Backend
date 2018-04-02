@@ -399,7 +399,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                         .Action(timeTrigger.Tick)
                         .Action((delta) => timeTrigger.Reset(10f))
                         .Action(_ToMake)      
-                        .Action(()=>new WaitSecondStrategy(3))   
+                        .Action(()=>new WaitSecondStrategy(3), t => t.Tick, t => t.Start, t => t.End)   
                         .Action((delta) => _GetRandomIndex(0, 4 , out index))
                         .Selector()
                             .Sequence()
@@ -743,7 +743,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
                         
                         .Action(_MoveForward)
                         
-                        .Action(()=>new WaitSecondStrategy(0.5f))
+                        .Action(()=>new WaitSecondStrategy(0.5f), t => t.Tick, t => t.Start, t => t.End)
                         
                     .End()   
                 .Build();

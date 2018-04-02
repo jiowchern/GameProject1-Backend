@@ -4,7 +4,7 @@ using Regulus.BehaviourTree;
 
 namespace Regulus.Project.ItIsNotAGame1.Game.Play
 {
-    internal class ChestIdleAction : IAction
+    internal class ChestIdleAction 
     {
         private readonly Entity _Chest;
 
@@ -19,17 +19,14 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
             _Gate = gate;            
         }
 
-        void ITicker.Reset()
-        {
-            
-        }
+        
 
-        TICKRESULT ITicker.Tick(float delta)
+        public TICKRESULT Tick(float delta)
         {
             return _Status;
         }
 
-        void IAction.Start()
+        public void Start()
         {
             _Chest.UnlockEvent += _OnUnlcokResult;
             _Gate.Join(_Chest);
@@ -38,7 +35,7 @@ namespace Regulus.Project.ItIsNotAGame1.Game.Play
 
         
 
-        void IAction.End()
+        public void End()
         {
             _Gate.Left(_Chest);
             _Chest.UnlockEvent -= _OnUnlcokResult;
